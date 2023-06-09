@@ -8,7 +8,7 @@
     <link href="/2023/06/09/%E6%88%91%E7%9A%84%E7%AC%AC%E4%B8%80%E7%AF%87%E5%8D%9A%E5%AE%A2/"/>
     <url>/2023/06/09/%E6%88%91%E7%9A%84%E7%AC%AC%E4%B8%80%E7%AF%87%E5%8D%9A%E5%AE%A2/</url>
     
-    <content type="html"><![CDATA[<h1 id="我的第一篇博客"><a href="#我的第一篇博客" class="headerlink" title="我的第一篇博客"></a>我的第一篇博客</h1><blockquote><p>分享琐碎</p></blockquote><p>忙里偷闲, 或者说闲来无事吧, 实际上, 时间已经来到期末, 可是呢, 我还是保留着对技术的疯狂热情, 搭建这个博客是因为偶然间在星球冲浪时, 看见一位大佬所写的hexo搭建博客系列. 这是他的博客 : <a href="https://ltyzzzxxx.github.io/">https://ltyzzzxxx.github.io/</a> 非常感谢他哈哈哈, 正是这一契机让我花了半天时间搞了这一个博客 .</p><p>其实之前也有花时间搭过一个博客, 是利用 <code>VuePress</code> 搭建的 </p><p><img src="https://weirdo-blog.oss-cn-chengdu.aliyuncs.com/blog/202306092321545.png" alt="image-20230609232105109"></p><p>(刚刚搞了好久的图床哈哈哈哈哈哈哈哈哈哈, 主要是通过 阿里云 + Pikgo + Typora 构建的)</p><p>这界面还是略显花哨 , 相比呢以下界面就显得非常滴简约好看</p><p><img src="https://weirdo-blog.oss-cn-chengdu.aliyuncs.com/blog/202306092322286.png" alt="image-20230609232220960"> </p><p>话不多说, 准备优化博客咯 ——</p>]]></content>
+    <content type="html"><![CDATA[<h1 id="我的第一篇博客"><a href="#我的第一篇博客" class="headerlink" title="我的第一篇博客"></a>我的第一篇博客</h1><blockquote><p>分享琐碎</p></blockquote><p>忙里偷闲, 或者说闲来无事吧, 实际上, 时间已经来到期末, 可是呢, 我还是保留着对技术的疯狂热情, 搭建这个博客是因为偶然间在星球冲浪时, 看见一位大佬所写的hexo搭建博客系列. 正是这一契机让我花了大半天时间搞了这一个博客.</p><p>其实之前也有花时间搭过一个博客, 是通过 <code>VuePress</code> 搭建的 </p><p>(刚刚搞了好久的图床哈哈哈哈哈哈哈哈哈哈, 主要是通过 阿里云 + Pikgo + Typora 构建的)<br><img src="https://weirdo-blog.oss-cn-chengdu.aliyuncs.com/blog/202306092321545.png" alt="image-20230609232105109"></p><p>这界面还是略显花哨 , 相比呢以下界面就显得非常滴简约好看</p><p><img src="https://weirdo-blog.oss-cn-chengdu.aliyuncs.com/blog/202306092322286.png" alt="image-20230609232220960"> </p><p>话不多说, 准备优化博客咯 ——</p>]]></content>
     
     
     <categories>
