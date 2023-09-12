@@ -1,0 +1,860 @@
+
+
+<!DOCTYPE html>
+<html lang="zh-CN" data-default-color-scheme=auto>
+
+
+
+<head>
+  <meta charset="UTF-8">
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/tub.png">
+  <link rel="icon" href="/img/tub.png">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="author" content="weirdo">
+  <meta name="keywords" content="">
+  
+    <meta name="description" content="1. 认识响应式逻辑 假如你有一个变量m , 你的某一段代码使用了变量m , 如果某个时刻变量m发生了改变, 那么这段代码也会重新执行. 但实际上执行的代码中可能不止一行代码，所以我们可以将这些代码放到一个函数中, 于是就变成了, 你有一个对象, 你的某个函数使用了对象的某个属性, 如果某个时候这个属性发生改变, 这个函数也会重新执行  2. 响应式依赖收集2.1. 响应式函数的实现watchFn">
+<meta property="og:type" content="article">
+<meta property="og:title" content="我的第一篇博客">
+<meta property="og:url" content="http://example.com/2023/06/09/Vue%E7%9A%84%E5%93%8D%E5%BA%94%E5%BC%8F%E5%8E%9F%E7%90%86/index.html">
+<meta property="og:site_name" content="Weirdo">
+<meta property="og:description" content="1. 认识响应式逻辑 假如你有一个变量m , 你的某一段代码使用了变量m , 如果某个时刻变量m发生了改变, 那么这段代码也会重新执行. 但实际上执行的代码中可能不止一行代码，所以我们可以将这些代码放到一个函数中, 于是就变成了, 你有一个对象, 你的某个函数使用了对象的某个属性, 如果某个时候这个属性发生改变, 这个函数也会重新执行  2. 响应式依赖收集2.1. 响应式函数的实现watchFn">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="http://example.com/img/%E7%99%BD.jpg">
+<meta property="article:published_time" content="2023-06-09T04:49:30.000Z">
+<meta property="article:modified_time" content="2023-09-12T10:57:09.081Z">
+<meta property="article:author" content="weirdo">
+<meta property="article:tag" content="面试题">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="http://example.com/img/%E7%99%BD.jpg">
+  
+  
+  
+  <title>我的第一篇博客 - Weirdo</title>
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
+
+
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/github-markdown-css/4.0.0/github-markdown.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/hint.css/2.7.0/hint.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.css" />
+
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+<!-- Do not modify the link that theme dependent icons -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1749284_hj8rtnfg7um.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1736178_lbnruvf0jn.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+
+  <link id="highlight-css" rel="stylesheet" href="/css/highlight.css" />
+  
+    <link id="highlight-css-dark" rel="stylesheet" href="/css/highlight-dark.css" />
+  
+
+
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    Fluid.ctx = Object.assign({}, Fluid.ctx)
+    var CONFIG = {"hostname":"example.com","root":"/","version":"1.9.4","typing":{"enable":true,"typeSpeed":80,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#ddfd","options":{"showSpinner":true,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":true,"follow_dnt":true,"baidu":null,"google":null,"gtag":null,"tencent":{"sid":null,"cid":null},"woyaola":null,"cnzz":null,"leancloud":{"app_id":"ukn0C9F4sFzy057RJ7Ohdmq4-gzGzoHsz","app_key":"x8NNzZf5L3jNKvqOKxoMj0FN","server_url":"https://ukn0c9f4.lc-cn-n1-shared.com","path":"window.location.pathname","ignore_local":true}},"search_path":"/local-search.xml"};
+
+    if (CONFIG.web_analytics.follow_dnt) {
+      var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
+      Fluid.ctx.dnt = dntVal && (dntVal.startsWith('1') || dntVal.startsWith('yes') || dntVal.startsWith('on'));
+    }
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+  
+
+
+
+  
+<meta name="generator" content="Hexo 6.3.0"></head>
+
+
+<body>
+  
+
+  <header>
+    
+
+<div class="header-inner" style="height: 70vh;">
+  <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <strong>Weirdo</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/">
+                <i class="iconfont icon-home-fill"></i>
+                <span>首页</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/">
+                <i class="iconfont icon-category-fill"></i>
+                <span>分类</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/">
+                <i class="iconfont icon-tags-fill"></i>
+                <span>标签</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/">
+                <i class="iconfont icon-archive-fill"></i>
+                <span>归档</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/">
+                <i class="iconfont icon-user-fill"></i>
+                <span>关于</span>
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              <i class="iconfont icon-search"></i>
+            </a>
+          </li>
+          
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">
+              <i class="iconfont icon-dark" id="color-toggle-icon"></i>
+            </a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+  
+
+<div id="banner" class="banner" parallax=true
+     style="background: url('/img/%E7%99%BD.jpg') no-repeat center center; background-size: cover;">
+  <div class="full-bg-img">
+    <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+      <div class="banner-text text-center fade-in-up">
+        <div class="h2">
+          
+            <span id="subtitle" data-typed-text="我的第一篇博客"></span>
+          
+        </div>
+
+        
+          
+  <div class="mt-3">
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-author" aria-hidden="true"></i>
+        weirdo
+      </span>
+    
+    
+      <span class="post-meta">
+        <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+        <time datetime="2023-06-09 12:49" pubdate>
+          2023年6月9日 下午
+        </time>
+      </span>
+    
+  </div>
+
+  <div class="mt-1">
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-chart"></i>
+        
+          5.4k 字
+        
+      </span>
+    
+
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-clock-fill"></i>
+        
+        
+        
+          46 分钟
+        
+      </span>
+    
+
+    
+    
+      
+        <span id="leancloud-page-views-container" class="post-meta" style="display: none">
+          <i class="iconfont icon-eye" aria-hidden="true"></i>
+          <span id="leancloud-page-views"></span> 次
+        </span>
+        
+      
+    
+  </div>
+
+
+        
+      </div>
+
+      
+    </div>
+  </div>
+</div>
+
+</div>
+
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+
+    </div>
+
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div id="board">
+          <article class="post-content mx-auto">
+            <!-- SEO header -->
+            <h1 style="display: none">我的第一篇博客</h1>
+            
+            
+              <div class="markdown-body">
+                
+                <h2 id="1-认识响应式逻辑"><a href="#1-认识响应式逻辑" class="headerlink" title="1. 认识响应式逻辑"></a>1. 认识响应式逻辑</h2><ul>
+<li>假如你有一个变量m , 你的某一段代码使用了变量m , 如果某个时刻变量m发生了改变, 那么这段代码也会重新执行.</li>
+<li>但实际上执行的代码中可能不止一行代码，所以我们可以将这些代码放到一个函数中, 于是就变成了, <strong>你有一个对象, 你的某个函数使用了对象的某个属性, 如果某个时候这个属性发生改变, 这个函数也会重新执行</strong></li>
+</ul>
+<h2 id="2-响应式依赖收集"><a href="#2-响应式依赖收集" class="headerlink" title="2. 响应式依赖收集"></a>2. 响应式依赖收集</h2><h3 id="2-1-响应式函数的实现watchFn"><a href="#2-1-响应式函数的实现watchFn" class="headerlink" title="2.1. 响应式函数的实现watchFn"></a>2.1. 响应式函数的实现watchFn</h3><p>我们现在实现一个响应式函数</p>
+<p>◼ 但是我们怎么区分呢？</p>
+<ul>
+<li>这个时候我们封装一个新的函数<code>watchFn</code>；</li>
+<li><strong>凡是传入到watchFn的函数，就是需要响应式的；</strong></li>
+<li>其他默认定义的函数都是不需要响应式的；</li>
+</ul>
+<p><img src="https://cdn.nlark.com/yuque/0/2023/png/29006943/1689516173261-6d66c817-eea9-4383-be1e-3298a47631cd.png" srcset="/img/loading.gif" lazyload alt="img"></p>
+<p>如图, foo以及bar都是需要响应式的</p>
+<p>我们将这些函数在响应之前先执行一次</p>
+<p>当obj的某个属性发生变化时, 就依次执行reactiveFns中的函数</p>
+<p>目前当然是极为不完善, 待后续优化hhh</p>
+<h3 id="2-2-响应式依赖的收集-类"><a href="#2-2-响应式依赖的收集-类" class="headerlink" title="2.2. 响应式依赖的收集__类"></a>2.2. 响应式依赖的收集__类</h3><p>◼ 目前我们收集的依赖是放到一个数组中来保存的，但是这里会存在数据管理的问题：</p>
+<ul>
+<li> 我们在实际开发中<strong>需要监听很多对象的响应式；</strong></li>
+<li> 这些对象需要监听的不只是一个属性，它们很多属性的变化，都会有对应的响应式函数；</li>
+<li> 我们不<strong>可能在全局维护一大堆的数组来保存这些响应函数；</strong></li>
+</ul>
+<p>◼ 所以我们要<strong>设计一个类，这个类用于管理某一个对象的某一个属性的所有响应式函数：</strong></p>
+<ul>
+<li> 相当于替代了原来的简单 reactiveFns 的数组；</li>
+</ul>
+<p><img src="https://cdn.nlark.com/yuque/0/2023/png/29006943/1689517162160-a9a5a240-242b-433d-960a-62abf100ee1b.png" srcset="/img/loading.gif" lazyload alt="img"></p>
+<p>这个类记住</p>
+<p><img src="https://cdn.nlark.com/yuque/0/2023/png/29006943/1689517182415-63f761a9-ddc0-4fe6-a28e-eca7edb33cd3.png" srcset="/img/loading.gif" lazyload alt="img"></p>
+<p>当我们某个属性发生变化时, 只需执行dep.notify()就行了, 无需一个一个的遍历函数</p>
+<p>这个obj对象就对应Depend类所创建出来的对象</p>
+<p>当然, 还需大大的优化</p>
+<p>现在我们每次修改了一个属性之后都是手动的去调用, 这样太麻烦了, 我们想要让它自动去调用响应函数,</p>
+<p>因此我们要去监听属性的变化</p>
+<h2 id=""><a href="#" class="headerlink" title=""></a></h2><h2 id="3-Object-defineProperty-监听属性变化"><a href="#3-Object-defineProperty-监听属性变化" class="headerlink" title="3. Object.defineProperty()监听属性变化"></a>3. Object.defineProperty()监听属性变化</h2><p><img src="https://cdn.nlark.com/yuque/0/2023/png/29006943/1689518493139-f829f2ac-5c05-4434-8ee1-c3fb3acb80a0.png" srcset="/img/loading.gif" lazyload alt="img"></p>
+<p><img src="https://cdn.nlark.com/yuque/0/2023/png/29006943/1689519094730-56db275e-2b85-47d9-ae6a-334a9cd92b79.png" srcset="/img/loading.gif" lazyload alt="img"></p>
+<p>再记一遍这个类</p>
+<p><img src="https://cdn.nlark.com/yuque/0/2023/png/29006943/1689518234206-e92d9a3f-a4af-4b5a-a181-71d3feac630a.png" srcset="/img/loading.gif" lazyload alt="img"></p>
+<p>注意看注释</p>
+<p><img src="https://cdn.nlark.com/yuque/0/2023/png/29006943/1689518428172-4a89266f-5f54-48b0-af45-2414d2132ad3.png" srcset="/img/loading.gif" lazyload alt="img"></p>
+<p>这里在属性变化后就不用手动给它通知了, 自动响应实现</p>
+<p>不过这种收集方式其实是错误的hhhhh</p>
+<h2 id="4-自动收集依赖-🔥"><a href="#4-自动收集依赖-🔥" class="headerlink" title="4. 自动收集依赖 🔥"></a>4. 自动收集依赖 🔥</h2><p>我们现在发现了一个问题 , obj 对象的两个属性都依赖于 同一个dep对象的reactiveFns,</p>
+<p>这样就会造成我们根本没办法区分它们</p>
+<p>对于同一个对象来说, 我们还是给它放到了同一个dep里面, 这会造成无法将它的属性区分</p>
+<p><strong>如何解决这个问题呢 ?</strong> </p>
+<p><img src="https://cdn.nlark.com/yuque/0/2023/png/29006943/1689519485001-4043e466-f8ce-4198-a12c-99b54969dff7.png" srcset="/img/loading.gif" lazyload alt="img"></p>
+<p><img src="https://cdn.nlark.com/yuque/0/2023/png/29006943/1689519775688-296650b1-3bf5-4968-b93f-5e669b531229.png" srcset="/img/loading.gif" lazyload alt="img"></p>
+<p>比如我们要获取obj对象的name属性的依赖</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs javascript"><span class="hljs-keyword">const</span> dep = objMap.<span class="hljs-title function_">get</span>(obj).<span class="hljs-title function_">get</span>(name);<br>dep.<span class="hljs-title function_">notifiy</span>();<br></code></pre></td></tr></table></figure>
+
+
+
+<p><img src="https://cdn.nlark.com/yuque/0/2023/png/29006943/1689522494979-ce644ee9-e348-4ae0-a2d6-6df2ae88e759.png" srcset="/img/loading.gif" lazyload alt="img"></p>
+<ul>
+<li><p>dep对象数据结构的管理</p>
+</li>
+<li><p>每一个对象的每一个属性都会对应一个dep对象</p>
+</li>
+<li><p>同一个对象的多个属性的dep对象是存放一个map对象中</p>
+</li>
+<li><p>多个对象的map对象, 会被存放到一个objMap的对象中</p>
+</li>
+<li><p>当执行get函数, 自动的添加fn函数</p>
+</li>
+</ul>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br></pre></td><td class="code"><pre><code class="hljs javascript"><span class="hljs-keyword">class</span> <span class="hljs-title class_">Depend</span> &#123;<br>  <span class="hljs-title function_">constructor</span>(<span class="hljs-params"></span>) &#123;<br>    <span class="hljs-variable language_">this</span>.<span class="hljs-property">reactiveFns</span> = []<br>  &#125;<br><br>  <span class="hljs-title function_">addDepend</span>(<span class="hljs-params">fn</span>) &#123;<br>    <span class="hljs-keyword">if</span> (fn) &#123;<br>      <span class="hljs-variable language_">this</span>.<span class="hljs-property">reactiveFns</span>.<span class="hljs-title function_">push</span>(fn)<br>    &#125;<br>  &#125;<br><br>  <span class="hljs-title function_">notify</span>(<span class="hljs-params"></span>) &#123;<br>    <span class="hljs-variable language_">this</span>.<span class="hljs-property">reactiveFns</span>.<span class="hljs-title function_">forEach</span>(<span class="hljs-function"><span class="hljs-params">fn</span> =&gt;</span> &#123;<br>      <span class="hljs-title function_">fn</span>()<br>    &#125;)<br>  &#125;<br>&#125;<br><br><span class="hljs-keyword">const</span> obj = &#123;<br>  <span class="hljs-attr">name</span>: <span class="hljs-string">&quot;why&quot;</span>,<br>  <span class="hljs-attr">age</span>: <span class="hljs-number">18</span><br>&#125;<br><br><span class="hljs-comment">// 设置一个专门执行响应式函数的一个函数</span><br><span class="hljs-keyword">let</span> reactiveFn = <span class="hljs-literal">null</span> <span class="hljs-comment">// </span><br><span class="hljs-keyword">function</span> <span class="hljs-title function_">watchFn</span>(<span class="hljs-params">fn</span>) &#123;<br>  reactiveFn = fn<br>  <span class="hljs-title function_">fn</span>() <span class="hljs-comment">// 执行下方的get方法 , 使得间接的把函数加到特定的dep对象上</span><br>  <span class="hljs-comment">//(因为函数中会有一些对象会有一些属性)</span><br>  reactiveFn = <span class="hljs-literal">null</span> <span class="hljs-comment">// 使用完后再置为null, 不然可能会造成影响</span><br>&#125;<br><br><span class="hljs-comment">// 封装一个函数: 负责通过obj的key获取对应的Depend对象</span><br><span class="hljs-comment">// 我们用一个WeakMap对所有对象进行管理, 我们不需要对里面进行强引用, </span><br><span class="hljs-comment">// 如果有一天obj为null,那就无法销毁了</span><br><span class="hljs-keyword">const</span> objMap = <span class="hljs-keyword">new</span> <span class="hljs-title class_">WeakMap</span>()<br><br><br><span class="hljs-comment">// 这个函数的作用是通过对象的key找到它的dep对象</span><br><span class="hljs-keyword">function</span> <span class="hljs-title function_">getDepend</span>(<span class="hljs-params">obj, key</span>) &#123;<br>  <br>  <span class="hljs-comment">// 1.根据对象obj, 找到对应的map对象</span><br>  <span class="hljs-keyword">let</span> map = objMap.<span class="hljs-title function_">get</span>(obj) <span class="hljs-comment">// 没有就new一个</span><br>  <span class="hljs-keyword">if</span> (!map) &#123;<br>    map = <span class="hljs-keyword">new</span> <span class="hljs-title class_">Map</span>()<br>    objMap.<span class="hljs-title function_">set</span>(obj, map)<br>  &#125;<br><br>  <span class="hljs-comment">// 2.根据key, 找到对应的depend对象</span><br>  <span class="hljs-keyword">let</span> dep = map.<span class="hljs-title function_">get</span>(key)<br>  <span class="hljs-keyword">if</span> (!dep) &#123;<br>    dep = <span class="hljs-keyword">new</span> <span class="hljs-title class_">Depend</span>()<br>    map.<span class="hljs-title function_">set</span>(key, dep)<br>  &#125;<br>  <span class="hljs-keyword">return</span> dep<br>&#125;<br><br><span class="hljs-title class_">Object</span>.<span class="hljs-title function_">keys</span>(obj).<span class="hljs-title function_">forEach</span>(<span class="hljs-function"><span class="hljs-params">key</span> =&gt;</span> &#123;<br>  <span class="hljs-keyword">let</span> value = obj[key]<br><br>  <span class="hljs-title class_">Object</span>.<span class="hljs-title function_">defineProperty</span>(obj, key, &#123;<br>    <span class="hljs-attr">set</span>: <span class="hljs-keyword">function</span>(<span class="hljs-params">newValue</span>) &#123;<br>      value = newValue<br>      <span class="hljs-comment">// 拿到这个对象的属性的dep对象</span><br>      <span class="hljs-keyword">const</span> dep = <span class="hljs-title function_">getDepend</span>(obj, key)<br>      dep.<span class="hljs-title function_">notify</span>()  <span class="hljs-comment">// 对这些</span><br>    &#125;,<br>    <span class="hljs-attr">get</span>: <span class="hljs-keyword">function</span>(<span class="hljs-params"></span>) &#123;<br>      <span class="hljs-comment">// 在函数中拿到obj 和 key 就会调用这个get方法</span><br>      <span class="hljs-comment">// console.log(&quot;get函数中:&quot;, obj, key)</span><br>      <span class="hljs-comment">// 找到对应的obj对象的key对应的dep对象</span><br>      <span class="hljs-keyword">const</span> dep = <span class="hljs-title function_">getDepend</span>(obj, key) <br>      <span class="hljs-comment">// 意味着我们只会创建obj对象的key属性的dep对象</span><br>      dep.<span class="hljs-title function_">addDepend</span>(reactiveFn) <br>      <span class="hljs-comment">// 精髓 : 在这个dep对象上放入跟特有对象的特有属性相关的函数,即reactiveFn</span><br>      <span class="hljs-comment">// dep这个对象就是保存了跟这个特有对象特有属性相关的一些函数</span><br>      <br>      <span class="hljs-keyword">return</span> value<br>    &#125;<br>  &#125;)<br>&#125;)<br><br><span class="hljs-title function_">watchFn</span>(<span class="hljs-keyword">function</span> <span class="hljs-title function_">foo</span>(<span class="hljs-params"></span>) &#123;<br>  <span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-string">&quot;foo function&quot;</span>)<br>  <span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-string">&quot;foo:&quot;</span>, obj.<span class="hljs-property">name</span>)<br>  <span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-string">&quot;foo&quot;</span>, obj.<span class="hljs-property">age</span>)<br>&#125;)<br><br><span class="hljs-title function_">watchFn</span>(<span class="hljs-keyword">function</span> <span class="hljs-title function_">bar</span>(<span class="hljs-params"></span>) &#123;<br>  <span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-string">&quot;bar function&quot;</span>)<br>  <span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-string">&quot;bar:&quot;</span>, obj.<span class="hljs-property">age</span> + <span class="hljs-number">10</span>)<br>&#125;)<br></code></pre></td></tr></table></figure>
+
+<p>注意看注释 !!!!!</p>
+<p>你用了我的数据, 我就收集你的依赖, 你没用, 我就不收集 —</p>
+<p>我们还有可以优化的点 : </p>
+<p>当我们执行下面这段代码时</p>
+<p><img src="https://cdn.nlark.com/yuque/0/2023/png/29006943/1689529177790-94163498-3f86-470e-909a-c004efa29284.png" srcset="/img/loading.gif" lazyload alt="img"></p>
+<p>age发生变化时, 它会执行两次函数</p>
+<p>我们可以这样操作</p>
+<p><img src="https://cdn.nlark.com/yuque/0/2023/png/29006943/1689529475739-be0c0316-fe43-4954-a668-9e6c00d76df1.png" srcset="/img/loading.gif" lazyload alt="img"></p>
+<p>我们的reactiveFns是一个Set, 这样它就不会添加相同的函数到这里面去</p>
+<p>然后下方的push改为add</p>
+<p>还有一个地方是我们可以给<img src="https://cdn.nlark.com/yuque/0/2023/png/29006943/1689529606306-7dee4494-d4de-4977-a298-45ae2c9e3f08.png" srcset="/img/loading.gif" lazyload alt="img">这个地方换个写法</p>
+<p>我们并不希望将reactiveFn添加放到get中，因为它是属于Dep的行为 (也可以不换, 看自己 )</p>
+<p><img src="https://cdn.nlark.com/yuque/0/2023/png/29006943/1689529618990-03b2f2f5-b1e2-4ba6-89f5-dcf614a29080.png" srcset="/img/loading.gif" lazyload alt="img"></p>
+<p>我们直接在类中添加一个方法自动获取收集的函数<code>depend()</code></p>
+<p>相当于利用到这个自由变量<code>reactiveFn</code></p>
+<p><img src="https://cdn.nlark.com/yuque/0/2023/png/29006943/1689529655446-123201f0-0940-4cca-a359-d864c7ca8165.png" srcset="/img/loading.gif" lazyload alt="img"></p>
+<p>然后直接<code>dep.depen()</code>调用即可</p>
+<p>不过这两种写法都可以 hhh</p>
+<p>但这个代码还有不足, 关于<strong>多个对象</strong>, 我们如何给它挨个来自动收集依赖, 因为我们这里是写死给obj对象自动收集依赖的</p>
+<p>如何解决呢? </p>
+<p>方法如下hhh —- 多个对象响应式</p>
+<h2 id="5-多个对象响应式"><a href="#5-多个对象响应式" class="headerlink" title="5. 多个对象响应式"></a>5. 多个对象响应式</h2><p>我们只需要将监听对象属性的这一串代码封装为一个函数</p>
+<p><img src="https://cdn.nlark.com/yuque/0/2023/png/29006943/1689530405694-0103a36d-0396-4dda-a01e-ea63cce40e1c.png" srcset="/img/loading.gif" lazyload alt="img"></p>
+<p>这里我们将这一串代码封装为一个函数reactive, 我们创建的对象就可以作为参数传递进去, 那么这个对象的所有属性就能被监听到了, 然后我们<strong>返回一个被监听的对象</strong></p>
+<p>注意 : 需要返回这个对象哈, 别搞忘了</p>
+<p>然后我们在创建对象时使用这个函数, 那么对象的所有属性就能被监听到了</p>
+<p><img src="https://cdn.nlark.com/yuque/0/2023/png/29006943/1689530499787-10cda5b2-d403-4379-8692-99a1004fc1aa.png" srcset="/img/loading.gif" lazyload alt="img"></p>
+<p><img src="https://cdn.nlark.com/yuque/0/2023/png/29006943/1689530482553-d5ef878e-ebd5-4e16-8ebc-4c392ab6af79.png" srcset="/img/loading.gif" lazyload alt="img"></p>
+<p>以上都是vue2响应式原理(也就是defineProperty), 接下来我们用vue3对代码进行重构</p>
+<p>特别easy</p>
+<h2 id="6-vue3-监听对象-proxy"><a href="#6-vue3-监听对象-proxy" class="headerlink" title="6. vue3__监听对象__proxy"></a>6. vue3__监听对象__proxy</h2><p>我们直接将</p>
+<p>Object.defineProperty</p>
+<p><img src="https://cdn.nlark.com/yuque/0/2023/png/29006943/1689530405694-0103a36d-0396-4dda-a01e-ea63cce40e1c.png" srcset="/img/loading.gif" lazyload alt="img"></p>
+<p>这部分代码改成</p>
+<p>proxy</p>
+<p><img src="https://cdn.nlark.com/yuque/0/2023/png/29006943/1689530926415-1a547667-a3ee-48ce-9175-c3f2b5f927eb.png" srcset="/img/loading.gif" lazyload alt="img"></p>
+<p>在我们调用了Proxy的get捕获器时, 收集依赖</p>
+<p>因为如果一个函数中使用了某个对象的key，那么它应该被收集依赖；</p>
+<p>这部分代码即可</p>
+<p>都是学过的东西 , 忘了就翻翻前面的笔记 </p>
+<h2 id="7-完整响应式代码"><a href="#7-完整响应式代码" class="headerlink" title="7. 完整响应式代码"></a>7. 完整响应式代码</h2><p>完整响应式代码</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br></pre></td><td class="code"><pre><code class="hljs javascript"><span class="hljs-keyword">class</span> <span class="hljs-title class_">Depend</span> &#123;<br>  <span class="hljs-title function_">constructor</span>(<span class="hljs-params"></span>) &#123;<br>    <span class="hljs-variable language_">this</span>.<span class="hljs-property">reactiveFns</span> = <span class="hljs-keyword">new</span> <span class="hljs-title class_">Set</span>()<br>  &#125;<br><br>  <span class="hljs-title function_">addDepend</span>(<span class="hljs-params">fn</span>) &#123;<br>    <span class="hljs-keyword">if</span> (fn) &#123;<br>      <span class="hljs-variable language_">this</span>.<span class="hljs-property">reactiveFns</span>.<span class="hljs-title function_">add</span>(fn)<br>    &#125;<br>  &#125;<br><br>  <span class="hljs-title function_">depend</span>(<span class="hljs-params"></span>) &#123;<br>    <span class="hljs-keyword">if</span> (reactiveFn) &#123;<br>      <span class="hljs-variable language_">this</span>.<span class="hljs-property">reactiveFns</span>.<span class="hljs-title function_">add</span>(reactiveFn)<br>    &#125;<br>  &#125;<br><br>  <span class="hljs-title function_">notify</span>(<span class="hljs-params"></span>) &#123;<br>    <span class="hljs-variable language_">this</span>.<span class="hljs-property">reactiveFns</span>.<span class="hljs-title function_">forEach</span>(<span class="hljs-function"><span class="hljs-params">fn</span> =&gt;</span> &#123;<br>      <span class="hljs-title function_">fn</span>()<br>    &#125;)<br>  &#125;<br>&#125;<br><br><span class="hljs-keyword">let</span> reactiveFn = <span class="hljs-literal">null</span><br><span class="hljs-keyword">function</span> <span class="hljs-title function_">watchFn</span>(<span class="hljs-params">fn</span>) &#123;<br>  reactiveFn = fn<br>  <span class="hljs-title function_">fn</span>()<br>  reactiveFn = <span class="hljs-literal">null</span><br>&#125;<br><br><span class="hljs-keyword">const</span> objMap = <span class="hljs-keyword">new</span> <span class="hljs-title class_">WeakMap</span>()<br><span class="hljs-keyword">function</span> <span class="hljs-title function_">getDepend</span>(<span class="hljs-params">obj, key</span>) &#123;<br>  <span class="hljs-comment">// 1.根据对象obj, 找到对应的map对象</span><br>  <span class="hljs-keyword">let</span> map = objMap.<span class="hljs-title function_">get</span>(obj)<br>  <span class="hljs-keyword">if</span> (!map) &#123;<br>    map = <span class="hljs-keyword">new</span> <span class="hljs-title class_">Map</span>()<br>    objMap.<span class="hljs-title function_">set</span>(obj, map)<br>  &#125;<br><br>  <span class="hljs-comment">// 2.根据key, 找到对应的depend对象</span><br>  <span class="hljs-keyword">let</span> dep = map.<span class="hljs-title function_">get</span>(key)<br>  <span class="hljs-keyword">if</span> (!dep) &#123;<br>    dep = <span class="hljs-keyword">new</span> <span class="hljs-title class_">Depend</span>()<br>    map.<span class="hljs-title function_">set</span>(key, dep)<br>  &#125;<br>  <span class="hljs-keyword">return</span> dep<br>&#125;<br><br><span class="hljs-keyword">function</span> <span class="hljs-title function_">reactive</span>(<span class="hljs-params">obj</span>) &#123;<br>  <span class="hljs-keyword">const</span> objProxy = <span class="hljs-keyword">new</span> <span class="hljs-title class_">Proxy</span>(obj, &#123;<br>    <span class="hljs-attr">set</span>: <span class="hljs-keyword">function</span>(<span class="hljs-params">target, key, newValue, receiver</span>) &#123;<br>      <span class="hljs-comment">// target[key] = newValue</span><br>      <span class="hljs-title class_">Reflect</span>.<span class="hljs-title function_">set</span>(target, key, newValue, receiver)<br>      <span class="hljs-keyword">const</span> dep = <span class="hljs-title function_">getDepend</span>(target, key)<br>      dep.<span class="hljs-title function_">notify</span>()<br>    &#125;,<br>    <span class="hljs-attr">get</span>: <span class="hljs-keyword">function</span>(<span class="hljs-params">target, key, receiver</span>) &#123;<br>      <span class="hljs-keyword">const</span> dep = <span class="hljs-title function_">getDepend</span>(target, key)<br>      dep.<span class="hljs-title function_">depend</span>()<br>      <span class="hljs-keyword">return</span> <span class="hljs-title class_">Reflect</span>.<span class="hljs-title function_">get</span>(target, key, receiver)<br>    &#125;<br>  &#125;)<br>  <span class="hljs-keyword">return</span> objProxy <br>&#125;<br></code></pre></td></tr></table></figure>
+
+
+
+<p>业务代码</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br></pre></td><td class="code"><pre><code class="hljs javascript"><span class="hljs-keyword">const</span> obj = <span class="hljs-title function_">reactive</span>(&#123;<br>  <span class="hljs-attr">name</span>: <span class="hljs-string">&quot;why&quot;</span>,<br>  <span class="hljs-attr">age</span>: <span class="hljs-number">18</span>,<br>  <span class="hljs-attr">address</span>: <span class="hljs-string">&quot;广州市&quot;</span><br>&#125;)<br><br><span class="hljs-title function_">watchFn</span>(<span class="hljs-keyword">function</span>(<span class="hljs-params"></span>) &#123;<br>  <span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(obj.<span class="hljs-property">name</span>)<br>  <span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(obj.<span class="hljs-property">age</span>)<br>  <span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(obj.<span class="hljs-property">age</span>)<br>&#125;)<br><br><span class="hljs-comment">// 修改name</span><br><span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-string">&quot;--------------&quot;</span>)<br><span class="hljs-comment">// obj.name = &quot;kobe&quot;</span><br>obj.<span class="hljs-property">age</span> = <span class="hljs-number">20</span><br><span class="hljs-comment">// obj.address = &quot;上海市&quot;</span><br><br><br><span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-string">&quot;=============== user =================&quot;</span>)<br><span class="hljs-keyword">const</span> user = <span class="hljs-title function_">reactive</span>(&#123;<br>  <span class="hljs-attr">nickname</span>: <span class="hljs-string">&quot;abc&quot;</span>,<br>  <span class="hljs-attr">level</span>: <span class="hljs-number">100</span><br>&#125;)<br><br><span class="hljs-title function_">watchFn</span>(<span class="hljs-keyword">function</span>(<span class="hljs-params"></span>) &#123;<br>  <span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-string">&quot;nickname:&quot;</span>, user.<span class="hljs-property">nickname</span>)<br>  <span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-string">&quot;level:&quot;</span>, user.<span class="hljs-property">level</span>)<br>&#125;)<br><br>user.<span class="hljs-property">nickname</span> = <span class="hljs-string">&quot;cba&quot;</span><br></code></pre></td></tr></table></figure>
+
+
+
+<p>执行结果</p>
+<p><img src="https://cdn.nlark.com/yuque/0/2023/png/29006943/1689531919326-42050d49-17eb-4c5b-9dd8-31ced574d9d4.png" srcset="/img/loading.gif" lazyload alt="img"></p>
+<p>总结 : </p>
+<ul>
+<li>Vue3主要是通过Proxy来监听数据的变化以及收集相关的依赖的；</li>
+<li>ue2中通过我们前面学习过的Object.defineProerty的方式来实现对象属性的监听；</li>
+</ul>
+
+                
+              </div>
+            
+            <hr/>
+            <div>
+              <div class="post-metas my-3">
+  
+    <div class="post-meta mr-3 d-flex align-items-center">
+      <i class="iconfont icon-category"></i>
+      
+
+<span class="category-chains">
+  
+  
+    
+      <span class="category-chain">
+        
+  <a href="/categories/Vue/" class="category-chain-item">Vue</a>
+  
+  
+
+      </span>
+    
+  
+</span>
+
+    </div>
+  
+  
+    <div class="post-meta">
+      <i class="iconfont icon-tags"></i>
+      
+        <a href="/tags/%E9%9D%A2%E8%AF%95%E9%A2%98/">#面试题</a>
+      
+    </div>
+  
+</div>
+
+
+              
+  
+
+  <div class="license-box my-3">
+    <div class="license-title">
+      <div>我的第一篇博客</div>
+      <div>http://example.com/2023/06/09/Vue的响应式原理/</div>
+    </div>
+    <div class="license-meta">
+      
+        <div class="license-meta-item">
+          <div>作者</div>
+          <div>weirdo</div>
+        </div>
+      
+      
+        <div class="license-meta-item license-meta-date">
+          <div>发布于</div>
+          <div>2023年6月9日</div>
+        </div>
+      
+      
+        <div class="license-meta-item license-meta-date">
+          <div>更新于</div>
+          <div>2023年9月12日</div>
+        </div>
+      
+      
+        <div class="license-meta-item">
+          <div>许可协议</div>
+          <div>
+            
+              
+              
+                <a target="_blank" href="https://creativecommons.org/licenses/by/4.0/">
+                  <span class="hint--top hint--rounded" aria-label="BY - 署名">
+                    <i class="iconfont icon-by"></i>
+                  </span>
+                </a>
+              
+            
+          </div>
+        </div>
+      
+    </div>
+    <div class="license-icon iconfont"></div>
+  </div>
+
+
+
+              
+                <div class="post-prevnext my-3">
+                  <article class="post-prev col-6">
+                    
+                    
+                      <a href="/2023/06/09/%E6%88%91%E7%9A%84%E7%AC%AC%E4%B8%80%E7%AF%87%E5%8D%9A%E5%AE%A2/" title="我的第一篇博客">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile">我的第一篇博客</span>
+                        <span class="visible-mobile">上一篇</span>
+                      </a>
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+  
+  
+    <article id="comments" lazyload>
+      
+  <div id="valine"></div>
+  <script type="text/javascript">
+    Fluid.utils.loadComments('#valine', function() {
+      Fluid.utils.createScript('https://lib.baomitu.com/valine/1.5.1/Valine.min.js', function() {
+        var options = Object.assign(
+          {"appId":"ukn0C9F4sFzy057RJ7Ohdmq4-gzGzoHsz","appKey":"x8NNzZf5L3jNKvqOKxoMj0FN","path":"window.location.pathname","placeholder":null,"avatar":"retro","meta":["nick","mail","link"],"requiredFields":[],"pageSize":10,"lang":"zh-CN","highlight":false,"recordIP":false,"serverURLs":"","emojiCDN":null,"emojiMaps":null,"enableQQ":false},
+          {
+            el: "#valine",
+            path: window.location.pathname
+          }
+        )
+        new Valine(options);
+        Fluid.utils.waitElementVisible('#valine .vcontent', () => {
+          var imgSelector = '#valine .vcontent img:not(.vemoji)';
+          Fluid.plugins.imageCaption(imgSelector);
+          Fluid.plugins.fancyBox(imgSelector);
+        })
+      });
+    });
+  </script>
+  <noscript>Please enable JavaScript to view the comments</noscript>
+
+
+    </article>
+  
+
+
+          </article>
+        </div>
+      </div>
+    </div>
+
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+  <aside class="sidebar" style="margin-left: -1rem">
+    <div id="toc">
+  <p class="toc-header">
+    <i class="iconfont icon-list"></i>
+    <span>目录</span>
+  </p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+
+
+  </aside>
+
+
+    </div>
+  </div>
+</div>
+
+
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+
+
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v" for="local-search-input">关键词</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+    
+
+    
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+  
+    <div class="footer-content">
+       <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a> <div style="font-size: 0.85rem"> <span id="timeDate">载入天数...</span> <span id="times">载入时分秒...</span> <script src="/js/duration.js"></script> </div> 
+    </div>
+  
+  
+    <div class="statistics">
+  
+  
+
+  
+    
+      <span id="leancloud-site-pv-container" style="display: none">
+        访问量 
+        <span id="leancloud-site-pv"></span>
+         次
+      </span>
+    
+    
+      <span id="leancloud-site-uv-container" style="display: none">
+        访客数 
+        <span id="leancloud-site-uv"></span>
+         人
+      </span>
+    
+    
+
+  
+</div>
+
+  
+  
+  
+</div>
+
+  </footer>
+
+  <!-- Scripts -->
+  
+  <script  src="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":true,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://lib.baomitu.com/jquery/3.6.0/jquery.min.js" ></script>
+<script  src="https://lib.baomitu.com/twitter-bootstrap/4.6.1/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+
+  <script  src="https://lib.baomitu.com/typed.js/2.0.12/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var subtitle = document.getElementById('subtitle');
+      if (!subtitle || !typing) {
+        return;
+      }
+      var text = subtitle.getAttribute('data-typed-text');
+      
+        typing(text);
+      
+    })(window, document);
+  </script>
+
+
+
+
+  
+    <script  src="/js/img-lazyload.js" ></script>
+  
+
+
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/tocbot/4.18.2/tocbot.min.js', function() {
+    var toc = jQuery('#toc');
+    if (toc.length === 0 || !window.tocbot) { return; }
+    var boardCtn = jQuery('#board-ctn');
+    var boardTop = boardCtn.offset().top;
+
+    window.tocbot.init(Object.assign({
+      tocSelector     : '#toc-body',
+      contentSelector : '.markdown-body',
+      linkClass       : 'tocbot-link',
+      activeLinkClass : 'tocbot-active-link',
+      listClass       : 'tocbot-list',
+      isCollapsedClass: 'tocbot-is-collapsed',
+      collapsibleClass: 'tocbot-is-collapsible',
+      scrollSmooth    : true,
+      includeTitleTags: true,
+      headingsOffset  : -boardTop,
+    }, CONFIG.toc));
+    if (toc.find('.toc-list-item').length > 0) {
+      toc.css('visibility', 'visible');
+    }
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('tocbot' in window) {
+        tocbot.refresh();
+        var toc = jQuery('#toc');
+        if (toc.length === 0 || !tocbot) {
+          return;
+        }
+        if (toc.find('.toc-list-item').length > 0) {
+          toc.css('visibility', 'visible');
+        }
+      }
+    });
+  });
+</script>
+
+
+  <script src=https://lib.baomitu.com/clipboard.js/2.0.11/clipboard.min.js></script>
+
+  <script>Fluid.plugins.codeWidget();</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/anchor-js/4.3.1/anchor.min.js', function() {
+    window.anchors.options = {
+      placement: CONFIG.anchorjs.placement,
+      visible  : CONFIG.anchorjs.visible
+    };
+    if (CONFIG.anchorjs.icon) {
+      window.anchors.options.icon = CONFIG.anchorjs.icon;
+    }
+    var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+    var res = [];
+    for (var item of el) {
+      res.push('.markdown-body > ' + item.trim());
+    }
+    if (CONFIG.anchorjs.placement === 'left') {
+      window.anchors.options.class = 'anchorjs-link-left';
+    }
+    window.anchors.add(res.join(', '));
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('anchors' in window) {
+        anchors.removeAll();
+        var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+        var res = [];
+        for (var item of el) {
+          res.push('.markdown-body > ' + item.trim());
+        }
+        if (CONFIG.anchorjs.placement === 'left') {
+          anchors.options.class = 'anchorjs-link-left';
+        }
+        anchors.add(res.join(', '));
+      }
+    });
+  });
+</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.js', function() {
+    Fluid.plugins.fancyBox();
+  });
+</script>
+
+
+  <script>Fluid.plugins.imageCaption();</script>
+
+  <script defer src="/js/leancloud.js" ></script>
+
+  <script  src="/js/local-search.js" ></script>
+
+
+
+
+
+<!-- 主题的启动项，将它保持在最底部 -->
+<!-- the boot of the theme, keep it at the bottom -->
+<script  src="/js/boot.js" ></script>
+
+
+  
+
+  <noscript>
+    <div class="noscript-warning">博客在允许 JavaScript 运行的环境下浏览效果更佳</div>
+  </noscript>
+</body>
+</html>
