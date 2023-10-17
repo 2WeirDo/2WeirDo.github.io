@@ -16,26 +16,28 @@
   <meta name="author" content="weirdo">
   <meta name="keywords" content="">
   
-    <meta name="description" content="原文 中高级前端工程师都需要熟悉的技能–前端缓存 - 掘金  HTTP 缓存可以分为协商缓存和强制缓存两种类型。  强缓存  强制缓存是指浏览器在请求资源时，不会发送任何请求头，直接从本地缓存中读取资源，从⽽提⾼响应速度,  只要浏览器判断缓存没有过期，则直接使用浏览器的本地缓存，决定是否使用缓存的主动性在于浏览器这边。      协商缓存   协商缓存是指浏览器在请求资源时，会发送⼀些请求头到">
+    <meta name="description" content="Chrome打开一个页面需要启动多少进程？  仅仅打开了1个页面，为什么有4个进程？ 在解答这个问题之前，我们需要了解一下进程与线程的概念。 1. 进程和线程计算机中的并行处理就是同一时刻处理多个任务, 比如我们要计算三个表达式的值，并显示出结果。  正常情况下程序可以使用单线程来处理，也就是分四步按照顺序分别执行这四个任务。 但如果采用多线程，我们只需分“两步走” : 第一步，使用三个线程同时执">
 <meta property="og:type" content="article">
-<meta property="og:title" content="强制缓存和协商缓存?">
-<meta property="og:url" content="http://example.com/2023/10/07/%E5%BC%BA%E5%88%B6%E7%BC%93%E5%AD%98%E5%92%8C%E5%8D%8F%E5%95%86%E7%BC%93%E5%AD%98/index.html">
+<meta property="og:title" content="关于浏览器的单进程&#x2F;多进程架构">
+<meta property="og:url" content="http://example.com/2023/10/17/%E6%B5%8F%E8%A7%88%E5%99%A8--/index.html">
 <meta property="og:site_name" content="Weirdo">
-<meta property="og:description" content="原文 中高级前端工程师都需要熟悉的技能–前端缓存 - 掘金  HTTP 缓存可以分为协商缓存和强制缓存两种类型。  强缓存  强制缓存是指浏览器在请求资源时，不会发送任何请求头，直接从本地缓存中读取资源，从⽽提⾼响应速度,  只要浏览器判断缓存没有过期，则直接使用浏览器的本地缓存，决定是否使用缓存的主动性在于浏览器这边。      协商缓存   协商缓存是指浏览器在请求资源时，会发送⼀些请求头到">
+<meta property="og:description" content="Chrome打开一个页面需要启动多少进程？  仅仅打开了1个页面，为什么有4个进程？ 在解答这个问题之前，我们需要了解一下进程与线程的概念。 1. 进程和线程计算机中的并行处理就是同一时刻处理多个任务, 比如我们要计算三个表达式的值，并显示出结果。  正常情况下程序可以使用单线程来处理，也就是分四步按照顺序分别执行这四个任务。 但如果采用多线程，我们只需分“两步走” : 第一步，使用三个线程同时执">
 <meta property="og:locale" content="zh_CN">
-<meta property="og:image" content="https://weirdo-blog.oss-cn-chengdu.aliyuncs.com/blog/202310171848158.png">
-<meta property="og:image" content="https://weirdo-blog.oss-cn-chengdu.aliyuncs.com/blog/202310071059690.png">
-<meta property="og:image" content="https://weirdo-blog.oss-cn-chengdu.aliyuncs.com/blog/202310071059655.png">
-<meta property="article:published_time" content="2023-10-07T03:06:30.000Z">
-<meta property="article:modified_time" content="2023-10-17T10:51:24.638Z">
+<meta property="og:image" content="https://weirdo-blog.oss-cn-chengdu.aliyuncs.com/blog/202310171854683.png">
+<meta property="og:image" content="https://weirdo-blog.oss-cn-chengdu.aliyuncs.com/blog/202310171854780.png">
+<meta property="og:image" content="https://weirdo-blog.oss-cn-chengdu.aliyuncs.com/blog/202310171854877.png">
+<meta property="og:image" content="https://weirdo-blog.oss-cn-chengdu.aliyuncs.com/blog/202310171854713.png">
+<meta property="og:image" content="https://weirdo-blog.oss-cn-chengdu.aliyuncs.com/blog/202310171854633.png">
+<meta property="article:published_time" content="2023-10-17T10:59:30.000Z">
+<meta property="article:modified_time" content="2023-10-17T10:59:46.152Z">
 <meta property="article:author" content="weirdo">
 <meta property="article:tag" content="面试题">
 <meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:image" content="https://weirdo-blog.oss-cn-chengdu.aliyuncs.com/blog/202310171848158.png">
+<meta name="twitter:image" content="https://weirdo-blog.oss-cn-chengdu.aliyuncs.com/blog/202310171854683.png">
   
   
   
-  <title>强制缓存和协商缓存? - Weirdo</title>
+  <title>关于浏览器的单进程/多进程架构 - Weirdo</title>
 
   <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
 
@@ -218,7 +220,7 @@
       <div class="banner-text text-center fade-in-up">
         <div class="h2">
           
-            <span id="subtitle" data-typed-text="强制缓存和协商缓存?"></span>
+            <span id="subtitle" data-typed-text="关于浏览器的单进程/多进程架构"></span>
           
         </div>
 
@@ -234,8 +236,8 @@
     
       <span class="post-meta">
         <i class="iconfont icon-date-fill" aria-hidden="true"></i>
-        <time datetime="2023-10-07 11:06" pubdate>
-          2023年10月7日 上午
+        <time datetime="2023-10-17 18:59" pubdate>
+          2023年10月17日 晚上
         </time>
       </span>
     
@@ -246,7 +248,7 @@
       <span class="post-meta mr-2">
         <i class="iconfont icon-chart"></i>
         
-          3.2k 字
+          3.6k 字
         
       </span>
     
@@ -257,7 +259,7 @@
         
         
         
-          14 分钟
+          16 分钟
         
       </span>
     
@@ -303,102 +305,143 @@
         <div id="board">
           <article class="post-content mx-auto">
             <!-- SEO header -->
-            <h1 style="display: none">强制缓存和协商缓存?</h1>
+            <h1 style="display: none">关于浏览器的单进程/多进程架构</h1>
             
             
               <div class="markdown-body">
                 
-                <blockquote>
-<p>原文 <a target="_blank" rel="noopener" href="https://juejin.cn/post/7127194919235485733?searchId=2023100709440962FECF52597D2C3CBEA0#heading-4">中高级前端工程师都需要熟悉的技能–前端缓存 - 掘金</a></p>
-</blockquote>
-<p>HTTP 缓存可以分为协商缓存和强制缓存两种类型。</p>
-<blockquote>
-<p>强缓存</p>
-</blockquote>
-<p>强制缓存是指浏览器在请求资源时，不会发送任何请求头，直接从本地缓存中读取资源，从⽽提⾼响应速度,  只要浏览器判断缓存没有过期，则直接使用浏览器的本地缓存，决定是否使用缓存的主动性在于浏览器这边。</p>
-<img src="https://weirdo-blog.oss-cn-chengdu.aliyuncs.com/blog/202310171848158.png" srcset="/img/loading.gif" lazyload alt="img" style="zoom:50%;" />
-
-
-
-<blockquote>
-<p>协商缓存</p>
-</blockquote>
+                <p>Chrome打开一个页面需要启动多少进程？</p>
+<p><img src="https://weirdo-blog.oss-cn-chengdu.aliyuncs.com/blog/202310171854683.png" srcset="/img/loading.gif" lazyload alt="img"></p>
+<p><strong>仅仅打开了1个页面，为什么有4个进程？</strong></p>
+<p>在解答这个问题之前，我们需要了解一下进程与线程的概念。</p>
+<h3 id="1-进程和线程"><a href="#1-进程和线程" class="headerlink" title="1. 进程和线程"></a>1. 进程和线程</h3><p>计算机中的并行处理就是同一时刻处理多个任务, 比如我们要计算三个表达式的值，并显示出结果。</p>
 <ul>
-<li>协商缓存是指浏览器在请求资源时，会发送⼀些请求头到服务器，询问服务器资源是否已经发⽣改变。如果资源未发⽣改变，服务器将返回 304 状态码，告诉浏览器可以从缓存中读取资源，从⽽减少了⽹络带宽的使⽤。强制缓存失效之后，浏览器在请求头中携带相应的缓存字段来向服务器发请求，由服务器根据这个字段，来决定是否使用缓存，这就是协商缓存。</li>
+<li>正常情况下程序可以使用<strong>单线程</strong>来处理，也就是分四步按照顺序分别执行这四个任务。</li>
+<li>但如果采用<strong>多线程</strong>，我们只需分“两步走” : 第一步，使用三个线程同时执行前三个任务；第二步，再执行第四个显示任务。</li>
 </ul>
-<h3 id="1-基于-Expires-字段实现的强缓存"><a href="#1-基于-Expires-字段实现的强缓存" class="headerlink" title="1. 基于 Expires 字段实现的强缓存"></a>1. 基于 Expires 字段实现的强缓存</h3><p>使用响应头的<code>Expires</code>字段去实现强缓存</p>
-<p><code>Expires</code> 头部：指定资源过期的时间，如果在过期时间之前再次请求该资源，浏览器将直接从缓存中读取资源。</p>
-<p>比如说将某一资源设置响应头为:<code>Expires:new Date(&quot;2022-7-30 23:59:59&quot;)</code>；</p>
-<p>那么，该资源在2022-7-30 23:59:59 之前，都会去本地的磁盘（或内存）中读取，不会去服务器请求。</p>
+<p><strong>通过对比发现用单线程执行需要四步，而使用多线程只需要两步。因此，使用并行处理能大大提升性能。</strong></p>
+<p>多线程可以并行处理任务，但是线程是不能单独存在的，它是由进程来启动和管理的。</p>
 <blockquote>
-<p>Expires判断强缓存是否过期的机制是: 获取本地时间戳，并对先前拿到的资源文件中的Expires字段的时间做比较, 但是Expires<strong>过度依赖本地时间</strong>，如果本地与服务器时间不同步，就会出现资源无法被缓存或者资源永远被缓存的情况。</p>
+<p>什么是进程呢?</p>
 </blockquote>
-<h3 id="2-基于-Cache-control-实现的强缓存"><a href="#2-基于-Cache-control-实现的强缓存" class="headerlink" title="2. 基于 Cache-control 实现的强缓存"></a>2. 基于 Cache-control 实现的强缓存</h3><p><code>Cache-Control</code> 头部：可以指定资源的缓存策略，包括 max-age,  public、private、no-cache 等，控制浏览器的缓存⾏为。</p>
-<p>通过在资源的响应头中设置 <code>Cache-Control:max-age=N</code>，N就是需要缓存的秒数。</p>
-<p>那么,  从第一次请求资源的时候开始，往后N秒内，资源若再次请求，则直接从磁盘（或内存中读取），不与服务器做任何交互。</p>
+<p>一个<strong>进程</strong>就是一个程序的运行实例。</p>
+<p>详细解释就是，启动一个程序的时候，操作系统会为该程序创建一块内存，用来存放代码、运行中的数据和一个执行任务的主线程，我们把这样的一个运行环境叫进程。</p>
 <blockquote>
-<p>Cache-control中因为max-age后面的值是一个滑动时间，从服务器第一次返回该资源时开始倒计时。所以也就不需要比对客户端和服务端的时间，解决了Expires所存在的巨大漏洞。</p>
+<p>单线程与多线程的进程对比图</p>
 </blockquote>
-<h3 id="3-基于-lasted-modified-实现的协商缓存"><a href="#3-基于-lasted-modified-实现的协商缓存" class="headerlink" title="3. 基于 lasted-modified 实现的协商缓存"></a>3. 基于 lasted-modified 实现的协商缓存</h3><ol>
-<li>浏览器在第一次请求资源时，在服务器端读出文件修改时间，将读出来的修改时间赋给响应头的<code>last-modified</code>字段。然后设置<code>Cache-control:no-cache(跳过强缓存校验，直接进行协商缓存)</code>. </li>
-<li>当客户端读取到<code>last-modified</code>的时候，会在下次的请求标头中携带一个字段<code>If-Modified-Since(这个请求头中的If-Modified-Since就是上一次请求设置在响应头中的 last-modified)</code>。  </li>
-<li>当再次请求资源时, 服务端需要拿到请求头中的 <code>If-Modified-Since</code> 这个时间并再次读取该资源的修改时间, 让他们两个做一个比对来决定是读取缓存还是返回新的资源。如果没有发生变化，返回 304 状态码并读取缓存，否则返回新的资源并将资源修改时间赋值给响应头的<code>last-modified</code> 字段。</li>
-</ol>
-<p><img src="https://weirdo-blog.oss-cn-chengdu.aliyuncs.com/blog/202310071059690.png" srcset="/img/loading.gif" lazyload alt="img"></p>
-<p>使用以上方式的协商缓存存在两个非常明显的漏洞。这两个漏洞都是基于文件是通过比较修改时间来判断是否更改而产生的。</p>
+<p><img src="https://weirdo-blog.oss-cn-chengdu.aliyuncs.com/blog/202310171854780.png" srcset="/img/loading.gif" lazyload alt="img"></p>
+<p><strong>从图中可以看到，线程是依附于进程的，而进程中使用多线程并行处理能提升运算效率。</strong></p>
+<p><strong>进程和线程之间的关系有以下4个特点。</strong></p>
 <ol>
-<li>因为是更具文件修改时间来判断的，所以，在文件内容本身不修改的情况下，依然有可能更新文件修改时间（比如修改文件名再改回来），这样，就有可能文件内容明明没有修改，但是缓存依然失效了。</li>
-<li>当文件在极短时间内完成修改的时候（比如几百毫秒）。因为文件修改时间记录的最小单位是秒，所以，如果文件在几百毫秒内完成修改的话，文件修改时间不会改变，这样，即使文件内容修改了，依然不会返回新的文件。</li>
+<li><strong>进程中的任意一线程执行出错，都会导致整个进程的崩溃。</strong></li>
+<li><strong>线程之间共享进程中的数据。</strong></li>
+<li><strong>当一个进程关闭之后，操作系统会回收进程所占用的内存。</strong></li>
 </ol>
-<blockquote>
-<p>为了解决上述的这两个问题。从http1.1开始新增了一个头信息，ETag(Entity 实体标签)</p>
-</blockquote>
-<h3 id="4-基于-ETag-实现的协商缓存"><a href="#4-基于-ETag-实现的协商缓存" class="headerlink" title="4. 基于 ETag 实现的协商缓存"></a>4. 基于 ETag 实现的协商缓存</h3><ol>
-<li>第一次请求某资源的时候，服务端读取文件并计算出文件指纹，将文件指纹放在响应头的<code>etag</code>字段中跟资源一起返回给客户端。</li>
-<li>第二次请求某资源的时候，客户端自动从缓存中读取出上一次服务端返回的<code>ETag</code>也就是文件指纹。并赋给请求头的<code>if-None-Match</code>字段，让上一次的文件指纹跟随请求一起回到服务端。</li>
-<li>服务端拿到请求头中的<code>if-None-Match</code>字段值（也就是上一次的文件指纹），并再次读取目标资源并生成文件指纹，两个指纹做对比。如果两个文件指纹完全吻合，说明文件没有被改变，则直接返回304状态码和一个空的响应体并<code>return</code>(这个时候已经读取了缓存)。如果两个文件指纹不吻合，则说明文件被更改，那么返回新的资源并将新的文件指纹重新存储到响应头的<code>ETag</code>字段</li>
-</ol>
-<p><img src="https://weirdo-blog.oss-cn-chengdu.aliyuncs.com/blog/202310071059655.png" srcset="/img/loading.gif" lazyload alt="img"></p>
-<blockquote>
-<p> ETag 的缺点</p>
-</blockquote>
-<ol>
-<li>ETag需要计算文件指纹这样意味着，服务端需要更多的计算开销。。如果文件尺寸大，数量多，并且计算频繁，那么ETag的计算就会影响服务器的性能。显然，ETag在这样的场景下就不是很适合。</li>
-<li>ETag有强验证和弱验证，所谓将强验证，ETag生成的哈希码深入到每个字节。哪怕文件中只有一个字节改变了，也会生成不同的哈希值，它可以保证文件内容绝对的不变。但是，强验证非常消耗计算量。ETag还有一个弱验证，弱验证是提取文件的部分属性来生成哈希值。因为不必精确到每个字节，所以他的整体速度会比强验证快，但是准确率不高。会降低协商缓存的有效性。</li>
-</ol>
-<h3 id="5-缓存位置"><a href="#5-缓存位置" class="headerlink" title="5. 缓存位置"></a>5. 缓存位置</h3><p>当强缓存命中或者<code>协商缓存</code>中服务器返回304的时候，我们直接从缓存中获取资源。那这些资源究竟缓存在什么位置呢？</p>
-<p>浏览器中的缓存位置一共有四种，按优先级从高到低排列分别是：</p>
 <ul>
-<li>Service Worker</li>
-<li>Memory Cache</li>
-<li>Disk Cache</li>
-<li>Push Cache</li>
+<li>当一个进程退出时，操作系统会回收该进程所申请的所有资源；即使其中任意线程因为操作不当导致内存泄漏，当进程退出时，这些内存也会被正确回收。</li>
+</ul>
+<ol start="4">
+<li><strong>进程之间的内容相互隔离</strong></li>
+</ol>
+<ul>
+<li>正是因为进程之间的数据是严格隔离的，所以一个进程如果崩溃了，或者挂起了，是不会影响到其他进程的。如果进程之间需要进行数据的通信这时候，就需要使用用于进程间通信（IPC）的机制了。</li>
+</ul>
+<h3 id="2-单进程浏览器时代"><a href="#2-单进程浏览器时代" class="headerlink" title="2. 单进程浏览器时代"></a>2. 单进程浏览器时代</h3><p>单进程浏览器是指浏览器的所有功能模块都是运行在同一个进程里些模块包含了网络、插件、JavaScript运行环境、渲染引擎和页面等。<img src="https://weirdo-blog.oss-cn-chengdu.aliyuncs.com/blog/202310171854877.png" srcset="/img/loading.gif" lazyload alt="img"></p>
+<p>如此多的功能模块运行在一个进程里，是导致单进程浏览器<strong>不稳定、不流畅和不安全</strong>的一个主要因素。</p>
+<p><strong>不稳定</strong></p>
+<ul>
+<li>早期浏览器需要借助于插件来实现诸如Web视频、Web游戏等各种强大的功能，但是插件是最容易出问题的模块，并且还运行在浏览器进程之中，所以一个插件的意外崩溃会引起整个浏览器的崩溃</li>
+<li>除了插件之外，渲染引擎模块也是不稳定的，通常一些复杂的JavaScript代码就有可能引起渲染引擎模块的崩溃。和插件一样，渲染引擎的崩溃也会导致整个浏览器的崩溃。</li>
+</ul>
+<p><strong>不流畅</strong></p>
+<ul>
+<li>单进程浏览器中所有页面的渲染模块、JavaScript执行环境以及插件都是运行在同一个线程中的，这就意味着同一时刻只能有一个模块可以执行。<strong>当有脚本发生无限循环时，</strong>它会独占整个线程，这样导致其他运行在该线程中的模块就没有机会被执行。因为浏览器中所有的页面都运行在该线程中，所以这些页面都没有机会去执行任务，这样就会导致整个浏览器失去响应，变卡顿。</li>
+<li>除了上述脚本或者插件会让单进程浏览器变卡顿外，<strong>页面的内存泄漏</strong>也是单进程变慢的一个重要原因。通常浏览器的内核都是非常复杂的，运行一个复杂点的页面再关闭页面，会存在内存不能完全回收的情况，这样导致的问题是使用时间越长，内存占用越高，浏览器会变得越慢。</li>
+</ul>
+<p><strong>不安全</strong></p>
+<ul>
+<li>插件可以使用C&#x2F;C++等代码编写，<strong>通过插件可以获取到操作系统的任意资源，</strong>当你在页面运行一个插件时也就意味着这个插件能完全操作你的电脑。如果是个恶意插件，那么它就可以释放病毒、窃取你的账号密码，引发安全性问题。</li>
+<li><strong>页面脚本可以通过浏览器的漏洞来获取系统权限</strong>，这些脚本获取系统权限之后也可以对你的电脑做一些恶意的事情，同样也会引发安全问题。</li>
 </ul>
 <blockquote>
-<p>Service Worker</p>
+<p>好在现代浏览器已经解决了这些问题，是如何解决的呢？这就得聊聊我们这个“多进程浏览器时代”了。</p>
 </blockquote>
-<p>Service Worker 借鉴了 Web Worker的 思路，即让 JS 运行在主线程之外，由于它脱离了浏览器的窗体，因此无法直接访问DOM。虽然如此，但它仍然能帮助我们完成很多有用的功能，比如离线缓存、消息推送和网络代理等功能。其中的离线缓存就是 <strong>Service Worker Cache</strong>。</p>
-<blockquote>
-<p> Memory Cache 和 Disk Cache</p>
+<h3 id="3-多进程浏览器时代"><a href="#3-多进程浏览器时代" class="headerlink" title="3. 多进程浏览器时代"></a>3. 多进程浏览器时代</h3><blockquote>
+<p>多进程浏览器架构的特点</p>
 </blockquote>
-<p><strong>Memory Cache</strong>指的是内存缓存，从效率上讲它是最快的。但是从存活时间来讲又是最短的，当渲染进程结束后，内存缓存也就不存在了。</p>
-<p><strong>Disk Cache</strong>就是存储在磁盘中的缓存，从存取效率上讲是比内存缓存慢的，但是他的优势在于存储容量和存储时长。稍微有些计算机基础的应该很好理解，就不展开了。</p>
-<p>好，现在问题来了，既然两者各有优劣，那浏览器如何决定将资源放进内存还是硬盘呢？主要策略如下：</p>
+<p><strong>稳定</strong></p>
 <ul>
-<li>比较大的JS、CSS文件会直接被丢进磁盘，反之丢进内存</li>
-<li>内存使用率比较高的时候，文件优先进入磁盘</li>
+<li>由于进程是相互隔离的，所以当一个页面或者插件崩溃时，影响到的仅仅是当前的页面进程或者插件进程，并不会影响到浏览器和其他页面，这就完美地解决了页面或者插件的崩溃会导致整个浏览器崩溃，也就是不稳定的问题。</li>
+</ul>
+<p><strong>流畅</strong></p>
+<ul>
+<li>JavaScript也是运行在渲染进程中的，所以即使<strong>JavaScript阻塞了渲染进程</strong>，影响到的也只是当前的渲染页面，而并不会影响浏览器和其他页面，因为其他页面的脚本是运行在它们自己的渲染进程中的。所以即使Chrome中运行上面死循环的脚本时，没有响应的仅仅也是当前的页面。</li>
+<li>对于<strong>内存泄漏的解决方法</strong>那就更简单了，因为当关闭一个页面时，整个渲染进程也会被关闭，之后该进程所占用的内存都会被系统回收，这样就轻松解决了浏览器页面的内存泄漏问题。</li>
+</ul>
+<p><strong>安全</strong></p>
+<ul>
+<li>采用多进程架构的额外好处是可以使用安全沙箱。沙箱可以看成是操作系统给进程上了一把锁，沙箱里面的程序可以运行，但是不能在你的硬盘上写入任何数据，也不能在敏感位置读取任何数据。</li>
+<li>例如你的文档和桌面。Chrome把插件进程和渲染进程锁在沙箱里面，这样即使在渲染进程或者插件进程里面执行了恶意程序，恶意程序也无法突破沙箱去获取系统权限。</li>
 </ul>
 <blockquote>
-<p>Push Cache</p>
+<p>目前的多进程架构</p>
 </blockquote>
-<p>即推送缓存，这是浏览器缓存的最后一道防线。它是 HTTP&#x2F;2 中的内容，虽然现在应用的并不广泛，但随着 HTTP&#x2F;2 的推广，它的应用越来越广泛。</p>
-<h3 id="6-总结一下"><a href="#6-总结一下" class="headerlink" title="6. 总结一下"></a>6. 总结一下</h3><ul>
-<li>需要注意的是，协商缓存虽然可以减少⽹络带宽的使⽤，但是需要服务器进⾏资源⽐较，会增加服务器的负载</li>
-<li>关于强缓存，cache-control是Expires的完全替代方案，在可以使用cache-control的情况下不要使用expires</li>
-<li>关于协商缓存,etag并不是last-modified的完全替代方案，而是补充方案，具体用哪一个，取决于业务场景。</li>
-<li>有哈希值的文件设置强缓存即可。没有哈希值的文件（比如index.html）设置协商缓存</li>
-<li>有些缓存是从磁盘读取，有些缓存是从内存读取，有什么区别？答：从内存读取的缓存更快。</li>
-<li>所有带304的资源都是协商缓存，所有标注（从内存中读取&#x2F;从磁盘中读取）的资源都是强缓存。</li>
+<p><img src="https://weirdo-blog.oss-cn-chengdu.aliyuncs.com/blog/202310171854713.png" srcset="/img/loading.gif" lazyload alt="img"></p>
+<p>从图中可以看出，最新的Chrome浏览器包括：</p>
+<p>1个浏览器（Browser）主进程、1个 GPU 进程、1个网络（NetWork）进程、多个渲染进程和多个插件进程。</p>
+<blockquote>
+<p>下面来逐个分析下这几个进程的功能：</p>
+</blockquote>
+<p><strong>Browser浏览器进程</strong></p>
+<p>主要负责界面显示、用户交互、子进程管理，同时提供存储等功能。</p>
+<p><strong>渲染进程</strong></p>
+<p>核心任务是将 HTML、CSS 和 JS 转换为用户可以与之交互的网页，排版引擎Blink和JS引擎V8都是运行在该进程中，默认情况下，Chrome会为每个Tab标签创建一个渲染进程。出于安全考虑，渲染进程都是运行在沙箱模式下。</p>
+<p><strong>GPU进程</strong></p>
+<p>Chrome刚开始发布的时候是没有GPU进程的。而GPU的使用初衷是为了实现3D CSS的效果，只是随后网页、Chrome的UI界面都选择采用GPU来绘制，这使得GPU成为浏览器普遍的需求。最后，Chrome在其多进程架构上也引入了GPU进程。</p>
+<p><strong>NetWork网络进程</strong></p>
+<p>主要负责页面的网络资源加载，之前是作为一个模块运行在浏览器进程里面的，直至最近才独立出来，成为一个单独的进程。</p>
+<p><strong>插件进程</strong></p>
+<p>主要是负责插件的运行，因插件易崩溃，所以需要通过插件进程来隔离，以保证插件进程崩溃不会对浏览器和页面造成影响。</p>
+<p>讲到这里，现在应该就明白文章开头提到的问题了：</p>
+<p><strong>仅仅打开了1个页面，为什么有4个进程？</strong></p>
+<p>开1个页面至少需要1个网络进程、1个浏览器进程、1个GPU进程以及1个渲染进程，共4个；如果打开的页面有运行插件的话，还需要再加上1个插件进程。</p>
+<h3 id="4-渲染进程中的线程"><a href="#4-渲染进程中的线程" class="headerlink" title="4. 渲染进程中的线程"></a>4. 渲染进程中的线程</h3><p>我们平时看到的浏览器呈现出页面过程中，大部分工作都是在渲染进程中完成，所以我们来看一下渲染进程中的线程。</p>
+<p><img src="https://weirdo-blog.oss-cn-chengdu.aliyuncs.com/blog/202310171854633.png" srcset="/img/loading.gif" lazyload alt="img"></p>
+<p><strong>GUI渲染线程：</strong></p>
+<ul>
+<li>负责渲染浏览器界面，解析HTML，CSS，构建DOM树和RenderObject树，布局和绘制等。</li>
+<li>当界面需要重绘（Repaint）或由于某种操作引发回流(reflow)时，该线程就会执行</li>
+<li>注意，GUI渲染线程与JS引擎线程是互斥的，当JS引擎执行时GUI线程会被挂起（相当于被冻结了），GUI更新会被保存在一个队列中等到JS引擎空闲时&#x2F;执行完时立即被执行。</li>
+</ul>
+<p><strong>JS引擎线程：</strong></p>
+<ul>
+<li><p>也称为JS内核，负责处理Javascript脚本程序。如V8引擎</p>
+</li>
+<li><p>JS引擎线程负责解析Javascript脚本，运行代码。</p>
+</li>
+<li><p>JS引擎一直等待着任务队列中任务的到来，然后加以处理，一个Tab页（renderer进程）中无论什么时候都只有一个JS线程在运行JS程序</p>
+</li>
+<li><p>同样注意，GUI渲染线程与JS引擎线程是互斥的，所以如果JS执行的时间过长，这样就会造成页面的渲染不连贯，导致页面渲染加载阻塞。</p>
+</li>
+</ul>
+<p><strong>事件触发线程</strong></p>
+<ul>
+<li>归属于浏览器而不是JS引擎，用来控制事件循环（可以理解，JS引擎自己都忙不过来，需要浏览器另开线程协助）</li>
+<li>当<code>js</code>代码在解析时，遇到事件比如鼠标事件时，会将这些任务添加到事件触发线程中</li>
+<li>当对应的事件符合触发条件被触发时，该线程会把事件添加到待处理队列的队尾，等待JS引擎的处理</li>
+<li>注意，由于JS的单线程关系，所以这些待处理队列中的事件都得排队等待JS引擎处理（当JS引擎空闲时才会去执行）</li>
+</ul>
+<p><strong>定时触发器线程</strong></p>
+<ul>
+<li>指setInterval与setTimeout所在线程</li>
+<li>浏览器定时计数器并不是由JavaScript引擎计数的，因为JS引擎是单线程的，所以如果处于阻塞状态，那么就会影响记计时的准确，所以需要单独的线程来负责计时器工作。</li>
+<li>计时完毕后，添加到事件队列中，等待JS引擎空闲后执行。</li>
+<li>注意，W3C在HTML标准中规定，规定要求setTimeout中低于4ms的时间间隔算为4ms。</li>
+</ul>
+<p><strong>异步http请求线程：</strong></p>
+<ul>
+<li>XMLHttpRequest连接后浏览器开的一个线程，比如请求有回调函数，异步线程就会将回调函数加入事件队列，等待JS引擎空闲执行</li>
+<li>将检测到状态变更时，如果设置有回调函数，异步线程就产生状态变更事件，将这个回调再放入事件队列中。再由JavaScript引擎执行。</li>
 </ul>
 
                 
@@ -418,7 +461,7 @@
     
       <span class="category-chain">
         
-  <a href="/categories/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C/" class="category-chain-item">计算机网络</a>
+  <a href="/categories/%E6%B5%8F%E8%A7%88%E5%99%A8/" class="category-chain-item">浏览器</a>
   
   
 
@@ -445,8 +488,8 @@
 
   <div class="license-box my-3">
     <div class="license-title">
-      <div>强制缓存和协商缓存?</div>
-      <div>http://example.com/2023/10/07/强制缓存和协商缓存/</div>
+      <div>关于浏览器的单进程/多进程架构</div>
+      <div>http://example.com/2023/10/17/浏览器--/</div>
     </div>
     <div class="license-meta">
       
@@ -458,7 +501,7 @@
       
         <div class="license-meta-item license-meta-date">
           <div>发布于</div>
-          <div>2023年10月7日</div>
+          <div>2023年10月17日</div>
         </div>
       
       
@@ -495,18 +538,12 @@
                   <article class="post-prev col-6">
                     
                     
-                      <a href="/2023/10/16/%E4%BD%A0%E4%BA%86%E8%A7%A3%E5%8F%91%E5%B8%83%E8%AE%A2%E9%98%85%E6%A8%A1%E5%BC%8F%E5%90%97/" title="你了解发布-订阅模式吗?">
-                        <i class="iconfont icon-arrowleft"></i>
-                        <span class="hidden-mobile">你了解发布-订阅模式吗?</span>
-                        <span class="visible-mobile">上一篇</span>
-                      </a>
-                    
                   </article>
                   <article class="post-next col-6">
                     
                     
-                      <a href="/2023/09/30/kmp%E7%AE%97%E6%B3%95(JS%E7%89%88)/" title="kmp算法(JS版)">
-                        <span class="hidden-mobile">kmp算法(JS版)</span>
+                      <a href="/2023/10/16/%E4%BD%A0%E4%BA%86%E8%A7%A3%E5%8F%91%E5%B8%83%E8%AE%A2%E9%98%85%E6%A8%A1%E5%BC%8F%E5%90%97/" title="你了解发布-订阅模式吗?">
+                        <span class="hidden-mobile">你了解发布-订阅模式吗?</span>
                         <span class="visible-mobile">下一篇</span>
                         <i class="iconfont icon-arrowright"></i>
                       </a>
