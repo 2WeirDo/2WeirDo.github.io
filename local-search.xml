@@ -4,6 +4,31 @@
   
   
   <entry>
+    <title>GPU 和 CSS 硬件加速</title>
+    <link href="/2023/10/25/GPU%E6%B8%B2%E6%9F%93/"/>
+    <url>/2023/10/25/GPU%E6%B8%B2%E6%9F%93/</url>
+    
+    <content type="html"><![CDATA[<h3 id="从cpu聊起"><a href="#从cpu聊起" class="headerlink" title="从cpu聊起"></a>从<code>cpu</code>聊起</h3><p>cpu 每个核只有一个线程，也就是单控制流、单数据流。这样的架构导致 cpu 在一些场景下效率是不高的，比如 3d 渲染的场景。</p><blockquote><p>3d 渲染的流程是：</p></blockquote><ul><li>计算顶点数据，构成 3d 的图形</li><li>给每个三角形贴图，画上纹理</li><li>投影到二维的屏幕，计算每个像素的颜色（光栅化）</li><li>把一帧的数据写入显存的帧缓冲区</li></ul><p>顶点的数量是非常庞大的，而 cpu 只能顺序的一个个计算，所以处理这种 3d 渲染会特别费劲，于是就出现了专门用于这种 3d 数据的并行计算的硬件，也就是 GPU。</p><h3 id="GPU-的构成"><a href="#GPU-的构成" class="headerlink" title="GPU 的构成"></a>GPU 的构成</h3><p>和 cpu 的一个一个数据计算不同，gpu 是并行的，有成百上千个核心用于并行计算</p><p>gpu 也是有着指令、译码、执行的流程，只不过，每个指令会并行执行 n 个计算，是单控制流多数据流的，而 cpu 是单控制流单数据流。</p><p>所以，对于 3d 渲染这种要计算成万个顶点数据和像素点的场景，GPU 会比 CPU 高效很多。</p><h3 id="cpu-和-gpu-的区别"><a href="#cpu-和-gpu-的区别" class="headerlink" title="cpu 和 gpu 的区别"></a>cpu 和 gpu 的区别</h3><p>cpu 是通用的，能够执行各种逻辑和运算，而 gpu 则是主要是用于并行计算大批量的重复任务，不能处理复杂逻辑。</p><p>cpu 中控制器和缓存占据了很大一部分，而 gpu 中这两部分则很少，但是有更多的核心用于计算。</p><p>两者对比的话，cpu 相当于一个大学生，能够解决各种难题，但是计算 1 万个加法就没那么快，而 gpu 就像一帮小学生，解决不了难题，但是计算加法这种就很快，因为人多。</p><p>也就是说如果逻辑复杂，那么只能用 cpu，如果只是计算量大，并且每个计算都比较重复，那就比较适合 gpu。</p><blockquote><p>3d 的渲染中有大量这种重复却简单的计算，比如顶点数据和光栅化的像素数据，通过 gpu 就可以并发的一次计算成百上千个</p></blockquote><h3 id="css-硬件加速"><a href="#css-硬件加速" class="headerlink" title="css 硬件加速"></a>css 硬件加速</h3><p>css 大部分样式还是通过 cpu 来计算的，但 css 中也有一些 3d 的样式和动画的样式，计算这些样式同样有很多重复且大量的计算任务，可以交给 gpu 来跑。</p><p>浏览器在处理下面的 css 的时候，会使用 gpu 渲染：</p><ul><li>transform</li><li>opacity</li><li>filter</li><li>will-change</li></ul><p>浏览器是把内容分到不同的图层分别渲染的，最后合并到一起，而触发 gpu 渲染会新建一个图层，把该元素样式的计算交给 gpu。</p><p>opacity 需要改变每个像素的值，符合重复且大量的特点，会新建图层，交给 gpu 渲染。transform 是动画，每个样式值的计算也符合重复且大量的特点，也默认会使用 gpu 加速。同理 fiter 也是一样。</p><p><strong>由于GPU中的这些CSS属性不触发</strong><code>repaint</code>，因此不需要重绘，单独处理，所以能大大提高网页的性能。</p><p>这里要注意的是 gpu 硬件加速是需要新建图层的，而把该元素移动到新图层是个耗时操作，界面可能会闪一下，所以最好提前做。<code>will-change</code> 就是提前告诉浏览器在一开始就把元素放到新的图层，方便后面用 <code>gpu </code>渲染的时候，不需要做图层的新建。</p><p>有的时候我们想<strong>强制触发硬件渲染</strong>，就可以通过以下方式 :</p><figure class="highlight css"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs CSS"><span class="hljs-attribute">will-change</span>: transform<br>transform:<span class="hljs-built_in">translate3d</span>(<span class="hljs-number">0</span>, <span class="hljs-number">0</span>, <span class="hljs-number">0</span>)<br>transform: <span class="hljs-built_in">rotateZ</span>(<span class="hljs-number">360deg</span>)<br></code></pre></td></tr></table></figure><p>通过这些操作开启GPU硬件加速之后，有些时候可能会导致浏览器频繁闪烁或抖动，可以尝试以下办法解决：</p><figure class="highlight css"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs CSS"><span class="hljs-attribute">backface-visibility</span>:hidden;   // <span class="hljs-attribute">backface-visibility</span> 指定当元素背面朝向观察者时是否可见。<br><span class="hljs-attribute">perspective</span>:<span class="hljs-number">1000</span>;  //  <span class="hljs-attribute">perspective</span> 指定了观察者与 z=<span class="hljs-number">0</span> 平面的距离<br></code></pre></td></tr></table></figure><h3 id="注意事项"><a href="#注意事项" class="headerlink" title="注意事项"></a>注意事项</h3><p>gpu 硬件加速能减轻 cpu 压力，使得渲染更流畅，但是也会增加内存的占用，对于 transform、opacity、filter 默认会开启硬件加速。<strong>其余情况，建议只在必要的时候用</strong>。</p><p>使用GPU渲染也会影响字体的抗锯齿效果。这是因为GPU和CPU具有不同的渲染机制。即使最终硬件加速停止了，文本还是会在动画期间显示得很模糊。</p><h3 id="其它场景"><a href="#其它场景" class="headerlink" title="其它场景"></a>其它场景</h3><p>重复且大量的计算任务只有 3d 渲染一种场景么？</p><p>不是的，AI 领域的机器学习也很典型，它的特点是大量的神经元需要计算，但是每个计算都比较简单，也很适合用 gpu 来跑。</p><p>现在的 gpu 不只是能跑图形渲染，也提供了一些编程能力，这部分 api 有 opencl 标准。可以通过 gpu 的并行计算能力来跑一些有大量计算但是没有很多逻辑的的任务，会比 cpu 效率更高。</p>]]></content>
+    
+    
+    <categories>
+      
+      <category>性能优化</category>
+      
+    </categories>
+    
+    
+    <tags>
+      
+      <tag>GPU渲染</tag>
+      
+    </tags>
+    
+  </entry>
+  
+  
+  
+  <entry>
     <title>😈请介绍一下TCP和UDP</title>
     <link href="/2023/10/24/TCP%E4%B8%8EUDP/"/>
     <url>/2023/10/24/TCP%E4%B8%8EUDP/</url>
