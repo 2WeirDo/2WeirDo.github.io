@@ -4,6 +4,31 @@
   
   
   <entry>
+    <title>浏览器渲染之什么是合成层?</title>
+    <link href="/2023/10/26/CSS%E5%90%88%E6%88%90%E5%B1%82/"/>
+    <url>/2023/10/26/CSS%E5%90%88%E6%88%90%E5%B1%82/</url>
+    
+    <content type="html"><![CDATA[<h2 id="居中为什么要使用-transform-为什么不使用-margin-Left-x2F-Top"><a href="#居中为什么要使用-transform-为什么不使用-margin-Left-x2F-Top" class="headerlink" title="居中为什么要使用 transform , 为什么不使用 margin Left&#x2F;Top ?"></a>居中为什么要使用 transform , 为什么不使用 margin Left&#x2F;Top ?</h2><p>在我们日常开发中经常会实现一些动画，有时候我们可能会选择改变 <code>top/left</code> 去实现，那么这个节点的渲染会发生在<strong>普通文档流</strong>中。该属性的变化会导致重排（<code>reflow/relayout</code>）</p><p>而使用 <code>transform</code> 和 <code>opacity</code> 实现动画能够让节点被放置到一个<strong>独立合成层</strong>中进行渲染绘制，动画不会影响其他图层，并且 <code>GPU</code>渲染相比 <code>CPU </code>能够更快，这会让你的动画变的更加流畅</p><h2 id="什么是合成层"><a href="#什么是合成层" class="headerlink" title="什么是合成层?"></a>什么是合成层?</h2><p>在讨论<code>合成层</code>之前我们先简单了解一下浏览器渲染，浏览器常见的渲染引擎有 Webkit&#x2F;Gecko 等，他们的主要渲染流程基本相同</p><blockquote><p>讨论一下 WebKit 简化的渲染流程。</p></blockquote><p><img src="https://weirdo-blog.oss-cn-chengdu.aliyuncs.com/blog/202310262312479.png" alt="img"></p><ol><li>浏览器下载并解析 HTML。</li><li>处理 <code>CSS</code> 构建 <code>CSSOM</code> 树，生成 <code>DOM</code> 树。</li><li><code>DOM</code> 与 <code>CSSOM</code> 合并成一个 <code>Render</code> 树。</li><li>有了 <code>Render Tree</code>，浏览器可以知道各个节点的 <code>CSS</code> 定义以及他们的从属关系，从而去计算出每个节点在屏幕中的位置，生成一个足够大的画布来容纳所有元素。</li><li>根据浏览器提供各层的信息合成图层，显示到屏幕上。</li></ol><p><code>合成层</code>就出现在最后一步流程中，这些合成图层中一些特殊的图层被认为是合成层（Compositing Layers）</p><p>首先合成就是将页面的各个部分分成多个层、单独<strong>光栅化</strong>它们并在合成器线程中合成为一个页面的技术。</p><blockquote><p>光栅化 : 浏览器根据文档的结构、每个元素的样式、页面的几何形状和绘制顺序转换为屏幕上的像素的过程</p></blockquote><ul><li>一般来说，拥有一些特定属性的渲染层，会被浏览器自动提升为合成层。</li><li>合成层拥有单独的图层（GraphicsLayer），和其他图层之间无不影响。</li><li>而其它不是合成层的渲染层，则和第一个拥有图层的父层共用一个，也就是普通文档流中的内容</li></ul><h2 id="提升为合成层的属性"><a href="#提升为合成层的属性" class="headerlink" title="提升为合成层的属性"></a>提升为合成层的属性</h2><p>我们看一些<strong>常见的提升为合成层的属性。</strong></p><ul><li>设置 <code>transform: translateZ(0)</code>，注意它必须是 <code>translateZ</code>，因为它使用 <code>GPU</code>来计算 <code>perspective distortion</code>（透视失真）。<code>perspective</code> 在 <code>3D</code>设计中是一个重要的属性。如果你使用 <code>translateX</code> 或 <code>translateY</code>，元素将会被绘制在普通文档流中 </li><li><code>backface-visibility: hidden</code> : 指定当元素背面朝向观察者时是否可见</li><li><code>transform</code> &#x2F; <code> opacity</code></li><li><code>video</code>、<code>canvas</code>、<code>iframe</code> 等元素。</li><li><code>will-change</code> :  告诉浏览器该元素会有哪些变化，这样浏览器可以提前做好对应的优化准备工作。<ul><li>当该属性的值为 <code>opacity</code>、<code>transform</code>、<code>top</code>、<code>left</code>、<code>bottom</code>、<code>right </code>时。</li></ul></li></ul><p><strong>隐式合成</strong>就是特定场景下，存在会被默认提升为合成层的情况。</p><ul><li>一个或多个非合成元素应出现在堆叠顺序上 (<code>z-index</code>) 的合成元素之上，会被提升为合成层。</li></ul><h2 id="合成层的好处和问题"><a href="#合成层的好处和问题" class="headerlink" title="合成层的好处和问题"></a>合成层的好处和问题</h2><p>合成层开启的<strong>好处</strong></p><ul><li><p>开启硬件加速，合成层的位图会交由 <code>GPU</code>合成，相比 <code>CPU </code>处理要快。</p></li><li><p>合成层发生 <code>repaint</code>的时候，不会影响其他图层。</p></li><li><p>对于 <code>transform </code>和 <code>opacity</code>效果，不会触发 <code>layout</code>和 <code>paint</code>。</p></li></ul><p>当然合成层也存在一些<strong>问题</strong>：</p><ul><li>如果我们把所有渲染工作都交给 <code>GPU</code>，在现有的优化下，它会导致渲染内存占用比大幅度提升，反而出现负面的效果。</li><li>另外隐式合成容易产生大量我们意料之外的合成层，过大的内存占用，会让页面变的卡顿，性能优化适得其反。</li></ul><p><strong>谨慎使用 <code>will-change</code></strong></p><p>除非你的元素的真的存在某个属性马上会发生变化，例如 <code>transform</code>，你可以使用 <code>will-change: transform</code> 告知浏览器，根据您打算更改的元素，浏览器可能可以预先安排，元素的改变和渲染速度都会变得更快。</p><blockquote><p>这些属性可能会给你带来一些副作用</p></blockquote><p><strong>但需要注意的是，不要创建太多的渲染层。因为每创建一个新的渲染层，就意味着新的内存分配和更复杂的层的管理。</strong></p><blockquote><p>如果你已经把一个元素放到一个新的合成层里，那么可以使用 Timeline 来确认这么做是否真的改进了渲染性能。别盲目提升合成层，一定要分析其实际性能表现。</p></blockquote><p>其实从性能方面考虑，最理想的渲染流水线是没有布局和绘制环节的，只需要做合成层的合并即可： </p><p><img src="https://weirdo-blog.oss-cn-chengdu.aliyuncs.com/blog/202310262312540.png" alt="img"></p><p>为了实现上述效果，就需要只使用那些仅触发 <code>Composite </code>的属性。目前，<strong>只有两个属性是满足这个条件的：transforms 和 opacity。</strong></p><p><strong>合理管理合成层</strong>：</p><blockquote><p> 大多数人都很喜欢使用 <code>translateZ(0)</code> 来进行所谓的硬件加速，以提升性能</p><p>但是性能优化并没有所谓的”银弹” (可解决复杂问题的简单方案)，<code>translateZ(0)</code> 不是，本文列出的优化建议也不是。</p><p>抛开了对页面的具体分析，任何的性能优化都是站不住脚的，盲目的使用一些优化措施，结果可能会适得其反。</p></blockquote><ul><li>创建一个新的合成层并不是免费的，它得消耗额外的内存和管理资源。实际上，在内存资源有限的设备上，合成层带来的性能改善，可能远远赶不上过多合成层开销给页面性能带来的负面影响。因此切实的去分析页面的实际性能表现，不断的改进测试，才是正确的优化途径。</li></ul><p><img src="https://weirdo-blog.oss-cn-chengdu.aliyuncs.com/blog/202310262312522.png" alt="img"></p>]]></content>
+    
+    
+    <categories>
+      
+      <category>浏览器原理</category>
+      
+    </categories>
+    
+    
+    <tags>
+      
+      <tag>GPU渲染</tag>
+      
+    </tags>
+    
+  </entry>
+  
+  
+  
+  <entry>
     <title>GPU 和 CSS 硬件加速</title>
     <link href="/2023/10/25/GPU%E6%B8%B2%E6%9F%93/"/>
     <url>/2023/10/25/GPU%E6%B8%B2%E6%9F%93/</url>

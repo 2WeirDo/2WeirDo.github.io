@@ -16,22 +16,26 @@
   <meta name="author" content="weirdo">
   <meta name="keywords" content="">
   
-    <meta name="description" content="从cpu聊起cpu 每个核只有一个线程，也就是单控制流、单数据流。这样的架构导致 cpu 在一些场景下效率是不高的，比如 3d 渲染的场景。  3d 渲染的流程是：   计算顶点数据，构成 3d 的图形 给每个三角形贴图，画上纹理 投影到二维的屏幕，计算每个像素的颜色（光栅化） 把一帧的数据写入显存的帧缓冲区  顶点的数量是非常庞大的，而 cpu 只能顺序的一个个计算，所以处理这种 3d 渲染会特">
+    <meta name="description" content="居中为什么要使用 transform , 为什么不使用 margin Left&#x2F;Top ?在我们日常开发中经常会实现一些动画，有时候我们可能会选择改变 top&#x2F;left 去实现，那么这个节点的渲染会发生在普通文档流中。该属性的变化会导致重排（reflow&#x2F;relayout） 而使用 transform 和 opacity 实现动画能够让节点被放置到一个独立合成层中进行渲染绘制，动画不会影">
 <meta property="og:type" content="article">
-<meta property="og:title" content="GPU 和 CSS 硬件加速">
-<meta property="og:url" content="http://example.com/2023/10/25/GPU%E6%B8%B2%E6%9F%93/index.html">
+<meta property="og:title" content="浏览器渲染之什么是合成层?">
+<meta property="og:url" content="http://example.com/2023/10/26/CSS%E5%90%88%E6%88%90%E5%B1%82/index.html">
 <meta property="og:site_name" content="Weirdo">
-<meta property="og:description" content="从cpu聊起cpu 每个核只有一个线程，也就是单控制流、单数据流。这样的架构导致 cpu 在一些场景下效率是不高的，比如 3d 渲染的场景。  3d 渲染的流程是：   计算顶点数据，构成 3d 的图形 给每个三角形贴图，画上纹理 投影到二维的屏幕，计算每个像素的颜色（光栅化） 把一帧的数据写入显存的帧缓冲区  顶点的数量是非常庞大的，而 cpu 只能顺序的一个个计算，所以处理这种 3d 渲染会特">
+<meta property="og:description" content="居中为什么要使用 transform , 为什么不使用 margin Left&#x2F;Top ?在我们日常开发中经常会实现一些动画，有时候我们可能会选择改变 top&#x2F;left 去实现，那么这个节点的渲染会发生在普通文档流中。该属性的变化会导致重排（reflow&#x2F;relayout） 而使用 transform 和 opacity 实现动画能够让节点被放置到一个独立合成层中进行渲染绘制，动画不会影">
 <meta property="og:locale" content="zh_CN">
-<meta property="article:published_time" content="2023-10-25T15:27:30.000Z">
-<meta property="article:modified_time" content="2023-10-25T15:27:01.658Z">
+<meta property="og:image" content="https://weirdo-blog.oss-cn-chengdu.aliyuncs.com/blog/202310262312479.png">
+<meta property="og:image" content="https://weirdo-blog.oss-cn-chengdu.aliyuncs.com/blog/202310262312540.png">
+<meta property="og:image" content="https://weirdo-blog.oss-cn-chengdu.aliyuncs.com/blog/202310262312522.png">
+<meta property="article:published_time" content="2023-10-26T15:18:00.000Z">
+<meta property="article:modified_time" content="2023-10-26T15:18:04.138Z">
 <meta property="article:author" content="weirdo">
 <meta property="article:tag" content="GPU渲染">
 <meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="https://weirdo-blog.oss-cn-chengdu.aliyuncs.com/blog/202310262312479.png">
   
   
   
-  <title>GPU 和 CSS 硬件加速 - Weirdo</title>
+  <title>浏览器渲染之什么是合成层? - Weirdo</title>
 
   <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
 
@@ -214,7 +218,7 @@
       <div class="banner-text text-center fade-in-up">
         <div class="h2">
           
-            <span id="subtitle" data-typed-text="GPU 和 CSS 硬件加速"></span>
+            <span id="subtitle" data-typed-text="浏览器渲染之什么是合成层?"></span>
           
         </div>
 
@@ -230,8 +234,8 @@
     
       <span class="post-meta">
         <i class="iconfont icon-date-fill" aria-hidden="true"></i>
-        <time datetime="2023-10-25 23:27" pubdate>
-          2023年10月25日 晚上
+        <time datetime="2023-10-26 23:18" pubdate>
+          2023年10月26日 晚上
         </time>
       </span>
     
@@ -242,7 +246,7 @@
       <span class="post-meta mr-2">
         <i class="iconfont icon-chart"></i>
         
-          1.7k 字
+          2k 字
         
       </span>
     
@@ -253,7 +257,7 @@
         
         
         
-          8 分钟
+          9 分钟
         
       </span>
     
@@ -299,59 +303,86 @@
         <div id="board">
           <article class="post-content mx-auto">
             <!-- SEO header -->
-            <h1 style="display: none">GPU 和 CSS 硬件加速</h1>
+            <h1 style="display: none">浏览器渲染之什么是合成层?</h1>
             
             
               <div class="markdown-body">
                 
-                <h3 id="从cpu聊起"><a href="#从cpu聊起" class="headerlink" title="从cpu聊起"></a>从<code>cpu</code>聊起</h3><p>cpu 每个核只有一个线程，也就是单控制流、单数据流。这样的架构导致 cpu 在一些场景下效率是不高的，比如 3d 渲染的场景。</p>
+                <h2 id="居中为什么要使用-transform-为什么不使用-margin-Left-x2F-Top"><a href="#居中为什么要使用-transform-为什么不使用-margin-Left-x2F-Top" class="headerlink" title="居中为什么要使用 transform , 为什么不使用 margin Left&#x2F;Top ?"></a>居中为什么要使用 transform , 为什么不使用 margin Left&#x2F;Top ?</h2><p>在我们日常开发中经常会实现一些动画，有时候我们可能会选择改变 <code>top/left</code> 去实现，那么这个节点的渲染会发生在<strong>普通文档流</strong>中。该属性的变化会导致重排（<code>reflow/relayout</code>）</p>
+<p>而使用 <code>transform</code> 和 <code>opacity</code> 实现动画能够让节点被放置到一个<strong>独立合成层</strong>中进行渲染绘制，动画不会影响其他图层，并且 <code>GPU</code>渲染相比 <code>CPU </code>能够更快，这会让你的动画变的更加流畅</p>
+<h2 id="什么是合成层"><a href="#什么是合成层" class="headerlink" title="什么是合成层?"></a>什么是合成层?</h2><p>在讨论<code>合成层</code>之前我们先简单了解一下浏览器渲染，浏览器常见的渲染引擎有 Webkit&#x2F;Gecko 等，他们的主要渲染流程基本相同</p>
 <blockquote>
-<p>3d 渲染的流程是：</p>
+<p>讨论一下 WebKit 简化的渲染流程。</p>
+</blockquote>
+<p><img src="https://weirdo-blog.oss-cn-chengdu.aliyuncs.com/blog/202310262312479.png" srcset="/img/loading.gif" lazyload alt="img"></p>
+<ol>
+<li>浏览器下载并解析 HTML。</li>
+<li>处理 <code>CSS</code> 构建 <code>CSSOM</code> 树，生成 <code>DOM</code> 树。</li>
+<li><code>DOM</code> 与 <code>CSSOM</code> 合并成一个 <code>Render</code> 树。</li>
+<li>有了 <code>Render Tree</code>，浏览器可以知道各个节点的 <code>CSS</code> 定义以及他们的从属关系，从而去计算出每个节点在屏幕中的位置，生成一个足够大的画布来容纳所有元素。</li>
+<li>根据浏览器提供各层的信息合成图层，显示到屏幕上。</li>
+</ol>
+<p><code>合成层</code>就出现在最后一步流程中，这些合成图层中一些特殊的图层被认为是合成层（Compositing Layers）</p>
+<p>首先合成就是将页面的各个部分分成多个层、单独<strong>光栅化</strong>它们并在合成器线程中合成为一个页面的技术。</p>
+<blockquote>
+<p>光栅化 : 浏览器根据文档的结构、每个元素的样式、页面的几何形状和绘制顺序转换为屏幕上的像素的过程</p>
 </blockquote>
 <ul>
-<li>计算顶点数据，构成 3d 的图形</li>
-<li>给每个三角形贴图，画上纹理</li>
-<li>投影到二维的屏幕，计算每个像素的颜色（光栅化）</li>
-<li>把一帧的数据写入显存的帧缓冲区</li>
+<li>一般来说，拥有一些特定属性的渲染层，会被浏览器自动提升为合成层。</li>
+<li>合成层拥有单独的图层（GraphicsLayer），和其他图层之间无不影响。</li>
+<li>而其它不是合成层的渲染层，则和第一个拥有图层的父层共用一个，也就是普通文档流中的内容</li>
 </ul>
-<p>顶点的数量是非常庞大的，而 cpu 只能顺序的一个个计算，所以处理这种 3d 渲染会特别费劲，于是就出现了专门用于这种 3d 数据的并行计算的硬件，也就是 GPU。</p>
-<h3 id="GPU-的构成"><a href="#GPU-的构成" class="headerlink" title="GPU 的构成"></a>GPU 的构成</h3><p>和 cpu 的一个一个数据计算不同，gpu 是并行的，有成百上千个核心用于并行计算</p>
-<p>gpu 也是有着指令、译码、执行的流程，只不过，每个指令会并行执行 n 个计算，是单控制流多数据流的，而 cpu 是单控制流单数据流。</p>
-<p>所以，对于 3d 渲染这种要计算成万个顶点数据和像素点的场景，GPU 会比 CPU 高效很多。</p>
-<h3 id="cpu-和-gpu-的区别"><a href="#cpu-和-gpu-的区别" class="headerlink" title="cpu 和 gpu 的区别"></a>cpu 和 gpu 的区别</h3><p>cpu 是通用的，能够执行各种逻辑和运算，而 gpu 则是主要是用于并行计算大批量的重复任务，不能处理复杂逻辑。</p>
-<p>cpu 中控制器和缓存占据了很大一部分，而 gpu 中这两部分则很少，但是有更多的核心用于计算。</p>
-<p>两者对比的话，cpu 相当于一个大学生，能够解决各种难题，但是计算 1 万个加法就没那么快，而 gpu 就像一帮小学生，解决不了难题，但是计算加法这种就很快，因为人多。</p>
-<p>也就是说如果逻辑复杂，那么只能用 cpu，如果只是计算量大，并且每个计算都比较重复，那就比较适合 gpu。</p>
-<blockquote>
-<p>3d 的渲染中有大量这种重复却简单的计算，比如顶点数据和光栅化的像素数据，通过 gpu 就可以并发的一次计算成百上千个</p>
-</blockquote>
-<h3 id="css-硬件加速"><a href="#css-硬件加速" class="headerlink" title="css 硬件加速"></a>css 硬件加速</h3><p>css 大部分样式还是通过 cpu 来计算的，但 css 中也有一些 3d 的样式和动画的样式，计算这些样式同样有很多重复且大量的计算任务，可以交给 gpu 来跑。</p>
-<p>浏览器在处理下面的 css 的时候，会使用 gpu 渲染：</p>
+<h2 id="提升为合成层的属性"><a href="#提升为合成层的属性" class="headerlink" title="提升为合成层的属性"></a>提升为合成层的属性</h2><p>我们看一些<strong>常见的提升为合成层的属性。</strong></p>
 <ul>
-<li>transform</li>
-<li>opacity</li>
-<li>filter</li>
-<li>will-change</li>
+<li>设置 <code>transform: translateZ(0)</code>，注意它必须是 <code>translateZ</code>，因为它使用 <code>GPU</code>来计算 <code>perspective distortion</code>（透视失真）。<code>perspective</code> 在 <code>3D</code>设计中是一个重要的属性。如果你使用 <code>translateX</code> 或 <code>translateY</code>，元素将会被绘制在普通文档流中 </li>
+<li><code>backface-visibility: hidden</code> : 指定当元素背面朝向观察者时是否可见</li>
+<li><code>transform</code> &#x2F; <code> opacity</code></li>
+<li><code>video</code>、<code>canvas</code>、<code>iframe</code> 等元素。</li>
+<li><code>will-change</code> :  告诉浏览器该元素会有哪些变化，这样浏览器可以提前做好对应的优化准备工作。<ul>
+<li>当该属性的值为 <code>opacity</code>、<code>transform</code>、<code>top</code>、<code>left</code>、<code>bottom</code>、<code>right </code>时。</li>
 </ul>
-<p>浏览器是把内容分到不同的图层分别渲染的，最后合并到一起，而触发 gpu 渲染会新建一个图层，把该元素样式的计算交给 gpu。</p>
-<p>opacity 需要改变每个像素的值，符合重复且大量的特点，会新建图层，交给 gpu 渲染。transform 是动画，每个样式值的计算也符合重复且大量的特点，也默认会使用 gpu 加速。同理 fiter 也是一样。</p>
-<p><strong>由于GPU中的这些CSS属性不触发</strong><code>repaint</code>，因此不需要重绘，单独处理，所以能大大提高网页的性能。</p>
-<p>这里要注意的是 gpu 硬件加速是需要新建图层的，而把该元素移动到新图层是个耗时操作，界面可能会闪一下，所以最好提前做。<code>will-change</code> 就是提前告诉浏览器在一开始就把元素放到新的图层，方便后面用 <code>gpu </code>渲染的时候，不需要做图层的新建。</p>
-<p>有的时候我们想<strong>强制触发硬件渲染</strong>，就可以通过以下方式 :</p>
-<figure class="highlight css"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs CSS"><span class="hljs-attribute">will-change</span>: transform<br>transform:<span class="hljs-built_in">translate3d</span>(<span class="hljs-number">0</span>, <span class="hljs-number">0</span>, <span class="hljs-number">0</span>)<br>transform: <span class="hljs-built_in">rotateZ</span>(<span class="hljs-number">360deg</span>)<br></code></pre></td></tr></table></figure>
-
-<p>通过这些操作开启GPU硬件加速之后，有些时候可能会导致浏览器频繁闪烁或抖动，可以尝试以下办法解决：</p>
-<figure class="highlight css"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs CSS"><span class="hljs-attribute">backface-visibility</span>:hidden;   // <span class="hljs-attribute">backface-visibility</span> 指定当元素背面朝向观察者时是否可见。<br><span class="hljs-attribute">perspective</span>:<span class="hljs-number">1000</span>;  //  <span class="hljs-attribute">perspective</span> 指定了观察者与 z=<span class="hljs-number">0</span> 平面的距离<br></code></pre></td></tr></table></figure>
-
-
-
-
-
-<h3 id="注意事项"><a href="#注意事项" class="headerlink" title="注意事项"></a>注意事项</h3><p>gpu 硬件加速能减轻 cpu 压力，使得渲染更流畅，但是也会增加内存的占用，对于 transform、opacity、filter 默认会开启硬件加速。<strong>其余情况，建议只在必要的时候用</strong>。</p>
-<p>使用GPU渲染也会影响字体的抗锯齿效果。这是因为GPU和CPU具有不同的渲染机制。即使最终硬件加速停止了，文本还是会在动画期间显示得很模糊。</p>
-<h3 id="其它场景"><a href="#其它场景" class="headerlink" title="其它场景"></a>其它场景</h3><p>重复且大量的计算任务只有 3d 渲染一种场景么？</p>
-<p>不是的，AI 领域的机器学习也很典型，它的特点是大量的神经元需要计算，但是每个计算都比较简单，也很适合用 gpu 来跑。</p>
-<p>现在的 gpu 不只是能跑图形渲染，也提供了一些编程能力，这部分 api 有 opencl 标准。可以通过 gpu 的并行计算能力来跑一些有大量计算但是没有很多逻辑的的任务，会比 cpu 效率更高。</p>
+</li>
+</ul>
+<p><strong>隐式合成</strong>就是特定场景下，存在会被默认提升为合成层的情况。</p>
+<ul>
+<li>一个或多个非合成元素应出现在堆叠顺序上 (<code>z-index</code>) 的合成元素之上，会被提升为合成层。</li>
+</ul>
+<h2 id="合成层的好处和问题"><a href="#合成层的好处和问题" class="headerlink" title="合成层的好处和问题"></a>合成层的好处和问题</h2><p>合成层开启的<strong>好处</strong></p>
+<ul>
+<li><p>开启硬件加速，合成层的位图会交由 <code>GPU</code>合成，相比 <code>CPU </code>处理要快。</p>
+</li>
+<li><p>合成层发生 <code>repaint</code>的时候，不会影响其他图层。</p>
+</li>
+<li><p>对于 <code>transform </code>和 <code>opacity</code>效果，不会触发 <code>layout</code>和 <code>paint</code>。</p>
+</li>
+</ul>
+<p>当然合成层也存在一些<strong>问题</strong>：</p>
+<ul>
+<li>如果我们把所有渲染工作都交给 <code>GPU</code>，在现有的优化下，它会导致渲染内存占用比大幅度提升，反而出现负面的效果。</li>
+<li>另外隐式合成容易产生大量我们意料之外的合成层，过大的内存占用，会让页面变的卡顿，性能优化适得其反。</li>
+</ul>
+<p><strong>谨慎使用 <code>will-change</code></strong></p>
+<p>除非你的元素的真的存在某个属性马上会发生变化，例如 <code>transform</code>，你可以使用 <code>will-change: transform</code> 告知浏览器，根据您打算更改的元素，浏览器可能可以预先安排，元素的改变和渲染速度都会变得更快。</p>
+<blockquote>
+<p>这些属性可能会给你带来一些副作用</p>
+</blockquote>
+<p><strong>但需要注意的是，不要创建太多的渲染层。因为每创建一个新的渲染层，就意味着新的内存分配和更复杂的层的管理。</strong></p>
+<blockquote>
+<p>如果你已经把一个元素放到一个新的合成层里，那么可以使用 Timeline 来确认这么做是否真的改进了渲染性能。别盲目提升合成层，一定要分析其实际性能表现。</p>
+</blockquote>
+<p>其实从性能方面考虑，最理想的渲染流水线是没有布局和绘制环节的，只需要做合成层的合并即可： </p>
+<p><img src="https://weirdo-blog.oss-cn-chengdu.aliyuncs.com/blog/202310262312540.png" srcset="/img/loading.gif" lazyload alt="img"></p>
+<p>为了实现上述效果，就需要只使用那些仅触发 <code>Composite </code>的属性。目前，<strong>只有两个属性是满足这个条件的：transforms 和 opacity。</strong></p>
+<p><strong>合理管理合成层</strong>：</p>
+<blockquote>
+<p> 大多数人都很喜欢使用 <code>translateZ(0)</code> 来进行所谓的硬件加速，以提升性能</p>
+<p>但是性能优化并没有所谓的”银弹” (可解决复杂问题的简单方案)，<code>translateZ(0)</code> 不是，本文列出的优化建议也不是。</p>
+<p>抛开了对页面的具体分析，任何的性能优化都是站不住脚的，盲目的使用一些优化措施，结果可能会适得其反。</p>
+</blockquote>
+<ul>
+<li>创建一个新的合成层并不是免费的，它得消耗额外的内存和管理资源。实际上，在内存资源有限的设备上，合成层带来的性能改善，可能远远赶不上过多合成层开销给页面性能带来的负面影响。因此切实的去分析页面的实际性能表现，不断的改进测试，才是正确的优化途径。</li>
+</ul>
+<p><img src="https://weirdo-blog.oss-cn-chengdu.aliyuncs.com/blog/202310262312522.png" srcset="/img/loading.gif" lazyload alt="img"></p>
 
                 
               </div>
@@ -370,7 +401,7 @@
     
       <span class="category-chain">
         
-  <a href="/categories/%E6%80%A7%E8%83%BD%E4%BC%98%E5%8C%96/" class="category-chain-item">性能优化</a>
+  <a href="/categories/%E6%B5%8F%E8%A7%88%E5%99%A8%E5%8E%9F%E7%90%86/" class="category-chain-item">浏览器原理</a>
   
   
 
@@ -397,8 +428,8 @@
 
   <div class="license-box my-3">
     <div class="license-title">
-      <div>GPU 和 CSS 硬件加速</div>
-      <div>http://example.com/2023/10/25/GPU渲染/</div>
+      <div>浏览器渲染之什么是合成层?</div>
+      <div>http://example.com/2023/10/26/CSS合成层/</div>
     </div>
     <div class="license-meta">
       
@@ -410,13 +441,13 @@
       
         <div class="license-meta-item license-meta-date">
           <div>发布于</div>
-          <div>2023年10月25日</div>
+          <div>2023年10月26日</div>
         </div>
       
       
         <div class="license-meta-item license-meta-date">
           <div>更新于</div>
-          <div>2023年10月25日</div>
+          <div>2023年10月26日</div>
         </div>
       
       
@@ -447,18 +478,12 @@
                   <article class="post-prev col-6">
                     
                     
-                      <a href="/2023/10/26/CSS%E5%90%88%E6%88%90%E5%B1%82/" title="浏览器渲染之什么是合成层?">
-                        <i class="iconfont icon-arrowleft"></i>
-                        <span class="hidden-mobile">浏览器渲染之什么是合成层?</span>
-                        <span class="visible-mobile">上一篇</span>
-                      </a>
-                    
                   </article>
                   <article class="post-next col-6">
                     
                     
-                      <a href="/2023/10/24/TCP%E4%B8%8EUDP/" title="😈请介绍一下TCP和UDP">
-                        <span class="hidden-mobile">😈请介绍一下TCP和UDP</span>
+                      <a href="/2023/10/25/GPU%E6%B8%B2%E6%9F%93/" title="GPU 和 CSS 硬件加速">
+                        <span class="hidden-mobile">GPU 和 CSS 硬件加速</span>
                         <span class="visible-mobile">下一篇</span>
                         <i class="iconfont icon-arrowright"></i>
                       </a>
