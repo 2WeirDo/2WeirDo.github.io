@@ -4,6 +4,31 @@
   
   
   <entry>
+    <title>offset/client/scroll你都记清了吗?</title>
+    <link href="/2023/10/27/scroll%20%20offset%20%20client/"/>
+    <url>/2023/10/27/scroll%20%20offset%20%20client/</url>
+    
+    <content type="html"><![CDATA[<h2 id="offset家族"><a href="#offset家族" class="headerlink" title="offset家族"></a><code>offset</code>家族</h2><blockquote><p>都是整数值, 如果是小数会四舍五入</p></blockquote><ol><li><p><code>Element.offsetHeight</code>返回一个整数，包括<strong>元素本身的高度、</strong>**<code>padding </code>**<strong>和</strong> **<code>border</code>**，以及水平滚动条的高度 (如果存在滚动条）。</p></li><li><p><code>Element.offsetWidth</code>表示元素本身的宽度,  其他都与<code>Element.offsetHeight</code>一致。</p></li></ol><blockquote><p>这两个属性都是<strong>只读</strong>属性，只比<code>Element.clientHeight</code>和<code>Element.clientWidth</code>多了边框的高度或宽度。</p><p>如果元素的 CSS 设为不可见（比如<code>display: none;</code>），则返回<code>0</code>。</p></blockquote><ol start="3"><li><code>Element.offsetParent</code>属性返回最靠近当前元素的、并且 CSS 的<code>position</code>属性不等于<code>static</code>的上层元素。</li></ol><blockquote><p>该属性主要用于确定子元素位置偏移的计算基准，<code>Element.offsetTop</code>和<code>Element.offsetLeft</code>就是<code>offsetParent</code>元素计算的。</p><p>如果该元素是不可见的（<code>display</code>属性为<code>none</code>），或者位置是固定的（<code>position</code>属性为<code>fixed</code>），则<code>offsetParent</code>属性返回<code>null</code>。</p></blockquote><ol start="4"><li><p><code>Element.offsetLeft</code>返回当前元素左上角相对于最近的开启了定位的节点的水平位移</p></li><li><p><code>Element.offsetTop</code>返回垂直位移，单位为像素。通常，这两个值是指相对于父节点的位移。</p></li></ol><h2 id="client-家族"><a href="#client-家族" class="headerlink" title="**client**家族"></a>**<code>client</code>**家族</h2><blockquote><p>都是整数值, 如果是小数会四舍五入</p></blockquote><ol><li><code>Element.clientHeight</code>表示<strong>元素节点本身的高度和</strong> **<code>padding</code>**，只对块级元素生效，对于行内元素返回<code>0</code>。</li></ol><blockquote><p>这个高度不包括<code>border</code>、<code>margin</code>。如果有水平滚动条，还要减去水平滚动条的高度。</p></blockquote><ol start="2"><li><p><code>Element.clientWidth</code>表示<strong>元素节点本身的宽度和</strong> <strong><code>padding</code></strong>, 其余和<code>Element.clientHeight</code>一致</p></li><li><p><code>Element.clientLeft</code>表示元素节点<strong>左边框的宽度</strong>，不包括左侧的<code>padding</code>和<code>margin</code>。如果没有设置左边框，或者是行内元素（<code>display: inline</code>），该属性返回<code>0</code>。</p></li><li><p><code>Element.clientTop</code>表示网页元素<strong>上边框的宽度</strong>，其他特点都与<code>clientLeft</code>相同。</p></li></ol><p><strong>判断滚动条是否滚动到底</strong> </p><ul><li>垂直滚动条 : <code>scrollHeight -scrollTop = clientHeight</code></li><li>水平滚动条 :  <code>scrollWidth - scrollLeft = clientWidth</code></li></ul><p><strong>其它</strong></p><ul><li><code>document.documentElement</code>的<code>clientHeight</code>属性，返回当前视口的高度（即浏览器窗口的高度），等同于<code>window.innerHeight</code>属性减去水平滚动条的高度（如果有的话）。</li><li><code>document.body</code>的高度则是网页的实际高度。一般来说，<code>document.body.clientHeight</code>(网页总高度)大于<code>document.documentElement.clientHeight</code>(视口高度)。</li></ul><h2 id="scroll家族"><a href="#scroll家族" class="headerlink" title="scroll家族"></a><code>scroll</code>家族</h2><blockquote><p>都是整数值, 如果是小数会四舍五入</p></blockquote><ol><li><p><code>Element.scrollHeight</code>表示当前元素的<strong>总高度，包括溢出容器、当前不可见的部分</strong>。它包括<code>padding</code>，但是不包括<code>border</code>、<code>margin</code>以及水平滚动条的高度（如果有水平滚动条的话），还包括伪元素（<code>::before</code>或<code>::after</code>）的高度。</p></li><li><p><code>Element.scrollWidth</code>属性表示当前元素的<strong>总宽度</strong>，其他地方都与<code>scrollHeight</code>属性类似。这两个属性只读。</p></li></ol><blockquote><p> 整张网页的总高度可以从<code>document.documentElement</code>或<code>document.body</code>上读取。</p></blockquote><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs JavaScript"><span class="hljs-comment">// 返回网页的总高度</span><br><span class="hljs-variable language_">document</span>.<span class="hljs-property">documentElement</span>.<span class="hljs-property">scrollHeight</span><br><span class="hljs-variable language_">document</span>.<span class="hljs-property">body</span>.<span class="hljs-property">scrollHeight</span><br></code></pre></td></tr></table></figure><ol start="3"><li><p><code>Element.scrollLeft</code>属性表示当前元素的水平滚动条<strong>向右侧滚动的距离。</strong></p></li><li><p><code>Element.scrollTop</code>属性表示当前元素的垂直滚动条<strong>向下滚动的距离</strong>。对于那些没有滚动条的网页元素，这两个属性总是等于<code>0</code>。</p></li></ol><p>如果要查看整张网页的水平的和垂直的滚动距离，要从<code>document.documentElement</code>元素上读取。</p><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs JavaScript"><span class="hljs-variable language_">document</span>.<span class="hljs-property">documentElement</span>.<span class="hljs-property">scrollLeft</span><br><span class="hljs-variable language_">document</span>.<span class="hljs-property">documentElement</span>.<span class="hljs-property">scrollTop</span><br></code></pre></td></tr></table></figure><p>这两个属性都<strong>可读写</strong>，<strong>设置该属性的值（不需要单位），会导致浏览器将当前元素自动滚动到相应的位置。</strong></p><h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p><img src="https://weirdo-blog.oss-cn-chengdu.aliyuncs.com/blog/202310272108830.png" alt="image-20231027210801789"></p>]]></content>
+    
+    
+    <categories>
+      
+      <category>CSS</category>
+      
+    </categories>
+    
+    
+    <tags>
+      
+      <tag>网页特效</tag>
+      
+    </tags>
+    
+  </entry>
+  
+  
+  
+  <entry>
     <title>浏览器渲染之什么是合成层?</title>
     <link href="/2023/10/26/CSS%E5%90%88%E6%88%90%E5%B1%82/"/>
     <url>/2023/10/26/CSS%E5%90%88%E6%88%90%E5%B1%82/</url>
