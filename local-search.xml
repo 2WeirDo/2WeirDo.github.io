@@ -4,6 +4,31 @@
   
   
   <entry>
+    <title>知道HTTPS吗? 实现原理是什么？</title>
+    <link href="/2023/11/02/https/"/>
+    <url>/2023/11/02/https/</url>
+    
+    <content type="html"><![CDATA[<h2 id="什么是-HTTPS"><a href="#什么是-HTTPS" class="headerlink" title="什么是 HTTPS?"></a>什么是 HTTPS?</h2><blockquote><p>HTTPS并不是一个新的协议, 它在HTTP和TCP的传输中<strong>建立了一个安全层</strong>，利用<strong>对称加密和非对称加密结合数字证书认证</strong>的方式，让传输过程的安全性大大提高。</p></blockquote><img src="https://weirdo-blog.oss-cn-chengdu.aliyuncs.com/blog/202311021222407.png" alt="img" style="zoom:67%;" /><p>HTTP 协议采用<strong>明文传输</strong>信息，存在<strong>信息窃听</strong>、<strong>信息篡改</strong>和<strong>信息劫持</strong>的风险</p><p>具体来说，HTTP 数据经过 TCP 层，然后经过 WIFI 路由器、运营商和目标服务器，这些环节中都可能被中间人拿到数据并进行篡改，也就是我们常说的<strong>中间人攻击。</strong></p><p>而协议<code>TLS/SSL</code>具有<strong>身份验证</strong>、<strong>信息加密</strong>和<strong>完整性校验</strong>的功能，可以避免此类问题发生。安全层的主要职责就是<strong>对发起的 HTTP 请求的数据进行加密操作</strong> 和 <strong>对接收到的 HTTP 的内容进行解密操作</strong>。</p><p><strong><code>TLS/SSL</code><strong>全称</strong>安全传输层协议</strong>（Transport Layer Security）， 是介于<code>TCP</code>和<code>HTTP</code>之间的一层安全协议，不影响原有的<code>TCP</code>协议和<code>HTTP</code>协议，所以使用<code>HTTPS</code>基本上不需要对<code>HTTP</code>页面进行太多的改造。</p><p><code>TLS/SSL</code>的功能实现主要依赖三类基本算法：<strong>散列函数 hash</strong>、<strong>对称加密</strong>、<strong>非对称加密</strong>。</p><blockquote><p> 这三类算法的作用如下：</p></blockquote><ul><li>基于散列函数验证信息的完整性</li><li>对称加密算法采用协商的秘钥对数据加密</li><li>非对称加密实现身份认证和秘钥协商</li></ul><p><strong>散列函数</strong> : 在信息传输过程中，由于传输是明文传输，中间人可以修改信息后重新计算信息的摘要，所以需要对传输的信息和信息摘要进行加密。</p><p><strong>对称加密</strong> : 对称加密的优势就是信息传输使用一对一，需要共享相同的密码，密码的安全是保证信息安全的基础，服务器和 N 个客户端通信，需要维持 N 个密码记录且不能修改密码。</p><p><strong>非对称加密</strong> : 非对称加密的特点就是信息一对多，服务器只需要维持一个私钥就可以和多个客户端进行通信，但服务器发出的信息能够被所有的客户端解密，且该算法的计算复杂，加密的速度慢。</p><h2 id="HTTPS-是如何保证安全的"><a href="#HTTPS-是如何保证安全的" class="headerlink" title="HTTPS 是如何保证安全的?"></a>HTTPS 是如何保证安全的?</h2><p><strong>对称加密：</strong></p><ul><li>即通信的双方都使用同⼀个秘钥进行加解密，对称加密虽然很简单性能也好</li><li>但是无法解决首次把秘钥发给对方的问题，<strong>很容易被黑客拦截秘钥。</strong></li></ul><p><strong>非对称加密：</strong></p><ul><li>私钥 + 公钥 &#x3D; 密钥对</li><li>即用私钥加密的数据，只有对应的公钥才能解密，用公钥加密的数据，只有对应的私钥才能解密</li><li>因为通信双方的收集都有⼀套自己的密钥对，通信之前双方会先把自己的公钥都先发给对方</li><li>然后对方再拿着这个公钥来加密数据响应给对方，等到到了对方那里，对方再用自己的私钥进行解密</li></ul><p><strong>非对称加密使用了一对密钥，公钥与私钥，所以安全性高，但加密与解密速度慢，影响性能。</strong></p><blockquote><p>有没有什么更好的方案呢?</p></blockquote><p>解决方案：两者结合</p><p><strong>结合两种加密方式， 解决的办法是将对称加密的密钥使用非对称加密的公钥进行加密，然后发送出去，接收方使用私钥进行解密得到对称加密的密钥，然后双方可以使用对称加密来进行沟通。</strong></p><p>尽管通过两者加密方式的结合，能够很好地实现加密传输，但实际上还是存在一些<strong>问题</strong></p><p>现在的方法也不一定是安全的，因为没有办法确定得到的公钥就一定是安全的公钥。可能存在一个中间人，截取了对方发给我们的公钥，然后将他自己的公钥发送给我们，当我们使用他的公钥加密后发送的信息，就可以被他用自己的私钥解密。然后他伪装成我们以同样的方法向对方发送信息，这样我们的信息就被窃取了，然而自己还不知道。</p><p>事实上 HTTPS 在上述结合对称和非对称加密的基础上，又添加了<strong>数字证书认证</strong>的步骤。</p><p>其目的就是<strong>让服务器证明自己的身份， 防止被中间人攻击。</strong></p><h2 id="数字证书是什么？"><a href="#数字证书是什么？" class="headerlink" title="数字证书是什么？"></a>数字证书是什么？</h2><p>首先使用一种 Hash 算法来对公钥和其他信息进行加密，生成一个信息摘要，然后让有公信力的认证中心（简称 CA ）用它的<strong>私钥</strong>对消息摘要加密，形成签名。最后将原始的信息和签名合在一起，称为数字证书。当接收方收到数字证书的时候，先根据原始信息使用同样的 Hash 算法生成一个摘要，然后使用 CA 的<strong>公钥</strong>来对数字证书中的签名进行解密，最后将解密获得的摘要和生成的摘要进行对比，就能发现得到的信息是否被更改了。</p><blockquote><p>这个方法最要的是认证中心的可靠性，一般浏览器里会内置一些顶层的认证中心的证书，相当于我们自动信任了他们，只有这样才能保证数据的安全。</p></blockquote><blockquote><p> 下面为具体流程</p></blockquote><p><strong>CA （有公信力的认证中心） 签发证书的过程：</strong></p><ul><li>首先 CA 会把持有者的公钥、用途、颁发者、有效时间等信息打成一个包，然后对这些信息进行 <code>Hash</code> 计算，得到一个 <code>Hash</code> 值；</li><li>然后 <code>CA</code> 会使用自己的私钥将该 <code>Hash</code> 值加密，生成 <code>Certificate Signature</code>，也就是 <code>CA</code> 对证书做了签名；</li><li>最后将 <code>Certificate Signature</code> 添加在文件证书上，形成数字证书；</li></ul><p><strong>客户端校验服务端的数字证书的过程：</strong></p><ul><li>首先客户端会使用同样的 <code>Hash</code> 算法获取该证书的 <code>Hash</code> 值 <code>H1</code>；</li><li>浏览器收到证书后可以使用 <code>CA</code> 的公钥解密 Certificate Signature 内容，得到一个 <code>Hash</code> 值 <code>H2</code> ；</li><li>最后比较 <code>H1</code> 和 <code>H2</code>，如果值相同，则为可信赖的证书，否则则认为证书不可信。</li></ul>]]></content>
+    
+    
+    <categories>
+      
+      <category>计算机网络</category>
+      
+    </categories>
+    
+    
+    <tags>
+      
+      <tag>网络协议</tag>
+      
+    </tags>
+    
+  </entry>
+  
+  
+  
+  <entry>
     <title>offset/client/scroll你都记清了吗?</title>
     <link href="/2023/10/27/scroll%20%20offset%20%20client/"/>
     <url>/2023/10/27/scroll%20%20offset%20%20client/</url>
