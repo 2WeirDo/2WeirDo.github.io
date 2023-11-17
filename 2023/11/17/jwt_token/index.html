@@ -16,22 +16,28 @@
   <meta name="author" content="weirdo">
   <meta name="keywords" content="">
   
-    <meta name="description" content="如何理解 HTTP 代理?我们知道在 HTTP 是基于请求-响应模型的协议，一般由客户端发请求，服务器来进行响应。 当然，也有特殊情况，就是代理服务器的情况。引入代理之后，作为代理的服务器相当于一个中间人的角色，对于客户端而言，表现为服务器进行响应；而对于源服务器，表现为客户端发起请求，具有双重身份。 代理服务器的功能 负载均衡。客户端的请求只会先到达代理服务器，后面到底有多少源服务器，IP 都是">
+    <meta name="description" content="认证和授权认证 指的是使用用户名和密码来验证当前用户的身份，简单来说就是用户登陆。  互联网中的认证：   用户名密码登录 邮箱发送登录链接 手机号接收验证码 只要你能收到邮箱&#x2F;验证码，就默认你是账号的主人  授权 指当用户登陆以后，当前用户是否有足够的权限访问特定的资源。 实现授权的方式有：cookie、session、token、OAuth Cookie为什么会出现Cookie? H">
 <meta property="og:type" content="article">
-<meta property="og:title" content="你知道 HTTP 代理&#x2F;代理缓存吗?">
-<meta property="og:url" content="http://example.com/2023/11/13/%E6%B5%8F%E8%A7%88%E5%99%A8%E4%BB%A3%E7%90%86%E7%BC%93%E5%AD%98/index.html">
+<meta property="og:title" content="cookie&#x2F;session&#x2F;token&#x2F;jwt分清楚没?">
+<meta property="og:url" content="http://example.com/2023/11/17/jwt_token/index.html">
 <meta property="og:site_name" content="Weirdo">
-<meta property="og:description" content="如何理解 HTTP 代理?我们知道在 HTTP 是基于请求-响应模型的协议，一般由客户端发请求，服务器来进行响应。 当然，也有特殊情况，就是代理服务器的情况。引入代理之后，作为代理的服务器相当于一个中间人的角色，对于客户端而言，表现为服务器进行响应；而对于源服务器，表现为客户端发起请求，具有双重身份。 代理服务器的功能 负载均衡。客户端的请求只会先到达代理服务器，后面到底有多少源服务器，IP 都是">
+<meta property="og:description" content="认证和授权认证 指的是使用用户名和密码来验证当前用户的身份，简单来说就是用户登陆。  互联网中的认证：   用户名密码登录 邮箱发送登录链接 手机号接收验证码 只要你能收到邮箱&#x2F;验证码，就默认你是账号的主人  授权 指当用户登陆以后，当前用户是否有足够的权限访问特定的资源。 实现授权的方式有：cookie、session、token、OAuth Cookie为什么会出现Cookie? H">
 <meta property="og:locale" content="zh_CN">
-<meta property="article:published_time" content="2023-11-13T07:56:30.000Z">
-<meta property="article:modified_time" content="2023-11-13T07:55:47.052Z">
+<meta property="og:image" content="https://weirdo-blog.oss-cn-chengdu.aliyuncs.com/blog/202311172338258.png">
+<meta property="og:image" content="https://weirdo-blog.oss-cn-chengdu.aliyuncs.com/blog/202311172338267.png">
+<meta property="og:image" content="https://weirdo-blog.oss-cn-chengdu.aliyuncs.com/blog/202311172338321.png">
+<meta property="og:image" content="https://weirdo-blog.oss-cn-chengdu.aliyuncs.com/blog/202311172338304.png">
+<meta property="og:image" content="https://weirdo-blog.oss-cn-chengdu.aliyuncs.com/blog/202311172338335.png">
+<meta property="article:published_time" content="2023-11-17T15:42:30.000Z">
+<meta property="article:modified_time" content="2023-11-17T15:42:24.062Z">
 <meta property="article:author" content="weirdo">
-<meta property="article:tag" content="HTTP">
+<meta property="article:tag" content="授权机制">
 <meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="https://weirdo-blog.oss-cn-chengdu.aliyuncs.com/blog/202311172338258.png">
   
   
   
-  <title>你知道 HTTP 代理/代理缓存吗? - Weirdo</title>
+  <title>cookie/session/token/jwt分清楚没? - Weirdo</title>
 
   <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
 
@@ -214,7 +220,7 @@
       <div class="banner-text text-center fade-in-up">
         <div class="h2">
           
-            <span id="subtitle" data-typed-text="你知道 HTTP 代理/代理缓存吗?"></span>
+            <span id="subtitle" data-typed-text="cookie/session/token/jwt分清楚没?"></span>
           
         </div>
 
@@ -230,8 +236,8 @@
     
       <span class="post-meta">
         <i class="iconfont icon-date-fill" aria-hidden="true"></i>
-        <time datetime="2023-11-13 15:56" pubdate>
-          2023年11月13日 下午
+        <time datetime="2023-11-17 23:42" pubdate>
+          2023年11月17日 晚上
         </time>
       </span>
     
@@ -242,7 +248,7 @@
       <span class="post-meta mr-2">
         <i class="iconfont icon-chart"></i>
         
-          2.5k 字
+          2.6k 字
         
       </span>
     
@@ -299,115 +305,107 @@
         <div id="board">
           <article class="post-content mx-auto">
             <!-- SEO header -->
-            <h1 style="display: none">你知道 HTTP 代理/代理缓存吗?</h1>
+            <h1 style="display: none">cookie/session/token/jwt分清楚没?</h1>
             
             
               <div class="markdown-body">
                 
-                <h2 id="如何理解-HTTP-代理"><a href="#如何理解-HTTP-代理" class="headerlink" title="如何理解 HTTP 代理?"></a>如何理解 HTTP 代理?</h2><p>我们知道在 HTTP 是基于请求-响应模型的协议，一般由客户端发请求，服务器来进行响应。</p>
-<p>当然，也有特殊情况，就是代理服务器的情况。引入代理之后，作为代理的服务器相当于一个中间人的角色，对于客户端而言，表现为服务器进行响应；而对于源服务器，表现为客户端发起请求，具有<strong>双重身份</strong>。</p>
-<h4 id="代理服务器的功能"><a href="#代理服务器的功能" class="headerlink" title="代理服务器的功能"></a>代理服务器的功能</h4><ol>
-<li><strong>负载均衡</strong>。客户端的请求只会先到达代理服务器，后面到底有多少源服务器，IP 都是多少，客户端是不知道的。因此，这个代理服务器可以拿到这个请求之后，可以通过特定的算法分发给不同的源服务器，让各台源服务器的负载尽量平均。当然，这样的算法有很多，包括<strong>随机算法</strong>、<strong>轮询</strong>、<strong>一致性hash</strong>、<strong>LRU</strong><code>(最近最少使用)</code>等等。</li>
-<li><strong>保障安全</strong>。利用<strong>心跳</strong>机制监控后台的服务器，一旦发现故障机就将其踢出集群。并且对于上下行的数据进行过滤，对非法 IP 限流，这些都是代理服务器的工作。</li>
-<li><strong>缓存代理</strong>。将内容缓存到代理服务器，使得客户端可以直接从代理服务器获得而不用到源服务器那里。</li>
+                <h2 id="认证和授权"><a href="#认证和授权" class="headerlink" title="认证和授权"></a>认证和授权</h2><p><strong>认证</strong></p>
+<p>指的是使用用户名和密码来验证当前用户的身份，简单来说就是用户登陆。</p>
+<blockquote>
+<p>互联网中的认证：</p>
+</blockquote>
+<ul>
+<li>用户名密码登录</li>
+<li>邮箱发送登录链接</li>
+<li>手机号接收验证码</li>
+<li>只要你能收到邮箱&#x2F;验证码，就默认你是账号的主人</li>
+</ul>
+<p><strong>授权</strong></p>
+<p>指当用户登陆以后，当前用户是否有足够的权限访问特定的资源。</p>
+<p>实现授权的方式有：<code>cookie</code>、<code>session</code>、<code>token</code>、<code>OAuth</code></p>
+<h2 id="Cookie"><a href="#Cookie" class="headerlink" title="Cookie"></a>Cookie</h2><p><strong>为什么会出现Cookie?</strong></p>
+<p>HTTP 是无状态的协议（对于事务处理没有记忆能力，每次客户端和服务端会话完成时，服务端不会保存任何会话信息)</p>
+<p>每个请求都是完全独立的，服务端无法确认当前访问者的身份信息，无法分辨上一次的请求发送者和这一次的发送者是不是同一个人。</p>
+<p>所以服务器与浏览器为了进行会话跟踪（知道是谁在访问我），就必须主动的去维护一个状态，这个状态用于告知服务端前后两个请求是否来自同一浏览器。</p>
+<p>而这个状态需要通过 <code>cookie</code> 或者 <code>session</code> 去实现。</p>
+<p><strong>Cookie的创建</strong></p>
+<p>当接收到客户端发出的 <code>HTTP</code> 请求时，服务器可以发送带有响应的 <code>Set-Cookie</code> 标头，<code>Cookie</code> 通常<strong>由浏览器存储</strong>，然后将 <code>Cookie</code> 与 <code>HTTP</code> 标头一同向服务器发出请求。</p>
+<p>随着对服务器的每个新请求，浏览器将使用 <code>Cookie</code> 头将所有以前存储的 <code>Cookie</code> 发送回服务器。</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs JavaScript"><span class="hljs-comment">//服务端</span><br><span class="hljs-title class_">Set</span>-<span class="hljs-title class_">Cookie</span>: ...<br><br><span class="hljs-comment">//客户端</span><br><span class="hljs-title class_">Cookie</span>: ...<br></code></pre></td></tr></table></figure>
+
+
+
+
+
+
+
+
+
+<h2 id="Session"><a href="#Session" class="headerlink" title="Session"></a>Session</h2><p><strong>什么是Session?</strong></p>
+<p>session 是另一种记录服务器和客户端<strong>会话状态</strong>的机制</p>
+<p>session 是基于 cookie 实现的，session 存储在服务器端，sessionId 会被存储到客户端的cookie 中</p>
+<p><strong>Session认证流程</strong></p>
+<p><img src="https://weirdo-blog.oss-cn-chengdu.aliyuncs.com/blog/202311172338258.png" srcset="/img/loading.gif" lazyload alt="img"></p>
+<ul>
+<li>用户第一次请求服务器的时候，服务器根据用户提交的相关信息，创建对应的 <code>Session</code></li>
+<li>请求返回时将此 <code>Session</code> 的唯一标识信息 <code>SessionID</code> 返回给浏览器</li>
+<li>浏览器接收到服务器返回的 <code>SessionID</code> 信息后，会将此信息存入到 <code>Cookie</code> 中，同时 <code>Cookie</code> 记录此 <code>SessionID</code> 属于哪个域名。</li>
+<li>当用户第二次访问服务器的时候，请求会自动判断此域名下是否存在 <code>Cookie</code> 信息，如果存在自动将 <code>Cookie</code> 信息也发送给服务端，服务端会从 <code>Cookie</code> 中获取 <code>SessionID</code>，再根据 <code>SessionID</code> 查找对应的 <code>Session</code> 信息，如果没有找到说明用户没有登录或者登录失效，如果找到 <code>Session</code> 证明用户已经登录可执行后面操作。</li>
+</ul>
+<blockquote>
+<p>根据以上流程可知，<code>SessionID</code> 是连接 <code>Cookie</code> 和 <code>Session</code> 的一道桥梁，大部分系统也是根据此原理来验证用户登录状态。</p>
+</blockquote>
+<h2 id="Token"><a href="#Token" class="headerlink" title="Token"></a>Token</h2><p><strong>什么是Token?</strong></p>
+<p>访问资源接口 (api)  时所需要的资源凭证</p>
+<blockquote>
+<p>简单 <code>token</code> 的组成：  </p>
+</blockquote>
+<ul>
+<li>uid : 用户唯一的身份标识</li>
+<li>time : 当前时间的时间戳</li>
+<li>sign : 签名，token 的前几位以哈希算法压缩成的一定长度的十六进制字符串</li>
+</ul>
+<p><strong>Token 的身份验证流程</strong></p>
+<p><img src="https://weirdo-blog.oss-cn-chengdu.aliyuncs.com/blog/202311172338267.png" srcset="/img/loading.gif" lazyload alt="img"></p>
+<ul>
+<li>客户端使用用户名跟密码请求登录</li>
+<li>服务端收到请求，去验证用户名与密码</li>
+<li>验证成功后，服务端会签发一个 <code>token</code> 并把这个 <code>token</code> 发送给客户端</li>
+<li>客户端收到 token 以后，会把它存储起来，比如放在 cookie 里或者 localStorage 里</li>
+<li>客户端每次向服务端请求资源的时候需要带着服务端签发的 token</li>
+<li>服务端收到请求，然后去验证客户端请求里面带着的 token ，如果验证成功，就向客户端返回请求的数据</li>
+</ul>
+<h2 id="JWT"><a href="#JWT" class="headerlink" title="JWT"></a>JWT</h2><p><strong>什么是JWT?</strong></p>
+<p>JSON Web Token（简称 JWT）是目前最流行的跨域认证解决方案。</p>
+<p><img src="https://weirdo-blog.oss-cn-chengdu.aliyuncs.com/blog/202311172338321.png" srcset="/img/loading.gif" lazyload alt="img"></p>
+<ol>
+<li>用户登陆，用户通过用户名和密码登陆，如果登陆成功，服务器就会返回一个加密文档，这个文档就是<code>jwt</code>，其中包含除了用户密码以外的全部的认证信息，包括用户名、email、角色、权限等等，而客户端在拿到<code>jwt</code>以后就可以把它保存起来了，可以保存<code>cookie</code>中，也可以保存在<code>LocalStorage</code>里面，而生成<code>jwt</code>以后不需要在服务器上保存。</li>
+<li>用户需要访问某些资源，这个时候用户需要把<code>jwt</code>放在<code>http</code>请求的<code>header</code>中，与<code>http</code>请求一同发送给服务器。服务器取得<code>jwt</code>以后，会使用自己的私钥来给给<code>jwt</code>文档解密，如果解密成功而且数据依然有效，则代表用户已经登陆了，如果<code>jwt</code>所描述的用户权限允许该用户访问资源，服务器就会把资源信息通过<code>http</code>响应发送回到客户端。</li>
 </ol>
-<h4 id="相关头部字段"><a href="#相关头部字段" class="headerlink" title="相关头部字段"></a><strong>相关头部字段</strong></h4><ul>
-<li><code>Via</code></li>
+<p><strong>什么时候用JWT?</strong></p>
+<p>学校新建了一个图书馆系统, 学校希望这个系统可以无缝衔接学生系统，使用同一套账户，在学生系统中登录以后就能直接进入图书馆系统。</p>
+<ul>
+<li><strong>使用传统的session验证方式</strong>，必须在学生系统和图书馆系统都各自创建一套<code>session</code>才能实现登录，而各自的<code>session</code>无法形成有效的联系，所以在最底层创建一个单点登录系统，不管学生访问哪个系统，都会连接到单点登录系统进行<code>session</code>的验证，当学生的登录信息验证成功以后，单点登录系统会做一个重定向，把流量引导至相应的系统中。这样就可以实现这学生系统和图书馆系统的无缝连接。但是，单点登录系统在使用分布式部署的时候又要考虑不同的服务器之间<code>session</code>的一致性，从而导致系统架构非常复杂。</li>
 </ul>
-<p>代理服务器需要标明自己的身份，在 HTTP 传输中留下自己的痕迹，怎么办呢？ 通过<code>Via</code>字段来记录。</p>
+<p><img src="https://weirdo-blog.oss-cn-chengdu.aliyuncs.com/blog/202311172338304.png" srcset="/img/loading.gif" lazyload alt="img"></p>
+<ul>
+<li>使用的**<code>jwt</code>**的验证方式，那么想要拓展系统简直就是易如反掌。因为<code>jwt</code>不会保存在服务器上，所以服务器如何部署完全不会影响到<code>jwt</code>的使用。学生登录完成以后，把<code>jwt</code>信息保存在浏览器中，需要访问学习系统或图书馆系统的时候，会向服务器发送带有<code>jwt</code>的请求，学生系统和图书馆系统只需要使用相同的私钥来验证<code>token</code>，验证成功以后，就可以通过<code>token</code>中用户的权限给不同的用户输出不同的数据。</li>
+</ul>
+<p><img src="https://weirdo-blog.oss-cn-chengdu.aliyuncs.com/blog/202311172338335.png" srcset="/img/loading.gif" lazyload alt="img"></p>
+<p><strong>JWT的优势</strong></p>
+<ul>
+<li>无状态登录，简化服务器的用户验证流程，同时完美支持分布式部署。</li>
+<li>使用非对称加密，只要私钥不泄露，可以保证<code>token</code>是绝对安全的。</li>
+</ul>
+<p><strong>JWT的缺陷</strong></p>
+<ul>
+<li><code>jwt token</code>一经发布就无法挽回了，因为具有无状态的特征，所以在带来便利的同时也无法被服务禁用，也就是说，如果用户自身因为某些原因导致<code>token</code>被黑客窃取，那么黑客就可以使用这个<code>token</code>来伪装登录，而服务端对此没有任何办法，只能等待<code>token</code>过期失效。</li>
+<li><code>jwt</code>的前两个部分其实并没有加密，仅仅使用了<code>base64</code>来编码而已，也就是说<code>jwt</code>的用户信息等于是明文传递的，很容易造成用户的信息泄露。</li>
+</ul>
 <blockquote>
-<p>举个例子</p>
+<p>本文转载自<a target="_blank" rel="noopener" href="https://juejin.cn/post/7167718864447340558#heading-15">❤️❤️包教包会——Cookie、Session、Token、JWT - 掘金</a></p>
 </blockquote>
-<p>现在中间有两台代理服务器，在客户端发送请求后会经历这样一个过程:</p>
-<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs JavaScript">客户端 -&gt; 代理<span class="hljs-number">1</span> -&gt; 代理<span class="hljs-number">2</span> -&gt; 源服务器<br></code></pre></td></tr></table></figure>
-
-<p>在源服务器收到请求后，会在请求头拿到这个字段:</p>
-<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs JavaScript"><span class="hljs-title class_">Via</span>: proxy_server1, proxy_server2<br></code></pre></td></tr></table></figure>
-
-<p>而源服务器响应时，最终在客户端会拿到这样的响应头:</p>
-<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs JavaScript"><span class="hljs-title class_">Via</span>: proxy_server2, proxy_server1<br></code></pre></td></tr></table></figure>
-
-<blockquote>
-<p>可以看到，Via中代理的顺序即为在 HTTP 传输中报文传达的顺序。</p>
-</blockquote>
-<ul>
-<li><code>X-Forwarded-For</code></li>
-</ul>
-<p>字面意思就是为谁转发, 它记录的是请求方的<code>IP</code>**地址 ** (注意，和<code>Via</code>区分开，<code>X-Forwarded-For</code>记录的是请求方这一个<code>IP</code>)。</p>
-<ul>
-<li><p><code>X-Real-IP</code>  : 是一种获取用户真实 <code>IP</code> 的字段，不管中间经过多少代理，这个字段始终记录<strong>最初的客户端的<code>IP</code>。</strong></p>
-</li>
-<li><p><code>X-Forwarded-Host</code>，记录<strong>客户端 (不包括代理) 的域名</strong>。</p>
-</li>
-<li><p><code>X-Forwarded-Proto</code> : 记录<strong>客户端(不包括代理)的协议名</strong></p>
-</li>
-</ul>
-<h4 id="X-Forwarded-For产生的问题"><a href="#X-Forwarded-For产生的问题" class="headerlink" title="X-Forwarded-For产生的问题"></a><strong>X-Forwarded-For产生的问题</strong></h4><p>前面可以看到，<code>X-Forwarded-For</code>这个字段记录的是请求方的 IP，这意味着每经过一个不同的代理，这个字段的名字都要变，从客户端到代理1，这个字段是客户端的 IP，从代理1到代理2，这个字段就变为了代理1的 IP。</p>
-<blockquote>
-<p>但是这会产生两个问题:</p>
-</blockquote>
-<ul>
-<li><p>意味着代理必须解析 HTTP 请求头，然后修改，比直接转发数据性能下降。</p>
-</li>
-<li><p>在 HTTPS 通信加密的过程中，原始报文是不允许修改的。</p>
-</li>
-</ul>
-<p>由此产生了代理协议，一般使用明文版本，只需要在 <code>HTTP</code> 请求行上面加上这样格式的文本即可:</p>
-<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs JavaScript"><span class="hljs-comment">// PROXY + TCP4/TCP6 + 请求方地址 + 接收方地址 + 请求端口 + 接收端口</span><br><span class="hljs-variable constant_">PROXY</span> <span class="hljs-title class_">TCP4</span> <span class="hljs-number">0.0</span><span class="hljs-number">.0</span><span class="hljs-number">.1</span> <span class="hljs-number">0.0</span><span class="hljs-number">.0</span><span class="hljs-number">.2</span> <span class="hljs-number">1111</span> <span class="hljs-number">2222</span><br><span class="hljs-variable constant_">GET</span> / <span class="hljs-variable constant_">HTTP</span>/<span class="hljs-number">1.1</span><br>...<br></code></pre></td></tr></table></figure>
-
-<p>这样就可以解决<code>X-Forwarded-For</code>带来的问题了。</p>
-<h2 id="代理缓存是什么"><a href="#代理缓存是什么" class="headerlink" title="代理缓存是什么?"></a>代理缓存是什么?</h2><blockquote>
-<p>我们先来回顾一下强缓存和协商缓存</p>
-</blockquote>
-<p>首先通过 <code>Cache-Control</code> 验证强缓存是否可用</p>
-<ul>
-<li>如果强缓存可用，直接使用</li>
-<li>否则进入协商缓存，即发送 HTTP 请求，服务器通过请求头中的If-Modified-Since或者If-None-Match这些条件请求字段检查资源是否更新<ul>
-<li>若资源更新，返回资源和200状态码</li>
-<li>否则，返回304，告诉浏览器直接从缓存获取资源</li>
-</ul>
-</li>
-</ul>
-<p>我们说说另外一种缓存方式: <strong>代理缓存。</strong></p>
-<h4 id="为什么产生代理缓存？"><a href="#为什么产生代理缓存？" class="headerlink" title="为什么产生代理缓存？"></a><strong>为什么产生代理缓存？</strong></h4><p>对于源服务器来说，它也是有缓存的，比如<code>Redis</code>, <code>Memcache</code>，但对于 <code>HTTP</code> 缓存来说，如果每次客户端缓存失效都要到源服务器获取，那给源服务器的压力是很大的。</p>
-<p>由此引入了缓存代理的机制。让代理服务器接管一部分的服务端<code>HTTP</code>缓存，<strong>客户端缓存过期后就近到代理缓存中获取，代理缓存过期了才请求源服务器，这样流量巨大的时候能明显降低源服务器的压力。</strong></p>
-<blockquote>
-<p>那缓存代理究竟是如何做到的呢？</p>
-</blockquote>
-<p>总的来说，缓存代理的控制分为两部分，一部分是<strong>源服务器端的控制</strong>，一部分是<strong>客户端的控制</strong>。</p>
-<h4 id="源服务器的缓存控制"><a href="#源服务器的缓存控制" class="headerlink" title="源服务器的缓存控制"></a><strong>源服务器的缓存控制</strong></h4><ul>
-<li><code>private</code> 和 <code>public</code></li>
-</ul>
-<p>在源服务器的响应头中，会加上<code>Cache-Control</code>这个字段进行缓存控制字段，那么它的值当中可以加入<code>private</code>或者<code>public</code>表示是否允许代理服务器缓存，前者禁止，后者为允许。</p>
-<p>比如对于一些非常私密的数据，如果缓存到代理服务器，别人直接访问代理就可以拿到这些数据，是非常危险的，因此对于这些数据一般是不会允许代理服务器进行缓存的，将响应头部的<code>Cache-Control</code>设为<code>private</code>，而不是<code>public</code>。</p>
-<ul>
-<li><code>proxy-revalidate</code></li>
-</ul>
-<p><code>must-revalidate</code>的意思是客户端缓存过期就去源服务器获取</p>
-<p><code>proxy-revalidate</code>则表示<strong>代理服务器的缓存过期后到源服务器获取</strong>。</p>
-<ul>
-<li><code>s-maxage</code></li>
-</ul>
-<p>限定了<strong>缓存在代理服务器中可以存放多久</strong>，和限制客户端缓存时间的<code>max-age</code>并不冲突。</p>
-<blockquote>
-<p>举例 : 源服务器在响应头中加入这样一个字段:</p>
-</blockquote>
-<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs JavaScript"><span class="hljs-title class_">Cache</span>-<span class="hljs-title class_">Control</span>: public, max-age=<span class="hljs-number">1000</span>, s-maxage=<span class="hljs-number">2000</span><br></code></pre></td></tr></table></figure>
-
-<p>相当于源服务器说: 我这个响应是允许代理服务器缓存的，客户端缓存过期了到代理中拿，并且在客户端的缓存时间为 1000 秒，在代理服务器中的缓存时间为 2000 s。</p>
-<h4 id="客户端的缓存控制"><a href="#客户端的缓存控制" class="headerlink" title="客户端的缓存控制"></a><strong>客户端的缓存控制</strong></h4><ul>
-<li><code>max-stale</code> 和 <code>min-fresh</code> :在客户端的请求头中，可以加入这两个字段，来对代理服务器上的缓存进行宽容和限制操作。</li>
-</ul>
-<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs JavaScript">max-<span class="hljs-attr">stale</span>: <span class="hljs-number">5</span><br></code></pre></td></tr></table></figure>
-
-<p>表示客户端到代理服务器上拿缓存的时候，即使代理缓存过期了也不要紧，<strong>只要过期时间在5秒之内，还是可以从代理中获取的。</strong></p>
-<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs JavaScript">min-<span class="hljs-attr">fresh</span>: <span class="hljs-number">5</span><br></code></pre></td></tr></table></figure>
-
-<p>表示代理缓存需要一定的<strong>新鲜度</strong>，不要等到缓存刚好到期再拿，一定要在<strong>到期前 5 秒之前的时间拿，否则拿不到。</strong></p>
-<ul>
-<li><code>only-if-cached</code></li>
-</ul>
-<p>这个字段加上后表示客户端<strong>只会接受代理缓存，而不会接受源服务器的响应。</strong>如果代理缓存无效，则直接返回<code>504</code>（Gateway Timeout）。</p>
 
                 
               </div>
@@ -426,7 +424,7 @@
     
       <span class="category-chain">
         
-  <a href="/categories/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C/" class="category-chain-item">计算机网络</a>
+  <a href="/categories/%E6%B5%8F%E8%A7%88%E5%99%A8%E5%8E%9F%E7%90%86/" class="category-chain-item">浏览器原理</a>
   
   
 
@@ -441,7 +439,7 @@
     <div class="post-meta">
       <i class="iconfont icon-tags"></i>
       
-        <a href="/tags/HTTP/">#HTTP</a>
+        <a href="/tags/%E6%8E%88%E6%9D%83%E6%9C%BA%E5%88%B6/">#授权机制</a>
       
     </div>
   
@@ -453,8 +451,8 @@
 
   <div class="license-box my-3">
     <div class="license-title">
-      <div>你知道 HTTP 代理/代理缓存吗?</div>
-      <div>http://example.com/2023/11/13/浏览器代理缓存/</div>
+      <div>cookie/session/token/jwt分清楚没?</div>
+      <div>http://example.com/2023/11/17/jwt_token/</div>
     </div>
     <div class="license-meta">
       
@@ -466,13 +464,13 @@
       
         <div class="license-meta-item license-meta-date">
           <div>发布于</div>
-          <div>2023年11月13日</div>
+          <div>2023年11月17日</div>
         </div>
       
       
         <div class="license-meta-item license-meta-date">
           <div>更新于</div>
-          <div>2023年11月13日</div>
+          <div>2023年11月17日</div>
         </div>
       
       
@@ -503,18 +501,12 @@
                   <article class="post-prev col-6">
                     
                     
-                      <a href="/2023/11/17/jwt_token/" title="cookie/session/token/jwt分清楚没?">
-                        <i class="iconfont icon-arrowleft"></i>
-                        <span class="hidden-mobile">cookie/session/token/jwt分清楚没?</span>
-                        <span class="visible-mobile">上一篇</span>
-                      </a>
-                    
                   </article>
                   <article class="post-next col-6">
                     
                     
-                      <a href="/2023/11/09/%E6%80%A7%E8%83%BD%E6%A3%80%E6%B5%8B%E4%B8%8E%E4%BC%98%E5%8C%96/" title="前端人都应该知道的性能优化📕">
-                        <span class="hidden-mobile">前端人都应该知道的性能优化📕</span>
+                      <a href="/2023/11/13/%E6%B5%8F%E8%A7%88%E5%99%A8%E4%BB%A3%E7%90%86%E7%BC%93%E5%AD%98/" title="你知道 HTTP 代理/代理缓存吗?">
+                        <span class="hidden-mobile">你知道 HTTP 代理/代理缓存吗?</span>
                         <span class="visible-mobile">下一篇</span>
                         <i class="iconfont icon-arrowright"></i>
                       </a>
