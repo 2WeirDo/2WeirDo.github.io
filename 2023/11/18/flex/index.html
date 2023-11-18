@@ -1,0 +1,937 @@
+
+
+<!DOCTYPE html>
+<html lang="zh-CN" data-default-color-scheme=auto>
+
+
+
+<head>
+  <meta charset="UTF-8">
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/tub.png">
+  <link rel="icon" href="/img/tub.png">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="author" content="weirdo">
+  <meta name="keywords" content="">
+  
+    <meta name="description" content="flex 布局 可以看这个  Flex 布局教程:实例篇 - 阮一峰的网络日志 容器属性display 属性用来将父元素定义为 Flex 布局的容器，设置 display 值为 display: flex;  容器对外表现为块级元素；display: inline-flex; 容器对外表现为行内元素，对内两者表现是一样的。  我们有以下六个属性可以设置的容器上：   flex-direction">
+<meta property="og:type" content="article">
+<meta property="og:title" content="😎flex布局详解">
+<meta property="og:url" content="http://example.com/2023/11/18/flex/index.html">
+<meta property="og:site_name" content="Weirdo">
+<meta property="og:description" content="flex 布局 可以看这个  Flex 布局教程:实例篇 - 阮一峰的网络日志 容器属性display 属性用来将父元素定义为 Flex 布局的容器，设置 display 值为 display: flex;  容器对外表现为块级元素；display: inline-flex; 容器对外表现为行内元素，对内两者表现是一样的。  我们有以下六个属性可以设置的容器上：   flex-direction">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://weirdo-blog.oss-cn-chengdu.aliyuncs.com/blog/202311181027665.png">
+<meta property="og:image" content="https://weirdo-blog.oss-cn-chengdu.aliyuncs.com/blog/202311181027684.png">
+<meta property="og:image" content="https://weirdo-blog.oss-cn-chengdu.aliyuncs.com/blog/202311181027720.png">
+<meta property="og:image" content="https://weirdo-blog.oss-cn-chengdu.aliyuncs.com/blog/202311181027736.png">
+<meta property="og:image" content="https://weirdo-blog.oss-cn-chengdu.aliyuncs.com/blog/202311181027651.png">
+<meta property="og:image" content="https://weirdo-blog.oss-cn-chengdu.aliyuncs.com/blog/202311181027759.png">
+<meta property="og:image" content="https://weirdo-blog.oss-cn-chengdu.aliyuncs.com/blog/202311181027302.png">
+<meta property="og:image" content="https://weirdo-blog.oss-cn-chengdu.aliyuncs.com/blog/202311181027272.png">
+<meta property="og:image" content="https://weirdo-blog.oss-cn-chengdu.aliyuncs.com/blog/202311181027277.png">
+<meta property="og:image" content="https://weirdo-blog.oss-cn-chengdu.aliyuncs.com/blog/202311181027296.png">
+<meta property="og:image" content="https://weirdo-blog.oss-cn-chengdu.aliyuncs.com/blog/202311181027278.png">
+<meta property="og:image" content="https://weirdo-blog.oss-cn-chengdu.aliyuncs.com/blog/202311181027287.png">
+<meta property="og:image" content="https://weirdo-blog.oss-cn-chengdu.aliyuncs.com/blog/202311181027769.png">
+<meta property="og:image" content="https://weirdo-blog.oss-cn-chengdu.aliyuncs.com/blog/202311181027803.png">
+<meta property="og:image" content="https://weirdo-blog.oss-cn-chengdu.aliyuncs.com/blog/202311181027782.png">
+<meta property="og:image" content="https://weirdo-blog.oss-cn-chengdu.aliyuncs.com/blog/202311181027815.png">
+<meta property="og:image" content="https://weirdo-blog.oss-cn-chengdu.aliyuncs.com/blog/202311181027840.png">
+<meta property="og:image" content="https://weirdo-blog.oss-cn-chengdu.aliyuncs.com/blog/202311181027937.png">
+<meta property="og:image" content="https://weirdo-blog.oss-cn-chengdu.aliyuncs.com/blog/202311181027283.png">
+<meta property="og:image" content="https://weirdo-blog.oss-cn-chengdu.aliyuncs.com/blog/202311181027352.png">
+<meta property="og:image" content="https://weirdo-blog.oss-cn-chengdu.aliyuncs.com/blog/202311181027342.png">
+<meta property="article:published_time" content="2023-11-18T02:32:30.000Z">
+<meta property="article:modified_time" content="2023-11-18T02:31:53.233Z">
+<meta property="article:author" content="weirdo">
+<meta property="article:tag" content="布局">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="https://weirdo-blog.oss-cn-chengdu.aliyuncs.com/blog/202311181027665.png">
+  
+  
+  
+  <title>😎flex布局详解 - Weirdo</title>
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
+
+
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/github-markdown-css/4.0.0/github-markdown.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/hint.css/2.7.0/hint.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.css" />
+
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+<!-- Do not modify the link that theme dependent icons -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1749284_hj8rtnfg7um.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1736178_lbnruvf0jn.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+
+  <link id="highlight-css" rel="stylesheet" href="/css/highlight.css" />
+  
+    <link id="highlight-css-dark" rel="stylesheet" href="/css/highlight-dark.css" />
+  
+
+
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    Fluid.ctx = Object.assign({}, Fluid.ctx)
+    var CONFIG = {"hostname":"example.com","root":"/","version":"1.9.4","typing":{"enable":true,"typeSpeed":80,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#ddfd","options":{"showSpinner":true,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":true,"follow_dnt":true,"baidu":null,"google":null,"gtag":null,"tencent":{"sid":null,"cid":null},"woyaola":null,"cnzz":null,"leancloud":{"app_id":"ukn0C9F4sFzy057RJ7Ohdmq4-gzGzoHsz","app_key":"x8NNzZf5L3jNKvqOKxoMj0FN","server_url":"https://ukn0c9f4.lc-cn-n1-shared.com","path":"window.location.pathname","ignore_local":true}},"search_path":"/local-search.xml"};
+
+    if (CONFIG.web_analytics.follow_dnt) {
+      var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
+      Fluid.ctx.dnt = dntVal && (dntVal.startsWith('1') || dntVal.startsWith('yes') || dntVal.startsWith('on'));
+    }
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+  
+
+
+
+  
+<meta name="generator" content="Hexo 6.3.0"></head>
+
+
+<body>
+  
+
+  <header>
+    
+
+<div class="header-inner" style="height: 70vh;">
+  <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <strong>Weirdo</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/">
+                <i class="iconfont icon-home-fill"></i>
+                <span>首页</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/">
+                <i class="iconfont icon-category-fill"></i>
+                <span>分类</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/">
+                <i class="iconfont icon-tags-fill"></i>
+                <span>标签</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/">
+                <i class="iconfont icon-archive-fill"></i>
+                <span>归档</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/">
+                <i class="iconfont icon-user-fill"></i>
+                <span>关于</span>
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              <i class="iconfont icon-search"></i>
+            </a>
+          </li>
+          
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">
+              <i class="iconfont icon-dark" id="color-toggle-icon"></i>
+            </a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+  
+
+<div id="banner" class="banner" parallax=true
+     style="background: url('/img/meili.jpg') no-repeat center center; background-size: cover;">
+  <div class="full-bg-img">
+    <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+      <div class="banner-text text-center fade-in-up">
+        <div class="h2">
+          
+            <span id="subtitle" data-typed-text="😎flex布局详解"></span>
+          
+        </div>
+
+        
+          
+  <div class="mt-3">
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-author" aria-hidden="true"></i>
+        weirdo
+      </span>
+    
+    
+      <span class="post-meta">
+        <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+        <time datetime="2023-11-18 10:32" pubdate>
+          2023年11月18日 上午
+        </time>
+      </span>
+    
+  </div>
+
+  <div class="mt-1">
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-chart"></i>
+        
+          5.4k 字
+        
+      </span>
+    
+
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-clock-fill"></i>
+        
+        
+        
+          23 分钟
+        
+      </span>
+    
+
+    
+    
+      
+        <span id="leancloud-page-views-container" class="post-meta" style="display: none">
+          <i class="iconfont icon-eye" aria-hidden="true"></i>
+          <span id="leancloud-page-views"></span> 次
+        </span>
+        
+      
+    
+  </div>
+
+
+        
+      </div>
+
+      
+    </div>
+  </div>
+</div>
+
+</div>
+
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+
+    </div>
+
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div id="board">
+          <article class="post-content mx-auto">
+            <!-- SEO header -->
+            <h1 style="display: none">😎flex布局详解</h1>
+            
+            
+              <div class="markdown-body">
+                
+                <h3 id=""><a href="#" class="headerlink" title=""></a></h3><h1 id="flex-布局"><a href="#flex-布局" class="headerlink" title="flex 布局"></a>flex 布局</h1><blockquote>
+<p>可以看这个</p>
+</blockquote>
+<p><a target="_blank" rel="noopener" href="https://www.ruanyifeng.com/blog/2015/07/flex-examples.html">Flex 布局教程:实例篇 - 阮一峰的网络日志</a></p>
+<h2 id="容器属性"><a href="#容器属性" class="headerlink" title="容器属性"></a>容器属性</h2><p>display 属性用来将父元素定义为 Flex 布局的容器，设置 display 值为 <code>display: flex;</code> </p>
+<p>容器对外表现为块级元素；<code>display: inline-flex;</code> 容器对外表现为行内元素，对内两者表现是一样的。</p>
+<blockquote>
+<p>我们有以下六个属性可以设置的容器上：</p>
+</blockquote>
+<ul>
+<li><code>flex-direction</code></li>
+<li><code>flex-wrap</code></li>
+<li><code>flex-flow</code></li>
+<li><code>justify-content</code></li>
+<li><code>align-items</code></li>
+<li><code>align-content</code></li>
+</ul>
+<h4 id="flex-direction"><a href="#flex-direction" class="headerlink" title="flex-direction"></a>flex-direction</h4><p><code>flex-direction</code> 定义了主轴的方向，即项目的排列方向。</p>
+<ul>
+<li><code>row</code>（默认值）：主轴在水平方向，起点在左侧，也就是我们常见的从左到右；</li>
+<li><code>row-reverse</code>：主轴在水平方向，起点在右侧；</li>
+<li><code>column</code>：主轴在垂直方向，起点在上沿；</li>
+<li><code>column-reverse</code>： 主轴在垂直方向，起点在下沿。</li>
+</ul>
+<h4 id="flex-wrap"><a href="#flex-wrap" class="headerlink" title="flex-wrap"></a>flex-wrap</h4><p>默认情况下，项目是排成一行显示的，<code>flex-wrap</code> 用来定义当一行放不下时，项目如何换行。</p>
+<p>假设此时主轴是从左到右的水平方向：</p>
+<ul>
+<li><code>nowrap</code>（默认）：不换行；</li>
+<li><code>wrap</code>：换行，第一行在上面；</li>
+<li><code>wrap-reverse</code>：换行，第一行在下面。</li>
+</ul>
+<h4 id="flex-flow"><a href="#flex-flow" class="headerlink" title="flex-flow"></a>flex-flow</h4><p><code>flex-flow</code> 是 <code>flex-direction </code>和 <code>flex-wrap</code> 的简写，默认值是 <code>row no-wrap</code>。</p>
+<h4 id="justify-content"><a href="#justify-content" class="headerlink" title="justify-content"></a>justify-content</h4><p><code>justify-content</code> 定义了项目在主轴上的对齐方式。</p>
+<ul>
+<li><code>flex-start</code>（默认）：与主轴的起点对齐；</li>
+<li><code>flex-end</code>：与主轴的终点对齐；</li>
+<li><code>center</code>：项目居中；</li>
+<li><code>space-between</code>：两端对齐，项目之间的距离都相等；</li>
+<li><code>space-around</code>：每个项目的两侧间隔相等，所以项目与项目之间的间隔是项目与边框之间间隔的两倍。</li>
+</ul>
+<h4 id="align-items"><a href="#align-items" class="headerlink" title="align-items"></a>align-items</h4><p><code>align-items </code>定义了项目在交叉轴上如何对齐。</p>
+<ul>
+<li><code>flex-start</code>：与交叉轴的起点对齐；</li>
+<li><code>flex-end</code>：与交叉轴的终点对齐；</li>
+<li><code>center</code>：居中对齐；</li>
+<li><code>baseline</code>：项目第一行文字的基线对齐；</li>
+<li><code>stretch</code>（默认值）：如果项目未设置高度或者为 auto，项目将占满整个容器的高度。</li>
+</ul>
+<h4 id="align-content"><a href="#align-content" class="headerlink" title="align-content"></a>align-content</h4><p><code>align-content</code> 定义了多根轴线的对齐方式，若此时主轴在水平方向，交叉轴在垂直方向，align-content 就可以理解为多行在垂直方向的对齐方式。项目排列只有一行时，该属性不起作用。</p>
+<ul>
+<li><code>flex-start</code>：与交叉轴的起点对齐；</li>
+<li><code>flex-end</code>： 与交叉轴的终点对齐；</li>
+<li><code>center</code>：居中对齐；</li>
+<li><code>space-between</code>：与交叉轴两端对齐，轴线之间的距离相等；</li>
+<li><code>space-around</code>：每根轴线两侧的间隔都相等，所以轴线与轴线之间的间隔是轴线与边框之间间隔的两倍；</li>
+<li><code>stretch</code>（默认值）：如果项目未设置高度或者为 <code>auto</code>，项目将占满整个容器的高度。</li>
+</ul>
+<h2 id="项目属性"><a href="#项目属性" class="headerlink" title="项目属性"></a>项目属性</h2><p>对项目设置属性，可以更灵活地控制 Flex 布局。以下六种属性可以设置在项目上：</p>
+<ul>
+<li><code>order</code></li>
+<li><code>flex-grow</code></li>
+<li><code>flex-shrink</code></li>
+<li><code>flex-basis</code></li>
+<li><code>flex</code></li>
+<li><code>align-self</code></li>
+</ul>
+<h4 id="order"><a href="#order" class="headerlink" title="order"></a>order</h4><p><code>order</code> 定义了项目的排列顺序，默认值为 0，数值越小，排列越靠前。</p>
+<figure class="highlight css"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs CSS"><span class="hljs-selector-class">.item</span> &#123;<br>    <span class="hljs-attribute">order</span>: &lt;integer&gt;;<br>&#125;<br></code></pre></td></tr></table></figure>
+
+<p><img src="https://weirdo-blog.oss-cn-chengdu.aliyuncs.com/blog/202311181027665.png" srcset="/img/loading.gif" lazyload alt="img"></p>
+<p>（给第三个项目设置了 order: -1； 后，该项目排到了最前面）</p>
+<h4 id="flex-grow"><a href="#flex-grow" class="headerlink" title="flex-grow"></a>flex-grow</h4><p><code>flex-grow</code> 定义了项目的放大比例，默认为 <code>0</code>，也就是即使存在剩余空间，也不会放大。</p>
+<p>如果所有项目的 <code>flex-grow</code> 都为 <code>1</code>，则所有项目平分剩余空间；</p>
+<p>如果其中某个项目的 <code>flex-grow </code>为 <code>2</code>，其余项目的<code> flex-grow</code> 为 <code>1</code>，则前者占据的剩余空间比其他项目多一倍。</p>
+<figure class="highlight css"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs CSS"><span class="hljs-selector-class">.item</span> &#123;<br>    <span class="hljs-attribute">flex-grow</span>: &lt;number&gt;;&#125;<br></code></pre></td></tr></table></figure>
+
+<p><img src="https://weirdo-blog.oss-cn-chengdu.aliyuncs.com/blog/202311181027684.png" srcset="/img/loading.gif" lazyload alt="img"></p>
+<p>（所有项目的 flex-grow 都为 1，平分剩余空间）</p>
+<p><img src="https://weirdo-blog.oss-cn-chengdu.aliyuncs.com/blog/202311181027720.png" srcset="/img/loading.gif" lazyload alt="img"></p>
+<p>（flex-grow 属性值越大，所占剩余空间越大）</p>
+<h4 id="flex-shrink"><a href="#flex-shrink" class="headerlink" title="flex-shrink"></a>flex-shrink</h4><p><code>flex-shrink</code> 定义了项目的缩小比例，默认为 1，即当空间不足时，项目会自动缩小。</p>
+<p>如果所有项目的 <code>flex-shrink </code>都为 1，当空间不足时，所有项目都将等比缩小；</p>
+<p>如果其中一个项目的 <code>flex-shrink</code> 为 0，其余都为 1，当空间不足时，<code>flex-shrink </code>为 0 的不缩小。</p>
+<p>负值对该属性无效。</p>
+<figure class="highlight css"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs CSS"><span class="hljs-selector-class">.item</span> &#123;<br>    <span class="hljs-attribute">flex-shrink</span>: &lt;number&gt;；<br>&#125;<br></code></pre></td></tr></table></figure>
+
+<p><img src="https://weirdo-blog.oss-cn-chengdu.aliyuncs.com/blog/202311181027736.png" srcset="/img/loading.gif" lazyload alt="img"></p>
+<p>（空间不足时，默认等比缩小）</p>
+<p><img src="https://weirdo-blog.oss-cn-chengdu.aliyuncs.com/blog/202311181027651.png" srcset="/img/loading.gif" lazyload alt="img"></p>
+<p>（flex-shrink 为 0 的不缩小）</p>
+<h4 id="flex-basis"><a href="#flex-basis" class="headerlink" title="flex-basis"></a>flex-basis</h4><p><code>flex-basis </code>定义了在分配多余的空间之前，项目占据的主轴空间，默认值为<code> auto</code>，即项目原来的大小。</p>
+<p>浏览器会根据这个属性来计算主轴是否有多余的空间。</p>
+<p><code>flex-basis</code> 的设置跟 <code>width</code> 或 <code>height </code>一样，可以是像素，也可以是百分比。</p>
+<p>设置了 <code>flex-basis</code> 之后，它的优先级比 <code>width</code> 或 <code>height</code> 高。</p>
+<figure class="highlight css"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs CSS"><span class="hljs-selector-class">.item</span> &#123;<br>    <span class="hljs-attribute">flex-basis</span>: &lt;length&gt; | auto;<br>&#125;<br></code></pre></td></tr></table></figure>
+
+<p><img src="https://weirdo-blog.oss-cn-chengdu.aliyuncs.com/blog/202311181027759.png" srcset="/img/loading.gif" lazyload alt="img"></p>
+<p>（不同的 flex-basis 值效果展示）</p>
+<h4 id="flex"><a href="#flex" class="headerlink" title="flex"></a>flex</h4><p><code>flex</code> 属性是 <code>flex-grow、flex-shrink、flex-basis</code> 的缩写，默认值是 <code>0 1 auto</code>，后两个属性可选。</p>
+<p>该属性有两个快捷值：<code>auto（1 1 auto）</code>和 <code>none（0 0 auto）</code>。</p>
+<p><code>auto</code> 代表在需要的时候可以拉伸也可以收缩，<code>none</code>表示既不能拉伸也不能收缩。</p>
+<figure class="highlight css"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs CSS"><span class="hljs-selector-class">.item</span> &#123;<br>    <span class="hljs-attribute">flex</span>: auto | none | [ &lt;<span class="hljs-string">&#x27;flex-grow&#x27;</span>&gt; &lt;<span class="hljs-string">&#x27;flex-shrink&#x27;</span>&gt;? || &lt;<span class="hljs-string">&#x27;flex-basis&#x27;</span>&gt; ]<br>&#125;<br></code></pre></td></tr></table></figure>
+
+
+
+
+
+<h4 id="align-self"><a href="#align-self" class="headerlink" title="align-self"></a>align-self</h4><p><code>align-self </code>用来定义单个项目与其他项目不一样的对齐方式，可以覆盖 <code>align-items</code> 属性。</p>
+<p>默认属性值是 <code>auto</code>，即继承父元素的 <code>align-items</code> 属性值。当没有父元素时，它的表现等同于 <code>stretch</code>。</p>
+<p><code>align-self </code>的六个可能属性值，除了 <code>auto </code>之外，其他的表现和 <code>align-items</code> 一样。</p>
+<figure class="highlight css"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs CSS"><span class="hljs-selector-class">.item</span> &#123;<br>    <span class="hljs-attribute">align-self</span>: auto | flex-start | flex-end | center | baseline | stretch;<br>&#125;<br></code></pre></td></tr></table></figure>
+
+<p><img src="https://weirdo-blog.oss-cn-chengdu.aliyuncs.com/blog/202311181027302.png" srcset="/img/loading.gif" lazyload alt="img"></p>
+<p>（第三个项目的对齐方式与其他不同）</p>
+<h3 id="注意"><a href="#注意" class="headerlink" title="注意"></a>注意</h3><ul>
+<li>当我们为父盒子设为<code>flex</code>布局之后，子元素的<code>float</code>，<code>clear</code>和<code>vertical-align</code>属性将失效</li>
+<li><code>align-items</code>是单行，<code>align-content</code>是多行</li>
+</ul>
+<p><code>flex</code>属性是<code>flex-grow</code>，<code>flex-shrink</code>和<code>flex-basis</code>的简写，默认值为<code>0 1 auto</code>。</p>
+<ul>
+<li><code>flex-grow</code>是如果有剩余空间，是否扩大，<code>1</code>为扩大</li>
+<li><code>flex-shrink</code>是如果剩余空间不够，是否缩小，<code>1</code>为缩小</li>
+<li><code>flex-basis</code>为项目本身的大小，默认值是<code>auto</code></li>
+</ul>
+<h2 id="示例"><a href="#示例" class="headerlink" title="示例"></a>示例</h2><p><img src="https://weirdo-blog.oss-cn-chengdu.aliyuncs.com/blog/202311181027272.png" srcset="/img/loading.gif" lazyload alt="img"></p>
+<figure class="highlight css"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><code class="hljs CSS"><span class="hljs-selector-class">.box</span> &#123;<br>  <span class="hljs-attribute">display</span>: flex;<br>  <span class="hljs-attribute">flex-direction</span>: column;<br>  <span class="hljs-attribute">justify-content</span>: space-between;<br>  <span class="hljs-attribute">align-items</span>: flex-end;<br>&#125;<br></code></pre></td></tr></table></figure>
+
+<p><img src="https://weirdo-blog.oss-cn-chengdu.aliyuncs.com/blog/202311181027277.png" srcset="/img/loading.gif" lazyload alt="img"></p>
+<figure class="highlight css"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><code class="hljs CSS"><span class="hljs-selector-class">.box</span> &#123;<br>  <span class="hljs-attribute">display</span>: flex;<br>&#125;<br><br><span class="hljs-selector-class">.item</span><span class="hljs-selector-pseudo">:nth-child</span>(<span class="hljs-number">2</span>) &#123;<br>  <span class="hljs-attribute">align-self</span>: center;<br>&#125;<br></code></pre></td></tr></table></figure>
+
+<p><img src="https://weirdo-blog.oss-cn-chengdu.aliyuncs.com/blog/202311181027296.png" srcset="/img/loading.gif" lazyload alt="img"></p>
+<figure class="highlight css"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><code class="hljs CSS"><span class="hljs-selector-class">.box</span> &#123;<br>  <span class="hljs-attribute">display</span>: flex;<br>  <span class="hljs-attribute">justify-content</span>: space-between;<br>&#125;<br><br><span class="hljs-selector-class">.item</span><span class="hljs-selector-pseudo">:nth-child</span>(<span class="hljs-number">2</span>) &#123;<br>  <span class="hljs-attribute">align-self</span>: flex-end;<br>&#125;<br></code></pre></td></tr></table></figure>
+
+<p><img src="https://weirdo-blog.oss-cn-chengdu.aliyuncs.com/blog/202311181027278.png" srcset="/img/loading.gif" lazyload alt="img"></p>
+<figure class="highlight css"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><code class="hljs CSS"><span class="hljs-selector-class">.box</span> &#123;<br>  <span class="hljs-attribute">display</span>: flex;<br>&#125;<br><br><span class="hljs-selector-class">.item</span><span class="hljs-selector-pseudo">:nth-child</span>(<span class="hljs-number">2</span>) &#123;<br>  <span class="hljs-attribute">align-self</span>: center;<br>&#125;<br><br><span class="hljs-selector-class">.item</span><span class="hljs-selector-pseudo">:nth-child</span>(<span class="hljs-number">3</span>) &#123;<br>  <span class="hljs-attribute">align-self</span>: flex-end;<br>&#125;<br></code></pre></td></tr></table></figure>
+
+<p><img src="https://weirdo-blog.oss-cn-chengdu.aliyuncs.com/blog/202311181027287.png" srcset="/img/loading.gif" lazyload alt="img"></p>
+<figure class="highlight css"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><code class="hljs CSS"><span class="hljs-selector-class">.box</span> &#123;<br>  <span class="hljs-attribute">display</span>: flex;<br>  <span class="hljs-attribute">flex-wrap</span>: wrap;<br>  <span class="hljs-attribute">justify-content</span>: flex-end;<br>  <span class="hljs-attribute">align-content</span>: space-between;<br>&#125;<br></code></pre></td></tr></table></figure>
+
+<p><img src="https://weirdo-blog.oss-cn-chengdu.aliyuncs.com/blog/202311181027769.png" srcset="/img/loading.gif" lazyload alt="img"></p>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><code class="hljs HTML"><span class="hljs-tag">&lt;<span class="hljs-name">div</span> <span class="hljs-attr">class</span>=<span class="hljs-string">&quot;box&quot;</span>&gt;</span><br>  <span class="hljs-tag">&lt;<span class="hljs-name">div</span> <span class="hljs-attr">class</span>=<span class="hljs-string">&quot;column&quot;</span>&gt;</span><br>    <span class="hljs-tag">&lt;<span class="hljs-name">span</span> <span class="hljs-attr">class</span>=<span class="hljs-string">&quot;item&quot;</span>&gt;</span><span class="hljs-tag">&lt;/<span class="hljs-name">span</span>&gt;</span><br>    <span class="hljs-tag">&lt;<span class="hljs-name">span</span> <span class="hljs-attr">class</span>=<span class="hljs-string">&quot;item&quot;</span>&gt;</span><span class="hljs-tag">&lt;/<span class="hljs-name">span</span>&gt;</span><br>  <span class="hljs-tag">&lt;/<span class="hljs-name">div</span>&gt;</span><br>  <span class="hljs-tag">&lt;<span class="hljs-name">div</span> <span class="hljs-attr">class</span>=<span class="hljs-string">&quot;column&quot;</span>&gt;</span><br>    <span class="hljs-tag">&lt;<span class="hljs-name">span</span> <span class="hljs-attr">class</span>=<span class="hljs-string">&quot;item&quot;</span>&gt;</span><span class="hljs-tag">&lt;/<span class="hljs-name">span</span>&gt;</span><br>    <span class="hljs-tag">&lt;<span class="hljs-name">span</span> <span class="hljs-attr">class</span>=<span class="hljs-string">&quot;item&quot;</span>&gt;</span><span class="hljs-tag">&lt;/<span class="hljs-name">span</span>&gt;</span><br>  <span class="hljs-tag">&lt;/<span class="hljs-name">div</span>&gt;</span><br><span class="hljs-tag">&lt;/<span class="hljs-name">div</span>&gt;</span><br></code></pre></td></tr></table></figure>
+
+<figure class="highlight css"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><code class="hljs css"><span class="hljs-selector-class">.box</span> &#123;<br>  <span class="hljs-attribute">display</span>: flex;<br>  <span class="hljs-attribute">flex-wrap</span>: wrap;<br>  <span class="hljs-attribute">align-content</span>: space-between;<br>&#125;<br><br><span class="hljs-selector-class">.column</span> &#123;<br>  <span class="hljs-attribute">flex-basis</span>: <span class="hljs-number">100%</span>;<br>  <span class="hljs-attribute">display</span>: flex;<br>  <span class="hljs-attribute">justify-content</span>: space-between;<br>&#125;<br></code></pre></td></tr></table></figure>
+
+
+
+<p><img src="https://weirdo-blog.oss-cn-chengdu.aliyuncs.com/blog/202311181027803.png" srcset="/img/loading.gif" lazyload alt="img"></p>
+<figure class="highlight css"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs CSS"><span class="hljs-selector-class">.box</span> &#123;<br>  <span class="hljs-attribute">display</span>: flex;<br>  <span class="hljs-attribute">flex-wrap</span>: wrap;<br>  <span class="hljs-attribute">align-content</span>: space-between;<br>&#125;<br></code></pre></td></tr></table></figure>
+
+<p><img src="https://weirdo-blog.oss-cn-chengdu.aliyuncs.com/blog/202311181027782.png" srcset="/img/loading.gif" lazyload alt="img"></p>
+<figure class="highlight css"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><code class="hljs CSS"><span class="hljs-selector-class">.box</span> &#123;<br>  <span class="hljs-attribute">display</span>: flex;<br>  <span class="hljs-attribute">flex-direction</span>: column;<br>  <span class="hljs-attribute">flex-wrap</span>: wrap;<br>  <span class="hljs-attribute">align-content</span>: space-between;<br>&#125;<br></code></pre></td></tr></table></figure>
+
+<p><img src="https://weirdo-blog.oss-cn-chengdu.aliyuncs.com/blog/202311181027815.png" srcset="/img/loading.gif" lazyload alt="img"></p>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><code class="hljs HTML"><span class="hljs-tag">&lt;<span class="hljs-name">div</span> <span class="hljs-attr">class</span>=<span class="hljs-string">&quot;box&quot;</span>&gt;</span><br>  <span class="hljs-tag">&lt;<span class="hljs-name">div</span> <span class="hljs-attr">class</span>=<span class="hljs-string">&quot;row&quot;</span>&gt;</span><br>    <span class="hljs-tag">&lt;<span class="hljs-name">span</span> <span class="hljs-attr">class</span>=<span class="hljs-string">&quot;item&quot;</span>&gt;</span><span class="hljs-tag">&lt;/<span class="hljs-name">span</span>&gt;</span><br>    <span class="hljs-tag">&lt;<span class="hljs-name">span</span> <span class="hljs-attr">class</span>=<span class="hljs-string">&quot;item&quot;</span>&gt;</span><span class="hljs-tag">&lt;/<span class="hljs-name">span</span>&gt;</span><br>    <span class="hljs-tag">&lt;<span class="hljs-name">span</span> <span class="hljs-attr">class</span>=<span class="hljs-string">&quot;item&quot;</span>&gt;</span><span class="hljs-tag">&lt;/<span class="hljs-name">span</span>&gt;</span><br>  <span class="hljs-tag">&lt;/<span class="hljs-name">div</span>&gt;</span><br>  <span class="hljs-tag">&lt;<span class="hljs-name">div</span> <span class="hljs-attr">class</span>=<span class="hljs-string">&quot;row&quot;</span>&gt;</span><br>    <span class="hljs-tag">&lt;<span class="hljs-name">span</span> <span class="hljs-attr">class</span>=<span class="hljs-string">&quot;item&quot;</span>&gt;</span><span class="hljs-tag">&lt;/<span class="hljs-name">span</span>&gt;</span><br>  <span class="hljs-tag">&lt;/<span class="hljs-name">div</span>&gt;</span><br>  <span class="hljs-tag">&lt;<span class="hljs-name">div</span> <span class="hljs-attr">class</span>=<span class="hljs-string">&quot;row&quot;</span>&gt;</span><br>     <span class="hljs-tag">&lt;<span class="hljs-name">span</span> <span class="hljs-attr">class</span>=<span class="hljs-string">&quot;item&quot;</span>&gt;</span><span class="hljs-tag">&lt;/<span class="hljs-name">span</span>&gt;</span><br>     <span class="hljs-tag">&lt;<span class="hljs-name">span</span> <span class="hljs-attr">class</span>=<span class="hljs-string">&quot;item&quot;</span>&gt;</span><span class="hljs-tag">&lt;/<span class="hljs-name">span</span>&gt;</span><br>  <span class="hljs-tag">&lt;/<span class="hljs-name">div</span>&gt;</span><br><span class="hljs-tag">&lt;/<span class="hljs-name">div</span>&gt;</span><br><br></code></pre></td></tr></table></figure>
+
+<figure class="highlight css"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><code class="hljs css"><span class="hljs-selector-class">.box</span> &#123;<br>  <span class="hljs-attribute">display</span>: flex;<br>  <span class="hljs-attribute">flex-wrap</span>: wrap;<br>&#125;<br><br><span class="hljs-selector-class">.row</span>&#123;<br>  <span class="hljs-attribute">flex-basis</span>: <span class="hljs-number">100%</span>;<br>  <span class="hljs-attribute">display</span>:flex;<br>&#125;<br><br><span class="hljs-selector-class">.row</span><span class="hljs-selector-pseudo">:nth-child</span>(<span class="hljs-number">2</span>)&#123;<br>  <span class="hljs-attribute">justify-content</span>: center;<br>&#125;<br><br><span class="hljs-selector-class">.row</span><span class="hljs-selector-pseudo">:nth-child</span>(<span class="hljs-number">3</span>)&#123;<br>  <span class="hljs-attribute">justify-content</span>: space-between;<br>&#125;<br></code></pre></td></tr></table></figure>
+
+
+
+<p><img src="https://weirdo-blog.oss-cn-chengdu.aliyuncs.com/blog/202311181027840.png" srcset="/img/loading.gif" lazyload alt="img"></p>
+<figure class="highlight css"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs CSS"><span class="hljs-selector-class">.box</span> &#123;<br>  <span class="hljs-attribute">display</span>: flex;<br>  <span class="hljs-attribute">flex-wrap</span>: wrap;<br>&#125;<br></code></pre></td></tr></table></figure>
+
+<h2 id="⭐-flex-各个值的区别"><a href="#⭐-flex-各个值的区别" class="headerlink" title="⭐ flex 各个值的区别"></a>⭐ flex 各个值的区别</h2><p>下面来分别讲讲 <code>flex:1</code>， <code>flex:auto</code>， <code>flex:0</code>， <code>flex:none</code>的区别</p>
+<p>flex 属性是 <code>flex-grow</code>、<code>flex-shrink</code>、<code>flex-basis</code> 的缩写，默认值是 <code>0 1 auto</code>，后两个属性可选。</p>
+<figure class="highlight apache"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs apache"><span class="hljs-attribute">flex</span>: <span class="hljs-number">1</span>` : 对应的是`<span class="hljs-number">1</span> <span class="hljs-number">1</span> <span class="hljs-number">0</span>%`， 相当于可扩大，可缩小，`flex-basis`为`<span class="hljs-number">0</span>%<br></code></pre></td></tr></table></figure>
+
+<p><img src="https://weirdo-blog.oss-cn-chengdu.aliyuncs.com/blog/202311181027937.png" srcset="/img/loading.gif" lazyload alt="img"></p>
+<figure class="highlight d"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs d">flex: <span class="hljs-keyword">auto</span><span class="hljs-string">` :  对应的是`</span><span class="hljs-number">1</span> <span class="hljs-number">1</span> <span class="hljs-keyword">auto</span><span class="hljs-string">`， 相当于可扩大，可缩小，`</span>flex-basis<span class="hljs-string">`为`</span><span class="hljs-keyword">auto</span><br></code></pre></td></tr></table></figure>
+
+<p><img src="https://weirdo-blog.oss-cn-chengdu.aliyuncs.com/blog/202311181027283.png" srcset="/img/loading.gif" lazyload alt="img"></p>
+<figure class="highlight nsis"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs nsis">flex: <span class="hljs-literal">none</span><span class="hljs-string">` : 对应的是`</span><span class="hljs-number">0</span> <span class="hljs-number">0</span> <span class="hljs-literal">auto</span><span class="hljs-string">`， 相当于不可扩大，不可缩小，`</span>flex-basis<span class="hljs-string">`为`</span><span class="hljs-literal">auto</span><br></code></pre></td></tr></table></figure>
+
+<p><img src="https://weirdo-blog.oss-cn-chengdu.aliyuncs.com/blog/202311181027352.png" srcset="/img/loading.gif" lazyload alt="img"></p>
+<figure class="highlight apache"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs apache"><span class="hljs-attribute">flex</span>: <span class="hljs-number">0</span>` : 对应的是`<span class="hljs-number">0</span> <span class="hljs-number">1</span> <span class="hljs-number">0</span>%`， 相当于不可扩大，可缩小，`flex-basis`为`<span class="hljs-number">0</span>%<br></code></pre></td></tr></table></figure>
+
+<p><img src="https://weirdo-blog.oss-cn-chengdu.aliyuncs.com/blog/202311181027342.png" srcset="/img/loading.gif" lazyload alt="img"></p>
+<p><strong>flex : 1 和 flex : auto 的区别</strong></p>
+<p><code>flex: 1</code> 不管内容多少，一般都是平分空间，空间大小都一致</p>
+<p><code>flex: auto</code>是<strong>根据内容的大小来分</strong>，不是均分的（除非内容都是一样，才均分）</p>
+<p><strong>flex: 0 和 flex: none 的区别：</strong></p>
+<p><code>flex: 0</code> 不可扩大，可缩小，表现形式为<strong>最小内容宽度</strong>， 上图你可以看到 div 的宽度就是一个字的宽度</p>
+<p>而<code>flex: none</code> 不可扩大，不可缩小，内容本身的宽度是多少就是多少</p>
+
+                
+              </div>
+            
+            <hr/>
+            <div>
+              <div class="post-metas my-3">
+  
+    <div class="post-meta mr-3 d-flex align-items-center">
+      <i class="iconfont icon-category"></i>
+      
+
+<span class="category-chains">
+  
+  
+    
+      <span class="category-chain">
+        
+  <a href="/categories/css/" class="category-chain-item">css</a>
+  
+  
+
+      </span>
+    
+  
+</span>
+
+    </div>
+  
+  
+    <div class="post-meta">
+      <i class="iconfont icon-tags"></i>
+      
+        <a href="/tags/%E5%B8%83%E5%B1%80/">#布局</a>
+      
+    </div>
+  
+</div>
+
+
+              
+  
+
+  <div class="license-box my-3">
+    <div class="license-title">
+      <div>😎flex布局详解</div>
+      <div>http://example.com/2023/11/18/flex/</div>
+    </div>
+    <div class="license-meta">
+      
+        <div class="license-meta-item">
+          <div>作者</div>
+          <div>weirdo</div>
+        </div>
+      
+      
+        <div class="license-meta-item license-meta-date">
+          <div>发布于</div>
+          <div>2023年11月18日</div>
+        </div>
+      
+      
+        <div class="license-meta-item license-meta-date">
+          <div>更新于</div>
+          <div>2023年11月18日</div>
+        </div>
+      
+      
+        <div class="license-meta-item">
+          <div>许可协议</div>
+          <div>
+            
+              
+              
+                <a target="_blank" href="https://creativecommons.org/licenses/by/4.0/">
+                  <span class="hint--top hint--rounded" aria-label="BY - 署名">
+                    <i class="iconfont icon-by"></i>
+                  </span>
+                </a>
+              
+            
+          </div>
+        </div>
+      
+    </div>
+    <div class="license-icon iconfont"></div>
+  </div>
+
+
+
+              
+                <div class="post-prevnext my-3">
+                  <article class="post-prev col-6">
+                    
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/2023/11/17/jwt_token/" title="cookie/session/token/jwt分清楚没?">
+                        <span class="hidden-mobile">cookie/session/token/jwt分清楚没?</span>
+                        <span class="visible-mobile">下一篇</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+  
+  
+    <article id="comments" lazyload>
+      
+  <div id="valine"></div>
+  <script type="text/javascript">
+    Fluid.utils.loadComments('#valine', function() {
+      Fluid.utils.createScript('https://lib.baomitu.com/valine/1.5.1/Valine.min.js', function() {
+        var options = Object.assign(
+          {"appId":"ukn0C9F4sFzy057RJ7Ohdmq4-gzGzoHsz","appKey":"x8NNzZf5L3jNKvqOKxoMj0FN","path":"window.location.pathname","placeholder":null,"avatar":"retro","meta":["nick","mail","link"],"requiredFields":[],"pageSize":10,"lang":"zh-CN","highlight":false,"recordIP":false,"serverURLs":"","emojiCDN":null,"emojiMaps":null,"enableQQ":false},
+          {
+            el: "#valine",
+            path: window.location.pathname
+          }
+        )
+        new Valine(options);
+        Fluid.utils.waitElementVisible('#valine .vcontent', () => {
+          var imgSelector = '#valine .vcontent img:not(.vemoji)';
+          Fluid.plugins.imageCaption(imgSelector);
+          Fluid.plugins.fancyBox(imgSelector);
+        })
+      });
+    });
+  </script>
+  <noscript>Please enable JavaScript to view the comments</noscript>
+
+
+    </article>
+  
+
+
+          </article>
+        </div>
+      </div>
+    </div>
+
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+  <aside class="sidebar" style="margin-left: -1rem">
+    <div id="toc">
+  <p class="toc-header">
+    <i class="iconfont icon-list"></i>
+    <span>目录</span>
+  </p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+
+
+  </aside>
+
+
+    </div>
+  </div>
+</div>
+
+
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+
+
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v" for="local-search-input">关键词</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+    
+
+    
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+  
+    <div class="footer-content">
+       <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a> <div style="font-size: 0.85rem"> <span id="timeDate">载入天数...</span> <span id="times">载入时分秒...</span> <script src="/js/duration.js"></script> </div> 
+    </div>
+  
+  
+    <div class="statistics">
+  
+  
+
+  
+    
+      <span id="leancloud-site-pv-container" style="display: none">
+        访问量 
+        <span id="leancloud-site-pv"></span>
+         次
+      </span>
+    
+    
+      <span id="leancloud-site-uv-container" style="display: none">
+        访客数 
+        <span id="leancloud-site-uv"></span>
+         人
+      </span>
+    
+    
+
+  
+</div>
+
+  
+  
+  
+</div>
+
+  </footer>
+
+  <!-- Scripts -->
+  
+  <script  src="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":true,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://lib.baomitu.com/jquery/3.6.0/jquery.min.js" ></script>
+<script  src="https://lib.baomitu.com/twitter-bootstrap/4.6.1/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+
+  <script  src="https://lib.baomitu.com/typed.js/2.0.12/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var subtitle = document.getElementById('subtitle');
+      if (!subtitle || !typing) {
+        return;
+      }
+      var text = subtitle.getAttribute('data-typed-text');
+      
+        typing(text);
+      
+    })(window, document);
+  </script>
+
+
+
+
+  
+    <script  src="/js/img-lazyload.js" ></script>
+  
+
+
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/tocbot/4.18.2/tocbot.min.js', function() {
+    var toc = jQuery('#toc');
+    if (toc.length === 0 || !window.tocbot) { return; }
+    var boardCtn = jQuery('#board-ctn');
+    var boardTop = boardCtn.offset().top;
+
+    window.tocbot.init(Object.assign({
+      tocSelector     : '#toc-body',
+      contentSelector : '.markdown-body',
+      linkClass       : 'tocbot-link',
+      activeLinkClass : 'tocbot-active-link',
+      listClass       : 'tocbot-list',
+      isCollapsedClass: 'tocbot-is-collapsed',
+      collapsibleClass: 'tocbot-is-collapsible',
+      scrollSmooth    : true,
+      includeTitleTags: true,
+      headingsOffset  : -boardTop,
+    }, CONFIG.toc));
+    if (toc.find('.toc-list-item').length > 0) {
+      toc.css('visibility', 'visible');
+    }
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('tocbot' in window) {
+        tocbot.refresh();
+        var toc = jQuery('#toc');
+        if (toc.length === 0 || !tocbot) {
+          return;
+        }
+        if (toc.find('.toc-list-item').length > 0) {
+          toc.css('visibility', 'visible');
+        }
+      }
+    });
+  });
+</script>
+
+
+  <script src=https://lib.baomitu.com/clipboard.js/2.0.11/clipboard.min.js></script>
+
+  <script>Fluid.plugins.codeWidget();</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/anchor-js/4.3.1/anchor.min.js', function() {
+    window.anchors.options = {
+      placement: CONFIG.anchorjs.placement,
+      visible  : CONFIG.anchorjs.visible
+    };
+    if (CONFIG.anchorjs.icon) {
+      window.anchors.options.icon = CONFIG.anchorjs.icon;
+    }
+    var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+    var res = [];
+    for (var item of el) {
+      res.push('.markdown-body > ' + item.trim());
+    }
+    if (CONFIG.anchorjs.placement === 'left') {
+      window.anchors.options.class = 'anchorjs-link-left';
+    }
+    window.anchors.add(res.join(', '));
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('anchors' in window) {
+        anchors.removeAll();
+        var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+        var res = [];
+        for (var item of el) {
+          res.push('.markdown-body > ' + item.trim());
+        }
+        if (CONFIG.anchorjs.placement === 'left') {
+          anchors.options.class = 'anchorjs-link-left';
+        }
+        anchors.add(res.join(', '));
+      }
+    });
+  });
+</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.js', function() {
+    Fluid.plugins.fancyBox();
+  });
+</script>
+
+
+  <script>Fluid.plugins.imageCaption();</script>
+
+  <script defer src="/js/leancloud.js" ></script>
+
+  <script  src="/js/local-search.js" ></script>
+
+
+
+
+
+<!-- 主题的启动项，将它保持在最底部 -->
+<!-- the boot of the theme, keep it at the bottom -->
+<script  src="/js/boot.js" ></script>
+
+
+  
+
+  <noscript>
+    <div class="noscript-warning">博客在允许 JavaScript 运行的环境下浏览效果更佳</div>
+  </noscript>
+</body>
+</html>
