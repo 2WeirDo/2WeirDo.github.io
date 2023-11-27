@@ -16,16 +16,13 @@
   <meta name="author" content="weirdo">
   <meta name="keywords" content="">
   
-    <meta name="description" content="文件(图片)上传注意 这时候已经使用了express-generator 文件上传也是在发送http请求报文 npm i formidable : 拿到formidable对象处理文件上传  routes&#x2F;index.js  12345678910111213141516171819202122232425262728293031323334353637383940414243var e">
+    <meta name="description" content="基本结构搭建 npm i -g express-generator   : 安装 npm 包 (已经安装就第二步)  express -e accounts : 快速创建文件夹, 添加ejs模板引擎的支持  在views中通过 ejs 写好页面 (关于页面的显示这里就不多介绍)   将所需要的 js 和 css 文件存放到 public 文件夹下  在routes&#x2F;index.js中写好增删改查">
 <meta property="og:type" content="article">
-<meta property="og:title" content="node记账本demo笔记">
+<meta property="og:title" content="😈node记账本demo笔记">
 <meta property="og:url" content="http://example.com/2023/11/27/node%E8%AE%B0%E8%B4%A6%E6%9C%AC/index.html">
 <meta property="og:site_name" content="Weirdo">
-<meta property="og:description" content="文件(图片)上传注意 这时候已经使用了express-generator 文件上传也是在发送http请求报文 npm i formidable : 拿到formidable对象处理文件上传  routes&#x2F;index.js  12345678910111213141516171819202122232425262728293031323334353637383940414243var e">
+<meta property="og:description" content="基本结构搭建 npm i -g express-generator   : 安装 npm 包 (已经安装就第二步)  express -e accounts : 快速创建文件夹, 添加ejs模板引擎的支持  在views中通过 ejs 写好页面 (关于页面的显示这里就不多介绍)   将所需要的 js 和 css 文件存放到 public 文件夹下  在routes&#x2F;index.js中写好增删改查">
 <meta property="og:locale" content="zh_CN">
-<meta property="og:image" content="https://weirdo-blog.oss-cn-chengdu.aliyuncs.com/blog/202311271415354.png">
-<meta property="og:image" content="https://weirdo-blog.oss-cn-chengdu.aliyuncs.com/blog/202311271415261.png">
-<meta property="og:image" content="https://weirdo-blog.oss-cn-chengdu.aliyuncs.com/blog/202311271415258.png">
 <meta property="og:image" content="https://weirdo-blog.oss-cn-chengdu.aliyuncs.com/blog/202311271511346.png">
 <meta property="og:image" content="https://weirdo-blog.oss-cn-chengdu.aliyuncs.com/blog/202311271440681.png">
 <meta property="og:image" content="https://weirdo-blog.oss-cn-chengdu.aliyuncs.com/blog/202311271440676.png">
@@ -36,17 +33,20 @@
 <meta property="og:image" content="https://weirdo-blog.oss-cn-chengdu.aliyuncs.com/blog/202311271501369.png">
 <meta property="og:image" content="https://weirdo-blog.oss-cn-chengdu.aliyuncs.com/blog/202311271502904.png">
 <meta property="og:image" content="https://weirdo-blog.oss-cn-chengdu.aliyuncs.com/blog/202311271502793.png">
+<meta property="og:image" content="https://weirdo-blog.oss-cn-chengdu.aliyuncs.com/blog/202311271415354.png">
+<meta property="og:image" content="https://weirdo-blog.oss-cn-chengdu.aliyuncs.com/blog/202311271415261.png">
+<meta property="og:image" content="https://weirdo-blog.oss-cn-chengdu.aliyuncs.com/blog/202311271415258.png">
 <meta property="article:published_time" content="2023-11-27T07:10:30.000Z">
-<meta property="article:modified_time" content="2023-11-27T07:12:55.986Z">
+<meta property="article:modified_time" content="2023-11-27T07:17:01.913Z">
 <meta property="article:author" content="weirdo">
 <meta property="article:tag" content="后端">
 <meta property="article:tag" content="node">
 <meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:image" content="https://weirdo-blog.oss-cn-chengdu.aliyuncs.com/blog/202311271415354.png">
+<meta name="twitter:image" content="https://weirdo-blog.oss-cn-chengdu.aliyuncs.com/blog/202311271511346.png">
   
   
   
-  <title>node记账本demo笔记 - Weirdo</title>
+  <title>😈node记账本demo笔记 - Weirdo</title>
 
   <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
 
@@ -229,7 +229,7 @@
       <div class="banner-text text-center fade-in-up">
         <div class="h2">
           
-            <span id="subtitle" data-typed-text="node记账本demo笔记"></span>
+            <span id="subtitle" data-typed-text="😈node记账本demo笔记"></span>
           
         </div>
 
@@ -314,35 +314,12 @@
         <div id="board">
           <article class="post-content mx-auto">
             <!-- SEO header -->
-            <h1 style="display: none">node记账本demo笔记</h1>
+            <h1 style="display: none">😈node记账本demo笔记</h1>
             
             
               <div class="markdown-body">
                 
-                <h2 id="文件-图片-上传"><a href="#文件-图片-上传" class="headerlink" title="文件(图片)上传"></a>文件(图片)上传</h2><p>注意 这时候已经使用了express-generator</p>
-<p>文件上传也是在发送<code>http</code>请求报文</p>
-<p><code>npm i formidable</code> : 拿到<code>formidable</code>对象处理文件上传</p>
-<blockquote>
-<p>routes&#x2F;index.js</p>
-</blockquote>
-<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br></pre></td><td class="code"><pre><code class="hljs JavaScript"><span class="hljs-keyword">var</span> express = <span class="hljs-built_in">require</span>(<span class="hljs-string">&quot;express&quot;</span>);<br><span class="hljs-keyword">var</span> router = express.<span class="hljs-title class_">Router</span>();<br><span class="hljs-keyword">let</span> &#123;formidable&#125; = <span class="hljs-built_in">require</span>(<span class="hljs-string">&quot;formidable&quot;</span>);  <span class="hljs-comment">// 这里formidable是一个对象, 要解构拿到</span><br><br><span class="hljs-comment">/* GET home page. */</span><br>router.<span class="hljs-title function_">get</span>(<span class="hljs-string">&quot;/&quot;</span>, <span class="hljs-keyword">function</span> (<span class="hljs-params">req, res, next</span>) &#123;<br>  res.<span class="hljs-title function_">render</span>(<span class="hljs-string">&quot;index&quot;</span>, &#123; <span class="hljs-attr">title</span>: <span class="hljs-string">&quot;Express&quot;</span> &#125;);<br>&#125;);<br><br><span class="hljs-comment">// 显示网页的 (表单)</span><br>router.<span class="hljs-title function_">get</span>(<span class="hljs-string">&quot;/portrait&quot;</span>, <span class="hljs-function">(<span class="hljs-params">req, res</span>) =&gt;</span> &#123;<br>  res.<span class="hljs-title function_">render</span>(<span class="hljs-string">&quot;portrait&quot;</span>);<br>&#125;);<br><br><span class="hljs-comment">// 处理文件上传</span><br>router.<span class="hljs-title function_">post</span>(<span class="hljs-string">&quot;/portrait&quot;</span>, <span class="hljs-function">(<span class="hljs-params">req, res, next</span>) =&gt;</span> &#123;<br>  <span class="hljs-comment">// 创建表单对象</span><br>  <span class="hljs-keyword">let</span> form = <span class="hljs-title function_">formidable</span>(&#123;<br>    <span class="hljs-comment">// 设置上传文件的保存目录</span><br>    <span class="hljs-attr">uploadDir</span>: __dirname + <span class="hljs-string">&#x27;/../public/images&#x27;</span>,<br>    <span class="hljs-comment">// 保持文件后缀</span><br>    <span class="hljs-attr">keepExtensions</span>: <span class="hljs-literal">true</span><br>  &#125;);<br><br>  <span class="hljs-comment">// 解析请求报文</span><br>  <span class="hljs-comment">// fields储存除了文件以外的字段</span><br>  <span class="hljs-comment">// files储存</span><br>  form.<span class="hljs-title function_">parse</span>(req, <span class="hljs-function">(<span class="hljs-params">err, fields, files</span>) =&gt;</span> &#123;<br>    <span class="hljs-keyword">if</span> (err) &#123;<br>      <span class="hljs-title function_">next</span>(err);<br>      <span class="hljs-keyword">return</span>;<br>    &#125;<br><br>    <span class="hljs-comment">// 服务器保存该图片的访问 URL : images/46b9df33709488d18ff343900.jpg</span><br>    <span class="hljs-keyword">let</span> url = <span class="hljs-string">&#x27;/images/&#x27;</span> + files.<span class="hljs-property">portrait</span>[<span class="hljs-number">0</span>].<span class="hljs-property">newFilename</span>; <span class="hljs-comment">// 将来将此数据保存在数据库中</span><br>    <span class="hljs-comment">// 这里files.portrait是一个数组里面存放一个对象, 拿到即可</span><br><br>    <span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(files);                 <br>    res.<span class="hljs-title function_">send</span>(url);<br>  &#125;);<br>&#125;);<br><br><span class="hljs-variable language_">module</span>.<span class="hljs-property">exports</span> = router;<br></code></pre></td></tr></table></figure>
-
-<blockquote>
-<p>portrait.ejs</p>
-</blockquote>
-<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><code class="hljs HTML"><span class="hljs-meta">&lt;!DOCTYPE <span class="hljs-keyword">html</span>&gt;</span><br><span class="hljs-tag">&lt;<span class="hljs-name">html</span> <span class="hljs-attr">lang</span>=<span class="hljs-string">&quot;en&quot;</span>&gt;</span><br><span class="hljs-tag">&lt;<span class="hljs-name">head</span>&gt;</span><br>    <span class="hljs-tag">&lt;<span class="hljs-name">meta</span> <span class="hljs-attr">charset</span>=<span class="hljs-string">&quot;UTF-8&quot;</span>&gt;</span><br>    <span class="hljs-tag">&lt;<span class="hljs-name">meta</span> <span class="hljs-attr">name</span>=<span class="hljs-string">&quot;viewport&quot;</span> <span class="hljs-attr">content</span>=<span class="hljs-string">&quot;width=device-width, initial-scale=1.0&quot;</span>&gt;</span><br>    <span class="hljs-tag">&lt;<span class="hljs-name">title</span>&gt;</span>文件上传<span class="hljs-tag">&lt;/<span class="hljs-name">title</span>&gt;</span><br><span class="hljs-tag">&lt;/<span class="hljs-name">head</span>&gt;</span><br><span class="hljs-tag">&lt;<span class="hljs-name">body</span>&gt;</span><br>    <span class="hljs-comment">&lt;!-- 文件上传必须的属性设置 enctype=&quot;multipart/form-data&quot; --&gt;</span><br>    <span class="hljs-tag">&lt;<span class="hljs-name">form</span> <span class="hljs-attr">action</span>=<span class="hljs-string">&quot;/portrait&quot;</span> <span class="hljs-attr">method</span>=<span class="hljs-string">&quot;post&quot;</span> <span class="hljs-attr">enctype</span>=<span class="hljs-string">&quot;multipart/form-data&quot;</span>&gt;</span><br>        用户名: <span class="hljs-tag">&lt;<span class="hljs-name">input</span> <span class="hljs-attr">type</span>=<span class="hljs-string">&quot;text&quot;</span> <span class="hljs-attr">name</span>=<span class="hljs-string">&quot;username&quot;</span>&gt;</span> <span class="hljs-tag">&lt;<span class="hljs-name">br</span>&gt;</span><br>        头像 : <span class="hljs-tag">&lt;<span class="hljs-name">input</span> <span class="hljs-attr">type</span>=<span class="hljs-string">&quot;file&quot;</span> <span class="hljs-attr">name</span>=<span class="hljs-string">&quot;portrait&quot;</span>&gt;</span><br>        <span class="hljs-tag">&lt;<span class="hljs-name">button</span>&gt;</span>点击提交<span class="hljs-tag">&lt;/<span class="hljs-name">button</span>&gt;</span><br>    <span class="hljs-tag">&lt;/<span class="hljs-name">form</span>&gt;</span><br><span class="hljs-tag">&lt;/<span class="hljs-name">body</span>&gt;</span><br><span class="hljs-tag">&lt;/<span class="hljs-name">html</span>&gt;</span><br></code></pre></td></tr></table></figure>
-
-<img src="https://weirdo-blog.oss-cn-chengdu.aliyuncs.com/blog/202311271415354.png" srcset="/img/loading.gif" lazyload alt="img" style="zoom: 67%;" />
-
-<blockquote>
-<p>get请求获取的表单</p>
-</blockquote>
-<p><img src="https://weirdo-blog.oss-cn-chengdu.aliyuncs.com/blog/202311271415261.png" srcset="/img/loading.gif" lazyload alt="img"></p>
-<blockquote>
-<p>点击提交后 (即 post 请求 &#x3D;&gt; 进行文件上传)</p>
-</blockquote>
-<p><img src="https://weirdo-blog.oss-cn-chengdu.aliyuncs.com/blog/202311271415258.png" srcset="/img/loading.gif" lazyload alt="img"></p>
-<h1 id="记账本案例"><a href="#记账本案例" class="headerlink" title="记账本案例"></a>记账本案例</h1><h2 id="基本结构搭建"><a href="#基本结构搭建" class="headerlink" title="基本结构搭建"></a>基本结构搭建</h2><ol>
+                <h2 id="基本结构搭建"><a href="#基本结构搭建" class="headerlink" title="基本结构搭建"></a>基本结构搭建</h2><ol>
 <li><p><code>npm i -g express-generator </code>  : 安装 npm 包 (已经安装就第二步)</p>
 </li>
 <li><p><code>express -e accounts</code> : 快速创建文件夹, 添加<code>ejs</code>模板引擎的支持</p>
@@ -705,6 +682,29 @@
 <blockquote>
 <p>后面的部署上线就自己去操作吧.</p>
 </blockquote>
+<h2 id="文件-图片-上传"><a href="#文件-图片-上传" class="headerlink" title="文件(图片)上传"></a>文件(图片)上传</h2><p>注意 这时候已经使用了express-generator</p>
+<p>文件上传也是在发送<code>http</code>请求报文</p>
+<p><code>npm i formidable</code> : 拿到<code>formidable</code>对象处理文件上传</p>
+<blockquote>
+<p>routes&#x2F;index.js</p>
+</blockquote>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br></pre></td><td class="code"><pre><code class="hljs JavaScript"><span class="hljs-keyword">var</span> express = <span class="hljs-built_in">require</span>(<span class="hljs-string">&quot;express&quot;</span>);<br><span class="hljs-keyword">var</span> router = express.<span class="hljs-title class_">Router</span>();<br><span class="hljs-keyword">let</span> &#123;formidable&#125; = <span class="hljs-built_in">require</span>(<span class="hljs-string">&quot;formidable&quot;</span>);  <span class="hljs-comment">// 这里formidable是一个对象, 要解构拿到</span><br><br><span class="hljs-comment">/* GET home page. */</span><br>router.<span class="hljs-title function_">get</span>(<span class="hljs-string">&quot;/&quot;</span>, <span class="hljs-keyword">function</span> (<span class="hljs-params">req, res, next</span>) &#123;<br>  res.<span class="hljs-title function_">render</span>(<span class="hljs-string">&quot;index&quot;</span>, &#123; <span class="hljs-attr">title</span>: <span class="hljs-string">&quot;Express&quot;</span> &#125;);<br>&#125;);<br><br><span class="hljs-comment">// 显示网页的 (表单)</span><br>router.<span class="hljs-title function_">get</span>(<span class="hljs-string">&quot;/portrait&quot;</span>, <span class="hljs-function">(<span class="hljs-params">req, res</span>) =&gt;</span> &#123;<br>  res.<span class="hljs-title function_">render</span>(<span class="hljs-string">&quot;portrait&quot;</span>);<br>&#125;);<br><br><span class="hljs-comment">// 处理文件上传</span><br>router.<span class="hljs-title function_">post</span>(<span class="hljs-string">&quot;/portrait&quot;</span>, <span class="hljs-function">(<span class="hljs-params">req, res, next</span>) =&gt;</span> &#123;<br>  <span class="hljs-comment">// 创建表单对象</span><br>  <span class="hljs-keyword">let</span> form = <span class="hljs-title function_">formidable</span>(&#123;<br>    <span class="hljs-comment">// 设置上传文件的保存目录</span><br>    <span class="hljs-attr">uploadDir</span>: __dirname + <span class="hljs-string">&#x27;/../public/images&#x27;</span>,<br>    <span class="hljs-comment">// 保持文件后缀</span><br>    <span class="hljs-attr">keepExtensions</span>: <span class="hljs-literal">true</span><br>  &#125;);<br><br>  <span class="hljs-comment">// 解析请求报文</span><br>  <span class="hljs-comment">// fields储存除了文件以外的字段</span><br>  <span class="hljs-comment">// files储存</span><br>  form.<span class="hljs-title function_">parse</span>(req, <span class="hljs-function">(<span class="hljs-params">err, fields, files</span>) =&gt;</span> &#123;<br>    <span class="hljs-keyword">if</span> (err) &#123;<br>      <span class="hljs-title function_">next</span>(err);<br>      <span class="hljs-keyword">return</span>;<br>    &#125;<br><br>    <span class="hljs-comment">// 服务器保存该图片的访问 URL : images/46b9df33709488d18ff343900.jpg</span><br>    <span class="hljs-keyword">let</span> url = <span class="hljs-string">&#x27;/images/&#x27;</span> + files.<span class="hljs-property">portrait</span>[<span class="hljs-number">0</span>].<span class="hljs-property">newFilename</span>; <span class="hljs-comment">// 将来将此数据保存在数据库中</span><br>    <span class="hljs-comment">// 这里files.portrait是一个数组里面存放一个对象, 拿到即可</span><br><br>    <span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(files);                 <br>    res.<span class="hljs-title function_">send</span>(url);<br>  &#125;);<br>&#125;);<br><br><span class="hljs-variable language_">module</span>.<span class="hljs-property">exports</span> = router;<br></code></pre></td></tr></table></figure>
+
+<blockquote>
+<p>portrait.ejs</p>
+</blockquote>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><code class="hljs HTML"><span class="hljs-meta">&lt;!DOCTYPE <span class="hljs-keyword">html</span>&gt;</span><br><span class="hljs-tag">&lt;<span class="hljs-name">html</span> <span class="hljs-attr">lang</span>=<span class="hljs-string">&quot;en&quot;</span>&gt;</span><br><span class="hljs-tag">&lt;<span class="hljs-name">head</span>&gt;</span><br>    <span class="hljs-tag">&lt;<span class="hljs-name">meta</span> <span class="hljs-attr">charset</span>=<span class="hljs-string">&quot;UTF-8&quot;</span>&gt;</span><br>    <span class="hljs-tag">&lt;<span class="hljs-name">meta</span> <span class="hljs-attr">name</span>=<span class="hljs-string">&quot;viewport&quot;</span> <span class="hljs-attr">content</span>=<span class="hljs-string">&quot;width=device-width, initial-scale=1.0&quot;</span>&gt;</span><br>    <span class="hljs-tag">&lt;<span class="hljs-name">title</span>&gt;</span>文件上传<span class="hljs-tag">&lt;/<span class="hljs-name">title</span>&gt;</span><br><span class="hljs-tag">&lt;/<span class="hljs-name">head</span>&gt;</span><br><span class="hljs-tag">&lt;<span class="hljs-name">body</span>&gt;</span><br>    <span class="hljs-comment">&lt;!-- 文件上传必须的属性设置 enctype=&quot;multipart/form-data&quot; --&gt;</span><br>    <span class="hljs-tag">&lt;<span class="hljs-name">form</span> <span class="hljs-attr">action</span>=<span class="hljs-string">&quot;/portrait&quot;</span> <span class="hljs-attr">method</span>=<span class="hljs-string">&quot;post&quot;</span> <span class="hljs-attr">enctype</span>=<span class="hljs-string">&quot;multipart/form-data&quot;</span>&gt;</span><br>        用户名: <span class="hljs-tag">&lt;<span class="hljs-name">input</span> <span class="hljs-attr">type</span>=<span class="hljs-string">&quot;text&quot;</span> <span class="hljs-attr">name</span>=<span class="hljs-string">&quot;username&quot;</span>&gt;</span> <span class="hljs-tag">&lt;<span class="hljs-name">br</span>&gt;</span><br>        头像 : <span class="hljs-tag">&lt;<span class="hljs-name">input</span> <span class="hljs-attr">type</span>=<span class="hljs-string">&quot;file&quot;</span> <span class="hljs-attr">name</span>=<span class="hljs-string">&quot;portrait&quot;</span>&gt;</span><br>        <span class="hljs-tag">&lt;<span class="hljs-name">button</span>&gt;</span>点击提交<span class="hljs-tag">&lt;/<span class="hljs-name">button</span>&gt;</span><br>    <span class="hljs-tag">&lt;/<span class="hljs-name">form</span>&gt;</span><br><span class="hljs-tag">&lt;/<span class="hljs-name">body</span>&gt;</span><br><span class="hljs-tag">&lt;/<span class="hljs-name">html</span>&gt;</span><br></code></pre></td></tr></table></figure>
+
+<img src="https://weirdo-blog.oss-cn-chengdu.aliyuncs.com/blog/202311271415354.png" srcset="/img/loading.gif" lazyload alt="img" style="zoom: 67%;" />
+
+<blockquote>
+<p>get请求获取的表单</p>
+</blockquote>
+<p><img src="https://weirdo-blog.oss-cn-chengdu.aliyuncs.com/blog/202311271415261.png" srcset="/img/loading.gif" lazyload alt="img"></p>
+<blockquote>
+<p>点击提交后 (即 post 请求 &#x3D;&gt; 进行文件上传)</p>
+</blockquote>
+<p><img src="https://weirdo-blog.oss-cn-chengdu.aliyuncs.com/blog/202311271415258.png" srcset="/img/loading.gif" lazyload alt="img"></p>
 
                 
               </div>
@@ -752,7 +752,7 @@
 
   <div class="license-box my-3">
     <div class="license-title">
-      <div>node记账本demo笔记</div>
+      <div>😈node记账本demo笔记</div>
       <div>http://example.com/2023/11/27/node记账本/</div>
     </div>
     <div class="license-meta">
