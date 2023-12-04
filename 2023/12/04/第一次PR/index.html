@@ -1,0 +1,837 @@
+
+
+<!DOCTYPE html>
+<html lang="zh-CN" data-default-color-scheme=auto>
+
+
+
+<head>
+  <meta charset="UTF-8">
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/tub.png">
+  <link rel="icon" href="/img/tub.png">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="author" content="weirdo">
+  <meta name="keywords" content="">
+  
+    <meta name="description" content="故事开头事情是这样的, 前几天我使用 pinia 数据持久化插件 pinia-plugin-persistedstate 时忘记了相关配置, 于是去官方文档查看。 在关于 storage 配置的位置, 我发现官方文档这里有一个文字错误, 多了一个 “的” 字, 于是我将其记录下来, 也是提前把它当作我的第一次 PR 来练手。       PR流程  接下来是我 PR 的流程   首先把你要提交 P">
+<meta property="og:type" content="article">
+<meta property="og:title" content="😈记录我的第一次PR">
+<meta property="og:url" content="http://example.com/2023/12/04/%E7%AC%AC%E4%B8%80%E6%AC%A1PR/index.html">
+<meta property="og:site_name" content="Weirdo">
+<meta property="og:description" content="故事开头事情是这样的, 前几天我使用 pinia 数据持久化插件 pinia-plugin-persistedstate 时忘记了相关配置, 于是去官方文档查看。 在关于 storage 配置的位置, 我发现官方文档这里有一个文字错误, 多了一个 “的” 字, 于是我将其记录下来, 也是提前把它当作我的第一次 PR 来练手。       PR流程  接下来是我 PR 的流程   首先把你要提交 P">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://weirdo-blog.oss-cn-chengdu.aliyuncs.com/blog/202312041032394.png">
+<meta property="og:image" content="https://weirdo-blog.oss-cn-chengdu.aliyuncs.com/blog/202312041035122.png">
+<meta property="og:image" content="https://weirdo-blog.oss-cn-chengdu.aliyuncs.com/blog/202312041037355.png">
+<meta property="og:image" content="https://weirdo-blog.oss-cn-chengdu.aliyuncs.com/blog/202312041055935.png">
+<meta property="og:image" content="https://weirdo-blog.oss-cn-chengdu.aliyuncs.com/blog/202312041053119.png">
+<meta property="og:image" content="https://weirdo-blog.oss-cn-chengdu.aliyuncs.com/blog/202312041056622.png">
+<meta property="og:image" content="https://weirdo-blog.oss-cn-chengdu.aliyuncs.com/blog/202312041059366.png">
+<meta property="article:published_time" content="2023-12-04T03:05:50.000Z">
+<meta property="article:modified_time" content="2023-12-04T03:05:42.880Z">
+<meta property="article:author" content="weirdo">
+<meta property="article:tag" content="开源">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="https://weirdo-blog.oss-cn-chengdu.aliyuncs.com/blog/202312041032394.png">
+  
+  
+  
+  <title>😈记录我的第一次PR - Weirdo</title>
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
+
+
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/github-markdown-css/4.0.0/github-markdown.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/hint.css/2.7.0/hint.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.css" />
+
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+<!-- Do not modify the link that theme dependent icons -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1749284_hj8rtnfg7um.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1736178_lbnruvf0jn.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+
+  <link id="highlight-css" rel="stylesheet" href="/css/highlight.css" />
+  
+    <link id="highlight-css-dark" rel="stylesheet" href="/css/highlight-dark.css" />
+  
+
+
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    Fluid.ctx = Object.assign({}, Fluid.ctx)
+    var CONFIG = {"hostname":"example.com","root":"/","version":"1.9.4","typing":{"enable":true,"typeSpeed":80,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#ddfd","options":{"showSpinner":true,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":true,"follow_dnt":true,"baidu":null,"google":null,"gtag":null,"tencent":{"sid":null,"cid":null},"woyaola":null,"cnzz":null,"leancloud":{"app_id":"ukn0C9F4sFzy057RJ7Ohdmq4-gzGzoHsz","app_key":"x8NNzZf5L3jNKvqOKxoMj0FN","server_url":"https://ukn0c9f4.lc-cn-n1-shared.com","path":"window.location.pathname","ignore_local":true}},"search_path":"/local-search.xml"};
+
+    if (CONFIG.web_analytics.follow_dnt) {
+      var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
+      Fluid.ctx.dnt = dntVal && (dntVal.startsWith('1') || dntVal.startsWith('yes') || dntVal.startsWith('on'));
+    }
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+  
+
+
+
+  
+<meta name="generator" content="Hexo 6.3.0"></head>
+
+
+<body>
+  
+
+  <header>
+    
+
+<div class="header-inner" style="height: 70vh;">
+  <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <strong>Weirdo</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/">
+                <i class="iconfont icon-home-fill"></i>
+                <span>首页</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/">
+                <i class="iconfont icon-category-fill"></i>
+                <span>分类</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/">
+                <i class="iconfont icon-tags-fill"></i>
+                <span>标签</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/">
+                <i class="iconfont icon-archive-fill"></i>
+                <span>归档</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/">
+                <i class="iconfont icon-user-fill"></i>
+                <span>关于</span>
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              <i class="iconfont icon-search"></i>
+            </a>
+          </li>
+          
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">
+              <i class="iconfont icon-dark" id="color-toggle-icon"></i>
+            </a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+  
+
+<div id="banner" class="banner" parallax=true
+     style="background: url('/img/meili.jpg') no-repeat center center; background-size: cover;">
+  <div class="full-bg-img">
+    <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+      <div class="banner-text text-center fade-in-up">
+        <div class="h2">
+          
+            <span id="subtitle" data-typed-text="😈记录我的第一次PR"></span>
+          
+        </div>
+
+        
+          
+  <div class="mt-3">
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-author" aria-hidden="true"></i>
+        weirdo
+      </span>
+    
+    
+      <span class="post-meta">
+        <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+        <time datetime="2023-12-04 11:05" pubdate>
+          2023年12月4日 上午
+        </time>
+      </span>
+    
+  </div>
+
+  <div class="mt-1">
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-chart"></i>
+        
+          1.1k 字
+        
+      </span>
+    
+
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-clock-fill"></i>
+        
+        
+        
+          5 分钟
+        
+      </span>
+    
+
+    
+    
+      
+        <span id="leancloud-page-views-container" class="post-meta" style="display: none">
+          <i class="iconfont icon-eye" aria-hidden="true"></i>
+          <span id="leancloud-page-views"></span> 次
+        </span>
+        
+      
+    
+  </div>
+
+
+        
+      </div>
+
+      
+    </div>
+  </div>
+</div>
+
+</div>
+
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+
+    </div>
+
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div id="board">
+          <article class="post-content mx-auto">
+            <!-- SEO header -->
+            <h1 style="display: none">😈记录我的第一次PR</h1>
+            
+            
+              <div class="markdown-body">
+                
+                <h2 id="故事开头"><a href="#故事开头" class="headerlink" title="故事开头"></a>故事开头</h2><p>事情是这样的, 前几天我使用 <code>pinia</code> 数据持久化插件 <code>pinia-plugin-persistedstate</code> 时忘记了相关配置, 于是去官方文档查看。</p>
+<p>在关于 <code>storage</code> 配置的位置, 我发现官方文档这里有一个文字错误, 多了一个 “的” 字, 于是我将其记录下来, 也是提前把它当作我的第一次 <code>PR</code> 来练手。</p>
+<img src="https://weirdo-blog.oss-cn-chengdu.aliyuncs.com/blog/202312041032394.png" srcset="/img/loading.gif" lazyload alt="image" style="zoom: 67%;" />
+
+
+
+
+
+<h2 id="PR流程"><a href="#PR流程" class="headerlink" title="PR流程"></a>PR流程</h2><blockquote>
+<p> 接下来是我 PR 的流程</p>
+</blockquote>
+<ol>
+<li>首先把你要提交 <code>PR</code> 的项目 <code>Fork</code> 到自己的仓库。点击 <code>fork</code> 按钮</li>
+</ol>
+<p><img src="https://weirdo-blog.oss-cn-chengdu.aliyuncs.com/blog/202312041035122.png" srcset="/img/loading.gif" lazyload alt="image-20231204103548078"></p>
+<p>这个时候自己的仓库中 就有你 <code>fork</code>下来的项目了</p>
+<img src="https://weirdo-blog.oss-cn-chengdu.aliyuncs.com/blog/202312041037355.png" srcset="/img/loading.gif" lazyload alt="image-20231204103742309" style="zoom: 50%;" />
+
+
+
+
+
+<ol start="2">
+<li><p>在自己的仓库中将 <code>fork</code> 的仓库 <code>clone</code> 到本地。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs bash"><span class="hljs-comment"># git clone &#x27;自己仓库中的项目地址&#x27;</span><br>git <span class="hljs-built_in">clone</span> <span class="hljs-string">&#x27;https://github.com/2WeirDo/pinia-plugin-persistedstate.git&#x27;</span><br></code></pre></td></tr></table></figure>
+
+
+</li>
+<li><p>与上游仓库建立连接</p>
+</li>
+</ol>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs bash"><span class="hljs-comment"># 只需操作一次</span><br>git remote add upstream <span class="hljs-string">&#x27;开源项目源地址&#x27;</span>  <br><br><span class="hljs-comment"># 查看远程仓库地址</span><br>git remote -v  <br></code></pre></td></tr></table></figure>
+
+
+
+<ol start="4">
+<li>代码 <code>clone</code>到本地之后，先切换一个新的分支，分支名最好紧贴这次更新的内容。分支的命名尽量简洁，并与解决的问题相关</li>
+</ol>
+<p>为什么要切换到新分支呢 ?  因为你以后可能还需要进行新的 PR , 这样最好切换到新分支便于管理你的 PR, 避免混淆。</p>
+<blockquote>
+<p>比如这里就是这个项目关于 fix-typo 的 PR。</p>
+</blockquote>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs bash"><span class="hljs-comment"># 创建并切换分支</span><br>git checkout -b fix-typo <br></code></pre></td></tr></table></figure>
+
+
+
+<ol start="5">
+<li>在新分支修改代码并提交</li>
+</ol>
+<blockquote>
+<p>注意看每个项目它可能会有自己的提交规范, 根据规范进行 PR</p>
+</blockquote>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs bash">git add .<br>git commit -m <span class="hljs-string">&quot;just a minor typo&quot;</span><br>git push origin fix-typo<br></code></pre></td></tr></table></figure>
+
+
+
+<ol start="6">
+<li>在自己的仓库中找到对应项目，打开 <code>Pull requests Tab</code>，点击 <code>New pull request</code> 按钮，新建一个 <code>PR</code>。</li>
+</ol>
+<blockquote>
+<p>Pull requests Tab 会显示在我们的项目页面,  如果没有 则点击 Pull requests , 然后点击 New pull request </p>
+</blockquote>
+<p><img src="https://weirdo-blog.oss-cn-chengdu.aliyuncs.com/blog/202312041055935.png" srcset="/img/loading.gif" lazyload alt="image-20231204105531892"></p>
+<ol start="7">
+<li><code>github</code> 会帮我们自动选择刚刚提交的分支，你需要编写 PR 相关描述,  最后点击 <code>Create pull request</code> 即可。</li>
+</ol>
+<blockquote>
+<p>最好使用英文</p>
+</blockquote>
+<ol start="8">
+<li>之后只需要等待管理人员批准审核 merge 你的 PR 即可</li>
+</ol>
+<img src="https://weirdo-blog.oss-cn-chengdu.aliyuncs.com/blog/202312041053119.png" srcset="/img/loading.gif" lazyload style="zoom:50%;" />
+
+
+
+<ol start="9">
+<li>最后我们打开官方文档, 发现 typo 错误已经被修改。</li>
+</ol>
+<img src="https://weirdo-blog.oss-cn-chengdu.aliyuncs.com/blog/202312041056622.png" srcset="/img/loading.gif" lazyload alt="image-20231204105627576" style="zoom:67%;" />
+
+
+
+<h2 id="结语"><a href="#结语" class="headerlink" title="结语"></a>结语</h2><p>这就是我第一次 PR 的经历了, 虽说是个 很小很水 的 PR , 不过拿来作为我对开源贡献的起步, 也是大有裨益的。</p>
+<blockquote>
+<p>这样看我的 <code>github</code> 主页, 也显得不那么单调咯hhh😈</p>
+</blockquote>
+<img src="https://weirdo-blog.oss-cn-chengdu.aliyuncs.com/blog/202312041059366.png" srcset="/img/loading.gif" lazyload alt="image-20231204105950328" style="zoom:50%;" />
+
+
+
+<blockquote>
+<p>❗ <strong>注意</strong> :   你可能会遇到一个问题 :</p>
+<p>当你 fork 了一个项目, 正在开发的时候，可能源项目发生了改动或者其他人也在开发, 这样就使得你 fork 的项目与源项目不同步, </p>
+<p>这个时候就需要去拉取源项目的代码, 进行一个合并,  具体流程可以查阅资料解决   b（￣▽￣）d　</p>
+</blockquote>
+
+                
+              </div>
+            
+            <hr/>
+            <div>
+              <div class="post-metas my-3">
+  
+    <div class="post-meta mr-3 d-flex align-items-center">
+      <i class="iconfont icon-category"></i>
+      
+
+<span class="category-chains">
+  
+  
+    
+      <span class="category-chain">
+        
+  <a href="/categories/%E6%97%A5%E5%B8%B8%E7%90%90%E7%A2%8E/" class="category-chain-item">日常琐碎</a>
+  
+  
+
+      </span>
+    
+  
+</span>
+
+    </div>
+  
+  
+    <div class="post-meta">
+      <i class="iconfont icon-tags"></i>
+      
+        <a href="/tags/%E5%BC%80%E6%BA%90/">#开源</a>
+      
+    </div>
+  
+</div>
+
+
+              
+  
+
+  <div class="license-box my-3">
+    <div class="license-title">
+      <div>😈记录我的第一次PR</div>
+      <div>http://example.com/2023/12/04/第一次PR/</div>
+    </div>
+    <div class="license-meta">
+      
+        <div class="license-meta-item">
+          <div>作者</div>
+          <div>weirdo</div>
+        </div>
+      
+      
+        <div class="license-meta-item license-meta-date">
+          <div>发布于</div>
+          <div>2023年12月4日</div>
+        </div>
+      
+      
+        <div class="license-meta-item license-meta-date">
+          <div>更新于</div>
+          <div>2023年12月4日</div>
+        </div>
+      
+      
+        <div class="license-meta-item">
+          <div>许可协议</div>
+          <div>
+            
+              
+              
+                <a target="_blank" href="https://creativecommons.org/licenses/by/4.0/">
+                  <span class="hint--top hint--rounded" aria-label="BY - 署名">
+                    <i class="iconfont icon-by"></i>
+                  </span>
+                </a>
+              
+            
+          </div>
+        </div>
+      
+    </div>
+    <div class="license-icon iconfont"></div>
+  </div>
+
+
+
+              
+                <div class="post-prevnext my-3">
+                  <article class="post-prev col-6">
+                    
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/2023/11/29/CDN/" title="🤠你知道什么是 CDN 吗?">
+                        <span class="hidden-mobile">🤠你知道什么是 CDN 吗?</span>
+                        <span class="visible-mobile">下一篇</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+  
+  
+    <article id="comments" lazyload>
+      
+  <div id="valine"></div>
+  <script type="text/javascript">
+    Fluid.utils.loadComments('#valine', function() {
+      Fluid.utils.createScript('https://lib.baomitu.com/valine/1.5.1/Valine.min.js', function() {
+        var options = Object.assign(
+          {"appId":"ukn0C9F4sFzy057RJ7Ohdmq4-gzGzoHsz","appKey":"x8NNzZf5L3jNKvqOKxoMj0FN","path":"window.location.pathname","placeholder":null,"avatar":"retro","meta":["nick","mail","link"],"requiredFields":[],"pageSize":10,"lang":"zh-CN","highlight":false,"recordIP":false,"serverURLs":"","emojiCDN":null,"emojiMaps":null,"enableQQ":false},
+          {
+            el: "#valine",
+            path: window.location.pathname
+          }
+        )
+        new Valine(options);
+        Fluid.utils.waitElementVisible('#valine .vcontent', () => {
+          var imgSelector = '#valine .vcontent img:not(.vemoji)';
+          Fluid.plugins.imageCaption(imgSelector);
+          Fluid.plugins.fancyBox(imgSelector);
+        })
+      });
+    });
+  </script>
+  <noscript>Please enable JavaScript to view the comments</noscript>
+
+
+    </article>
+  
+
+
+          </article>
+        </div>
+      </div>
+    </div>
+
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+  <aside class="sidebar" style="margin-left: -1rem">
+    <div id="toc">
+  <p class="toc-header">
+    <i class="iconfont icon-list"></i>
+    <span>目录</span>
+  </p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+
+
+  </aside>
+
+
+    </div>
+  </div>
+</div>
+
+
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+
+
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v" for="local-search-input">关键词</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+    
+
+    
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+  
+    <div class="footer-content">
+       <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a> <div style="font-size: 0.85rem"> <span id="timeDate">载入天数...</span> <span id="times">载入时分秒...</span> <script src="/js/duration.js"></script> </div> 
+    </div>
+  
+  
+    <div class="statistics">
+  
+  
+
+  
+    
+      <span id="leancloud-site-pv-container" style="display: none">
+        访问量 
+        <span id="leancloud-site-pv"></span>
+         次
+      </span>
+    
+    
+      <span id="leancloud-site-uv-container" style="display: none">
+        访客数 
+        <span id="leancloud-site-uv"></span>
+         人
+      </span>
+    
+    
+
+  
+</div>
+
+  
+  
+  
+</div>
+
+  </footer>
+
+  <!-- Scripts -->
+  
+  <script  src="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":true,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://lib.baomitu.com/jquery/3.6.0/jquery.min.js" ></script>
+<script  src="https://lib.baomitu.com/twitter-bootstrap/4.6.1/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+
+  <script  src="https://lib.baomitu.com/typed.js/2.0.12/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var subtitle = document.getElementById('subtitle');
+      if (!subtitle || !typing) {
+        return;
+      }
+      var text = subtitle.getAttribute('data-typed-text');
+      
+        typing(text);
+      
+    })(window, document);
+  </script>
+
+
+
+
+  
+    <script  src="/js/img-lazyload.js" ></script>
+  
+
+
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/tocbot/4.18.2/tocbot.min.js', function() {
+    var toc = jQuery('#toc');
+    if (toc.length === 0 || !window.tocbot) { return; }
+    var boardCtn = jQuery('#board-ctn');
+    var boardTop = boardCtn.offset().top;
+
+    window.tocbot.init(Object.assign({
+      tocSelector     : '#toc-body',
+      contentSelector : '.markdown-body',
+      linkClass       : 'tocbot-link',
+      activeLinkClass : 'tocbot-active-link',
+      listClass       : 'tocbot-list',
+      isCollapsedClass: 'tocbot-is-collapsed',
+      collapsibleClass: 'tocbot-is-collapsible',
+      scrollSmooth    : true,
+      includeTitleTags: true,
+      headingsOffset  : -boardTop,
+    }, CONFIG.toc));
+    if (toc.find('.toc-list-item').length > 0) {
+      toc.css('visibility', 'visible');
+    }
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('tocbot' in window) {
+        tocbot.refresh();
+        var toc = jQuery('#toc');
+        if (toc.length === 0 || !tocbot) {
+          return;
+        }
+        if (toc.find('.toc-list-item').length > 0) {
+          toc.css('visibility', 'visible');
+        }
+      }
+    });
+  });
+</script>
+
+
+  <script src=https://lib.baomitu.com/clipboard.js/2.0.11/clipboard.min.js></script>
+
+  <script>Fluid.plugins.codeWidget();</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/anchor-js/4.3.1/anchor.min.js', function() {
+    window.anchors.options = {
+      placement: CONFIG.anchorjs.placement,
+      visible  : CONFIG.anchorjs.visible
+    };
+    if (CONFIG.anchorjs.icon) {
+      window.anchors.options.icon = CONFIG.anchorjs.icon;
+    }
+    var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+    var res = [];
+    for (var item of el) {
+      res.push('.markdown-body > ' + item.trim());
+    }
+    if (CONFIG.anchorjs.placement === 'left') {
+      window.anchors.options.class = 'anchorjs-link-left';
+    }
+    window.anchors.add(res.join(', '));
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('anchors' in window) {
+        anchors.removeAll();
+        var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+        var res = [];
+        for (var item of el) {
+          res.push('.markdown-body > ' + item.trim());
+        }
+        if (CONFIG.anchorjs.placement === 'left') {
+          anchors.options.class = 'anchorjs-link-left';
+        }
+        anchors.add(res.join(', '));
+      }
+    });
+  });
+</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.js', function() {
+    Fluid.plugins.fancyBox();
+  });
+</script>
+
+
+  <script>Fluid.plugins.imageCaption();</script>
+
+  <script defer src="/js/leancloud.js" ></script>
+
+  <script  src="/js/local-search.js" ></script>
+
+
+
+
+
+<!-- 主题的启动项，将它保持在最底部 -->
+<!-- the boot of the theme, keep it at the bottom -->
+<script  src="/js/boot.js" ></script>
+
+
+  
+
+  <noscript>
+    <div class="noscript-warning">博客在允许 JavaScript 运行的环境下浏览效果更佳</div>
+  </noscript>
+</body>
+</html>
