@@ -1,0 +1,816 @@
+
+
+<!DOCTYPE html>
+<html lang="zh-CN" data-default-color-scheme=auto>
+
+
+
+<head>
+  <meta charset="UTF-8">
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/tub.png">
+  <link rel="icon" href="/img/tub.png">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="author" content="weirdo">
+  <meta name="keywords" content="">
+  
+    <meta name="description" content="故事背景前几天上线了自己的 web 终端项目 –  https:&#x2F;&#x2F;www.weirdo-terminal.com&#x2F;   由于后端是通过微信云托管部署的, 导致上线版本无法使用 chatGPT 服务, 啊 – 这样我也就放弃部署了  正好今天, 有位同志在我项目下提了一个问题  我瞬间懵逼, 啊? 我咋没想到,  到官网看了看调用方法,  和 gpt 是差不多的。 那话不多说, 如何快速通过 No">
+<meta property="og:type" content="article">
+<meta property="og:title" content="😈快速上手接入文心一言API">
+<meta property="og:url" content="http://example.com/2023/12/14/Node.js%20%E6%8E%A5%E5%85%A5%E6%96%87%E5%BF%83%E4%B8%80%E8%A8%80%20API/index.html">
+<meta property="og:site_name" content="Weirdo">
+<meta property="og:description" content="故事背景前几天上线了自己的 web 终端项目 –  https:&#x2F;&#x2F;www.weirdo-terminal.com&#x2F;   由于后端是通过微信云托管部署的, 导致上线版本无法使用 chatGPT 服务, 啊 – 这样我也就放弃部署了  正好今天, 有位同志在我项目下提了一个问题  我瞬间懵逼, 啊? 我咋没想到,  到官网看了看调用方法,  和 gpt 是差不多的。 那话不多说, 如何快速通过 No">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://weirdo-blog.oss-cn-chengdu.aliyuncs.com/blog/202312142217631.png">
+<meta property="og:image" content="https://weirdo-blog.oss-cn-chengdu.aliyuncs.com/blog/202312142219146.png">
+<meta property="og:image" content="https://weirdo-blog.oss-cn-chengdu.aliyuncs.com/blog/202312142221297.png">
+<meta property="og:image" content="https://weirdo-blog.oss-cn-chengdu.aliyuncs.com/blog/202312142222772.png">
+<meta property="og:image" content="https://weirdo-blog.oss-cn-chengdu.aliyuncs.com/blog/202312142235215.png">
+<meta property="og:image" content="https://weirdo-blog.oss-cn-chengdu.aliyuncs.com/blog/202312142245398.png">
+<meta property="article:published_time" content="2023-12-14T14:48:30.000Z">
+<meta property="article:modified_time" content="2023-12-14T14:47:17.094Z">
+<meta property="article:author" content="weirdo">
+<meta property="article:tag" content="AI">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="https://weirdo-blog.oss-cn-chengdu.aliyuncs.com/blog/202312142217631.png">
+  
+  
+  
+  <title>😈快速上手接入文心一言API - Weirdo</title>
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
+
+
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/github-markdown-css/4.0.0/github-markdown.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/hint.css/2.7.0/hint.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.css" />
+
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+<!-- Do not modify the link that theme dependent icons -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1749284_hj8rtnfg7um.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1736178_lbnruvf0jn.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+
+  <link id="highlight-css" rel="stylesheet" href="/css/highlight.css" />
+  
+    <link id="highlight-css-dark" rel="stylesheet" href="/css/highlight-dark.css" />
+  
+
+
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    Fluid.ctx = Object.assign({}, Fluid.ctx)
+    var CONFIG = {"hostname":"example.com","root":"/","version":"1.9.4","typing":{"enable":true,"typeSpeed":80,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#ddfd","options":{"showSpinner":true,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":true,"follow_dnt":true,"baidu":null,"google":null,"gtag":null,"tencent":{"sid":null,"cid":null},"woyaola":null,"cnzz":null,"leancloud":{"app_id":"ukn0C9F4sFzy057RJ7Ohdmq4-gzGzoHsz","app_key":"x8NNzZf5L3jNKvqOKxoMj0FN","server_url":"https://ukn0c9f4.lc-cn-n1-shared.com","path":"window.location.pathname","ignore_local":true}},"search_path":"/local-search.xml"};
+
+    if (CONFIG.web_analytics.follow_dnt) {
+      var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
+      Fluid.ctx.dnt = dntVal && (dntVal.startsWith('1') || dntVal.startsWith('yes') || dntVal.startsWith('on'));
+    }
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+  
+
+
+
+  
+<meta name="generator" content="Hexo 6.3.0"></head>
+
+
+<body>
+  
+
+  <header>
+    
+
+<div class="header-inner" style="height: 70vh;">
+  <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <strong>Weirdo</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/">
+                <i class="iconfont icon-home-fill"></i>
+                <span>首页</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/">
+                <i class="iconfont icon-category-fill"></i>
+                <span>分类</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/">
+                <i class="iconfont icon-tags-fill"></i>
+                <span>标签</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/">
+                <i class="iconfont icon-archive-fill"></i>
+                <span>归档</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/">
+                <i class="iconfont icon-user-fill"></i>
+                <span>关于</span>
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              <i class="iconfont icon-search"></i>
+            </a>
+          </li>
+          
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">
+              <i class="iconfont icon-dark" id="color-toggle-icon"></i>
+            </a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+  
+
+<div id="banner" class="banner" parallax=true
+     style="background: url('/img/meili.jpg') no-repeat center center; background-size: cover;">
+  <div class="full-bg-img">
+    <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+      <div class="banner-text text-center fade-in-up">
+        <div class="h2">
+          
+            <span id="subtitle" data-typed-text="😈快速上手接入文心一言API"></span>
+          
+        </div>
+
+        
+          
+  <div class="mt-3">
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-author" aria-hidden="true"></i>
+        weirdo
+      </span>
+    
+    
+      <span class="post-meta">
+        <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+        <time datetime="2023-12-14 22:48" pubdate>
+          2023年12月14日 晚上
+        </time>
+      </span>
+    
+  </div>
+
+  <div class="mt-1">
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-chart"></i>
+        
+          3.8k 字
+        
+      </span>
+    
+
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-clock-fill"></i>
+        
+        
+        
+          17 分钟
+        
+      </span>
+    
+
+    
+    
+      
+        <span id="leancloud-page-views-container" class="post-meta" style="display: none">
+          <i class="iconfont icon-eye" aria-hidden="true"></i>
+          <span id="leancloud-page-views"></span> 次
+        </span>
+        
+      
+    
+  </div>
+
+
+        
+      </div>
+
+      
+    </div>
+  </div>
+</div>
+
+</div>
+
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+
+    </div>
+
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div id="board">
+          <article class="post-content mx-auto">
+            <!-- SEO header -->
+            <h1 style="display: none">😈快速上手接入文心一言API</h1>
+            
+            
+              <div class="markdown-body">
+                
+                <h2 id="故事背景"><a href="#故事背景" class="headerlink" title="故事背景"></a>故事背景</h2><p>前几天上线了自己的 web 终端项目 –  <a target="_blank" rel="noopener" href="https://www.weirdo-terminal.com/">https://www.weirdo-terminal.com/</a>  </p>
+<p>由于后端是通过微信云托管部署的, 导致上线版本无法使用 chatGPT 服务, 啊 – 这样我也就放弃部署了</p>
+<hr>
+<p>正好今天, 有位同志在我项目下提了一个问题</p>
+<p><img src="https://weirdo-blog.oss-cn-chengdu.aliyuncs.com/blog/202312142217631.png" srcset="/img/loading.gif" lazyload alt="image-20231214221743543"></p>
+<p>我瞬间懵逼, 啊? 我咋没想到,  到官网看了看调用方法,  和 gpt 是差不多的。</p>
+<p>那话不多说, 如何快速通过 Node.js 调用文心一言 API , 接下来你就知道咯~~</p>
+<p>API 的调用流程如下图所示。</p>
+<p><img src="https://weirdo-blog.oss-cn-chengdu.aliyuncs.com/blog/202312142219146.png" srcset="/img/loading.gif" lazyload alt="image-20231214221956120"></p>
+<ol>
+<li>创建一个千帆应用。根据实际需求创建千帆应用，创建成功后，获取AppID、API Key、Secret Key 等信息。</li>
+<li>API 授权。对应用的 AppID 进行授权。</li>
+<li>获取接口访问凭证 access_token 。根据第1步获取的 API Key 和 Secret Key ，调用<a target="_blank" rel="noopener" href="https://cloud.baidu.com/doc/WENXINWORKSHOP/s/Ilkkrb0i5">获取access_token</a>接口获取 access_token ，通过 access_token 鉴权调用者身份。</li>
+<li>调用API接口。例如调用ERNIE-Bot相关接口，详见<a target="_blank" rel="noopener" href="https://cloud.baidu.com/doc/WENXINWORKSHOP/s/Nlks5zkzu">API列表</a>。</li>
+</ol>
+<h2 id="登录"><a href="#登录" class="headerlink" title="登录"></a>登录</h2><p>登录百度智能云千帆控制台。</p>
+<p>注册并登录<a target="_blank" rel="noopener" href="https://console.bce.baidu.com/qianfan/ais/console/applicationConsole/application">百度智能云千帆控制台</a> 。</p>
+<h2 id="创建应用"><a href="#创建应用" class="headerlink" title="创建应用"></a>创建应用</h2><p>创建千帆应用</p>
+<p>进入<a target="_blank" rel="noopener" href="https://console.bce.baidu.com/qianfan/ais/console/applicationConsole/application/create">控制台创建应用</a> 。</p>
+<img src="https://weirdo-blog.oss-cn-chengdu.aliyuncs.com/blog/202312142221297.png" srcset="/img/loading.gif" lazyload alt="image-20231214222138267" style="zoom:67%;" />
+
+
+
+<h2 id="获取-key"><a href="#获取-key" class="headerlink" title="获取 key"></a>获取 key</h2><p>创建应用后，获取AppID、API Key、Secret Key。</p>
+<p><img src="https://weirdo-blog.oss-cn-chengdu.aliyuncs.com/blog/202312142222772.png" srcset="/img/loading.gif" lazyload alt="image-20231214222213748"></p>
+<blockquote>
+<p>上图则是我的 api key 和 secret key</p>
+</blockquote>
+<h2 id="得到-Access-Token"><a href="#得到-Access-Token" class="headerlink" title="得到 Access Token"></a>得到 Access Token</h2><p>这两个值的作用是用来获取 Access Token，Access Token 是调用文心 API 的必需参数。Access Token 是通过将 API Key 和 Secret Key 作为参数请求一个独立的接口得到。本文用 axios 作为 Node 端的网络请求库，下面的函数用来请求接口，拿到 token：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><code class="hljs javascript"><span class="hljs-keyword">import</span> axios <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;axios&#x27;</span>;<br><br><span class="hljs-keyword">const</span> <span class="hljs-variable constant_">API_KEY</span> = <span class="hljs-string">&#x27;&lt;API Key&gt;&#x27;</span>;<br><span class="hljs-keyword">const</span> <span class="hljs-variable constant_">SECRET_KEY</span> = <span class="hljs-string">&#x27;&lt;Secret Key&gt;&#x27;</span>;<br><span class="hljs-keyword">const</span> <span class="hljs-variable constant_">ACCESS_TOKEN_URL</span> = <span class="hljs-string">&#x27;https://aip.baidubce.com/oauth/2.0/token&#x27;</span>;<br><br><span class="hljs-comment">// 获取 access token</span><br><span class="hljs-keyword">async</span> <span class="hljs-keyword">function</span> <span class="hljs-title function_">fetchAccessToken</span>(<span class="hljs-params"></span>) &#123;<br>    <span class="hljs-keyword">const</span> accessTokenRes = <span class="hljs-keyword">await</span> axios.<span class="hljs-title function_">post</span>(<span class="hljs-variable constant_">ACCESS_TOKEN_URL</span>, <span class="hljs-literal">null</span>, &#123;<br>        <span class="hljs-attr">params</span>: &#123;<br>            <span class="hljs-string">&#x27;grant_type&#x27;</span>: <span class="hljs-string">&#x27;client_credentials&#x27;</span>,<br>            <span class="hljs-string">&#x27;client_id&#x27;</span>: <span class="hljs-variable constant_">API_KEY</span>,<br>            <span class="hljs-string">&#x27;client_secret&#x27;</span>: <span class="hljs-variable constant_">SECRET_KEY</span>,<br>        &#125;,<br>    &#125;);<br>    <span class="hljs-keyword">return</span> accessTokenRes.<span class="hljs-property">data</span>.<span class="hljs-property">access_token</span>;<br>&#125;<br></code></pre></td></tr></table></figure>
+
+
+
+<h2 id="及时更新token"><a href="#及时更新token" class="headerlink" title="及时更新token"></a>及时更新token</h2><p>Access Token 的有效期是 30 天，需要及时更新，在一个需要持久运行的 Node 应用里，最好把 Access Token 和它对应的生成时间成对记录，以便在 token 过期之前及时更新：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><code class="hljs javascript"><span class="hljs-comment">// 全局存储一个 access token -&gt; 过期时间对象</span><br><span class="hljs-keyword">let</span> accessToken = &#123;<br>    <span class="hljs-attr">expiredTime</span>: <span class="hljs-number">0</span>,<br>    <span class="hljs-attr">value</span>: <span class="hljs-string">&#x27;&#x27;</span>,<br>&#125;;<br><br><span class="hljs-keyword">async</span> <span class="hljs-keyword">function</span> <span class="hljs-title function_">getAccessToken</span>(<span class="hljs-params"></span>) &#123;<br>    <span class="hljs-keyword">if</span> (accessToken.<span class="hljs-property">value</span> &amp;&amp; <span class="hljs-title class_">Date</span>.<span class="hljs-title function_">now</span>() &lt; accessToken.<span class="hljs-property">expiredTime</span>) &#123;<br>        <span class="hljs-keyword">return</span> accessToken.<span class="hljs-property">value</span>;<br>    &#125;<br>    <span class="hljs-keyword">const</span> token = <span class="hljs-keyword">await</span> <span class="hljs-title function_">fetchAccessToken</span>();<br>    accessToken = &#123;<br>        <span class="hljs-attr">expiredTime</span>: <span class="hljs-title class_">Date</span>.<span class="hljs-title function_">now</span>() + <span class="hljs-number">29</span> * <span class="hljs-number">86400</span> * <span class="hljs-number">1000</span>, <span class="hljs-comment">// 29 days</span><br>        <span class="hljs-attr">value</span>: token,<br>    &#125;;<br>    <span class="hljs-keyword">return</span> token;<br>&#125;<br></code></pre></td></tr></table></figure>
+
+
+
+<blockquote>
+<p>接下来便是重头戏了, 调用文心一言的服务</p>
+</blockquote>
+<h2 id="调用-ERNIT-Bot-API"><a href="#调用-ERNIT-Bot-API" class="headerlink" title="调用 ERNIT-Bot API"></a>调用 ERNIT-Bot API</h2><p>千帆平台上有多个模型的 API 可以调用，不同 API 用到的参数比较类似，这里用最基本的 ERNIT-Bot API 来做示例。</p>
+<p>Access Token 和对话信息是唯二的必填参数，前者以 query 的形式传入，后者则是作为 POST 请求体。</p>
+<blockquote>
+<p>下面是一个简单的调用示例：</p>
+</blockquote>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><code class="hljs javascript"><span class="hljs-keyword">const</span> <span class="hljs-variable constant_">CHAT_URL</span> = <span class="hljs-string">&#x27;https://aip.baidubce.com/rpc/2.0/ai_custom/v1/wenxinworkshop/chat/completions&#x27;</span>;<br><br><span class="hljs-keyword">async</span> <span class="hljs-keyword">function</span> <span class="hljs-title function_">ask</span>(<span class="hljs-params">question</span>) &#123;<br>  <span class="hljs-keyword">const</span> messages = [&#123; <span class="hljs-attr">role</span>: <span class="hljs-string">&#x27;user&#x27;</span>, <span class="hljs-attr">content</span>: question &#125;]<br>  <span class="hljs-keyword">const</span> token = <span class="hljs-keyword">await</span> <span class="hljs-title function_">getAccessToken</span>()<br>  <span class="hljs-keyword">const</span> res = <span class="hljs-keyword">await</span> axios.<span class="hljs-title function_">post</span>(<span class="hljs-variable constant_">CHAT_URL</span>, &#123; messages &#125;, &#123; <span class="hljs-attr">params</span>: &#123; <span class="hljs-attr">access_token</span>: token &#125; &#125;)<br>  <span class="hljs-keyword">const</span> &#123; data &#125; = res<br>  <span class="hljs-keyword">return</span> data<br>&#125;<br></code></pre></td></tr></table></figure>
+
+
+
+<p>测试一下</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><code class="hljs javascript"><span class="hljs-keyword">async</span> <span class="hljs-keyword">function</span> <span class="hljs-title function_">main</span>(<span class="hljs-params"></span>) &#123;<br>  <span class="hljs-keyword">const</span> question = <span class="hljs-string">&#x27;我是最帅的!&#x27;</span><br>  <span class="hljs-keyword">const</span> res = <span class="hljs-keyword">await</span> <span class="hljs-title function_">ask</span>(question)<br>  <span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(res)<br>&#125;<br><br><span class="hljs-title function_">main</span>();<br></code></pre></td></tr></table></figure>
+
+<p><img src="https://weirdo-blog.oss-cn-chengdu.aliyuncs.com/blog/202312142235215.png" srcset="/img/loading.gif" lazyload alt="image-20231214223522188"></p>
+<p>可以看到，返回的内容里不仅包括回答的文本，还包括占用 token 数（与计费相关）、回答是否有被截断的等信息。</p>
+<h2 id="实现多轮对话"><a href="#实现多轮对话" class="headerlink" title="实现多轮对话"></a>实现多轮对话</h2><p>OpenAI API 多轮对话是通过维护一个固定 conversation id 的形式实现的，文心 API 则有所不同，要实现多轮对话，需要在调用接口时携带上之前所有的提问和回答。比如最开始我们提问了「把我接下来说的话都翻译成英文」，文心回答「好的，我会尽力把您接下来想要表达的内容翻译成英文。请随时告诉我您想要说的话。」，那么我们再一次提问的时候，message 参数就需要是：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs javascript">[<br>    &#123; <span class="hljs-attr">role</span>: <span class="hljs-string">&#x27;user&#x27;</span>, <span class="hljs-attr">content</span>: <span class="hljs-string">&#x27;把我接下来说的话都翻译成英文&#x27;</span> &#125;,<br>    &#123; <span class="hljs-attr">role</span>: <span class="hljs-string">&#x27;assistant&#x27;</span>, <span class="hljs-attr">content</span>: <span class="hljs-string">&#x27;好的，我会尽力把您接下来想要表达的内容翻译成英文。请随时告诉我您想要说的话。&#x27;</span> &#125;,<br>    &#123; <span class="hljs-attr">role</span>: <span class="hljs-string">&#x27;user&#x27;</span>, <span class="hljs-attr">content</span>: <span class="hljs-string">&#x27;你好，我是一名程序员。&#x27;</span> &#125;<br>]<br></code></pre></td></tr></table></figure>
+
+
+
+
+
+<p>这里是通过每次加入一条前端传入的对话历史和当前请求的信息, 这样就能成功实现记忆功能</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><code class="hljs javascript"><span class="hljs-keyword">async</span> <span class="hljs-keyword">function</span> <span class="hljs-title function_">ask</span>(<span class="hljs-params">memory, message</span>) &#123;<br>    <span class="hljs-keyword">const</span> token = <span class="hljs-keyword">await</span> <span class="hljs-title function_">getAccessToken</span>()<br>    <span class="hljs-keyword">const</span> messages = memory<br>    messages.<span class="hljs-title function_">push</span>(&#123; <span class="hljs-attr">role</span>: <span class="hljs-string">&#x27;user&#x27;</span>, <span class="hljs-attr">content</span>: message &#125;)<br>    <span class="hljs-keyword">const</span> res = <span class="hljs-keyword">await</span> axios.<span class="hljs-title function_">post</span>(<span class="hljs-variable constant_">CHAT_URL</span>, &#123; messages &#125;, &#123; <span class="hljs-attr">params</span>: &#123; <span class="hljs-attr">access_token</span>: token &#125; &#125;)<br>    <span class="hljs-keyword">const</span> &#123; data &#125; = res<br>    <span class="hljs-keyword">return</span> data.<span class="hljs-property">result</span><br>&#125;<br></code></pre></td></tr></table></figure>
+
+
+
+<blockquote>
+<p>下面是前端的请求函数</p>
+</blockquote>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><code class="hljs javascript"><span class="hljs-keyword">export</span> <span class="hljs-keyword">const</span> <span class="hljs-title function_">getBotOutput</span> = <span class="hljs-keyword">async</span> (<span class="hljs-params">message: string</span>) =&gt; &#123;<br>  <span class="hljs-keyword">if</span> (!message) <span class="hljs-keyword">return</span> <span class="hljs-literal">null</span><br>  <span class="hljs-keyword">let</span> botStore = <span class="hljs-title function_">useBotStore</span>()<br>  <span class="hljs-keyword">let</span> &#123; memory &#125; = botStore<br>  <span class="hljs-keyword">let</span> <span class="hljs-attr">res</span>: any = <span class="hljs-keyword">await</span> myAxios.<span class="hljs-title function_">post</span>(<span class="hljs-string">&#x27;/bot/get&#x27;</span>, &#123; message, memory &#125;)<br>  res = res.<span class="hljs-property">data</span><br>  <span class="hljs-comment">// 虽然后端也有添加消息记录的代码, 但是我们前端没有啊, 所以还是要加入</span><br>  <span class="hljs-comment">// 你可能会问 : 为什么不先加入一次记录, 然后拿到最新的memory发起请求呢? 这样可以少传一个message参数。</span><br>  <span class="hljs-comment">// 回答 : 测试过, 不行 ------- hhhh</span><br>  botStore.<span class="hljs-title function_">addRecord</span>(&#123; <span class="hljs-attr">role</span>: <span class="hljs-string">&#x27;user&#x27;</span>, <span class="hljs-attr">content</span>: message &#125;)<br>  botStore.<span class="hljs-title function_">addRecord</span>(&#123; <span class="hljs-attr">role</span>: <span class="hljs-string">&#x27;assistant&#x27;</span>, <span class="hljs-attr">content</span>: res &#125;)<br>  <span class="hljs-keyword">return</span> res<br>&#125;<br><br></code></pre></td></tr></table></figure>
+
+<p>这个 res 就是我们获取的值了. 通过模板将回复的内容渲染到页面中即可。</p>
+<p><img src="https://weirdo-blog.oss-cn-chengdu.aliyuncs.com/blog/202312142245398.png" srcset="/img/loading.gif" lazyload alt="image-20231214224540269"></p>
+<p>这样便能请求到文心一言服务啦~~</p>
+<p>这是我的项目地址 ~~ <a target="_blank" rel="noopener" href="https://github.com/2WeirDo/weirdo_terminal">https://github.com/2WeirDo/weirdo_terminal</a> ~~ 感兴趣的朋友们欢迎star哦~ ⭐⭐⭐</p>
+
+                
+              </div>
+            
+            <hr/>
+            <div>
+              <div class="post-metas my-3">
+  
+    <div class="post-meta mr-3 d-flex align-items-center">
+      <i class="iconfont icon-category"></i>
+      
+
+<span class="category-chains">
+  
+  
+    
+      <span class="category-chain">
+        
+  <a href="/categories/Node/" class="category-chain-item">Node</a>
+  
+  
+
+      </span>
+    
+  
+</span>
+
+    </div>
+  
+  
+    <div class="post-meta">
+      <i class="iconfont icon-tags"></i>
+      
+        <a href="/tags/AI/">#AI</a>
+      
+    </div>
+  
+</div>
+
+
+              
+  
+
+  <div class="license-box my-3">
+    <div class="license-title">
+      <div>😈快速上手接入文心一言API</div>
+      <div>http://example.com/2023/12/14/Node.js 接入文心一言 API/</div>
+    </div>
+    <div class="license-meta">
+      
+        <div class="license-meta-item">
+          <div>作者</div>
+          <div>weirdo</div>
+        </div>
+      
+      
+        <div class="license-meta-item license-meta-date">
+          <div>发布于</div>
+          <div>2023年12月14日</div>
+        </div>
+      
+      
+        <div class="license-meta-item license-meta-date">
+          <div>更新于</div>
+          <div>2023年12月14日</div>
+        </div>
+      
+      
+        <div class="license-meta-item">
+          <div>许可协议</div>
+          <div>
+            
+              
+              
+                <a target="_blank" href="https://creativecommons.org/licenses/by/4.0/">
+                  <span class="hint--top hint--rounded" aria-label="BY - 署名">
+                    <i class="iconfont icon-by"></i>
+                  </span>
+                </a>
+              
+            
+          </div>
+        </div>
+      
+    </div>
+    <div class="license-icon iconfont"></div>
+  </div>
+
+
+
+              
+                <div class="post-prevnext my-3">
+                  <article class="post-prev col-6">
+                    
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/2023/12/04/%E7%AC%AC%E4%B8%80%E6%AC%A1PR/" title="😈记录我的第一次PR">
+                        <span class="hidden-mobile">😈记录我的第一次PR</span>
+                        <span class="visible-mobile">下一篇</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+  
+  
+    <article id="comments" lazyload>
+      
+  <div id="valine"></div>
+  <script type="text/javascript">
+    Fluid.utils.loadComments('#valine', function() {
+      Fluid.utils.createScript('https://lib.baomitu.com/valine/1.5.1/Valine.min.js', function() {
+        var options = Object.assign(
+          {"appId":"ukn0C9F4sFzy057RJ7Ohdmq4-gzGzoHsz","appKey":"x8NNzZf5L3jNKvqOKxoMj0FN","path":"window.location.pathname","placeholder":null,"avatar":"retro","meta":["nick","mail","link"],"requiredFields":[],"pageSize":10,"lang":"zh-CN","highlight":false,"recordIP":false,"serverURLs":"","emojiCDN":null,"emojiMaps":null,"enableQQ":false},
+          {
+            el: "#valine",
+            path: window.location.pathname
+          }
+        )
+        new Valine(options);
+        Fluid.utils.waitElementVisible('#valine .vcontent', () => {
+          var imgSelector = '#valine .vcontent img:not(.vemoji)';
+          Fluid.plugins.imageCaption(imgSelector);
+          Fluid.plugins.fancyBox(imgSelector);
+        })
+      });
+    });
+  </script>
+  <noscript>Please enable JavaScript to view the comments</noscript>
+
+
+    </article>
+  
+
+
+          </article>
+        </div>
+      </div>
+    </div>
+
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+  <aside class="sidebar" style="margin-left: -1rem">
+    <div id="toc">
+  <p class="toc-header">
+    <i class="iconfont icon-list"></i>
+    <span>目录</span>
+  </p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+
+
+  </aside>
+
+
+    </div>
+  </div>
+</div>
+
+
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+
+
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v" for="local-search-input">关键词</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+    
+
+    
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+  
+    <div class="footer-content">
+       <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a> <div style="font-size: 0.85rem"> <span id="timeDate">载入天数...</span> <span id="times">载入时分秒...</span> <script src="/js/duration.js"></script> </div> 
+    </div>
+  
+  
+    <div class="statistics">
+  
+  
+
+  
+    
+      <span id="leancloud-site-pv-container" style="display: none">
+        访问量 
+        <span id="leancloud-site-pv"></span>
+         次
+      </span>
+    
+    
+      <span id="leancloud-site-uv-container" style="display: none">
+        访客数 
+        <span id="leancloud-site-uv"></span>
+         人
+      </span>
+    
+    
+
+  
+</div>
+
+  
+  
+  
+</div>
+
+  </footer>
+
+  <!-- Scripts -->
+  
+  <script  src="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":true,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://lib.baomitu.com/jquery/3.6.0/jquery.min.js" ></script>
+<script  src="https://lib.baomitu.com/twitter-bootstrap/4.6.1/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+
+  <script  src="https://lib.baomitu.com/typed.js/2.0.12/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var subtitle = document.getElementById('subtitle');
+      if (!subtitle || !typing) {
+        return;
+      }
+      var text = subtitle.getAttribute('data-typed-text');
+      
+        typing(text);
+      
+    })(window, document);
+  </script>
+
+
+
+
+  
+    <script  src="/js/img-lazyload.js" ></script>
+  
+
+
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/tocbot/4.18.2/tocbot.min.js', function() {
+    var toc = jQuery('#toc');
+    if (toc.length === 0 || !window.tocbot) { return; }
+    var boardCtn = jQuery('#board-ctn');
+    var boardTop = boardCtn.offset().top;
+
+    window.tocbot.init(Object.assign({
+      tocSelector     : '#toc-body',
+      contentSelector : '.markdown-body',
+      linkClass       : 'tocbot-link',
+      activeLinkClass : 'tocbot-active-link',
+      listClass       : 'tocbot-list',
+      isCollapsedClass: 'tocbot-is-collapsed',
+      collapsibleClass: 'tocbot-is-collapsible',
+      scrollSmooth    : true,
+      includeTitleTags: true,
+      headingsOffset  : -boardTop,
+    }, CONFIG.toc));
+    if (toc.find('.toc-list-item').length > 0) {
+      toc.css('visibility', 'visible');
+    }
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('tocbot' in window) {
+        tocbot.refresh();
+        var toc = jQuery('#toc');
+        if (toc.length === 0 || !tocbot) {
+          return;
+        }
+        if (toc.find('.toc-list-item').length > 0) {
+          toc.css('visibility', 'visible');
+        }
+      }
+    });
+  });
+</script>
+
+
+  <script src=https://lib.baomitu.com/clipboard.js/2.0.11/clipboard.min.js></script>
+
+  <script>Fluid.plugins.codeWidget();</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/anchor-js/4.3.1/anchor.min.js', function() {
+    window.anchors.options = {
+      placement: CONFIG.anchorjs.placement,
+      visible  : CONFIG.anchorjs.visible
+    };
+    if (CONFIG.anchorjs.icon) {
+      window.anchors.options.icon = CONFIG.anchorjs.icon;
+    }
+    var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+    var res = [];
+    for (var item of el) {
+      res.push('.markdown-body > ' + item.trim());
+    }
+    if (CONFIG.anchorjs.placement === 'left') {
+      window.anchors.options.class = 'anchorjs-link-left';
+    }
+    window.anchors.add(res.join(', '));
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('anchors' in window) {
+        anchors.removeAll();
+        var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+        var res = [];
+        for (var item of el) {
+          res.push('.markdown-body > ' + item.trim());
+        }
+        if (CONFIG.anchorjs.placement === 'left') {
+          anchors.options.class = 'anchorjs-link-left';
+        }
+        anchors.add(res.join(', '));
+      }
+    });
+  });
+</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.js', function() {
+    Fluid.plugins.fancyBox();
+  });
+</script>
+
+
+  <script>Fluid.plugins.imageCaption();</script>
+
+  <script defer src="/js/leancloud.js" ></script>
+
+  <script  src="/js/local-search.js" ></script>
+
+
+
+
+
+<!-- 主题的启动项，将它保持在最底部 -->
+<!-- the boot of the theme, keep it at the bottom -->
+<script  src="/js/boot.js" ></script>
+
+
+  
+
+  <noscript>
+    <div class="noscript-warning">博客在允许 JavaScript 运行的环境下浏览效果更佳</div>
+  </noscript>
+</body>
+</html>
