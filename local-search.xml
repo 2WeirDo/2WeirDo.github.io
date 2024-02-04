@@ -4,6 +4,31 @@
   
   
   <entry>
+    <title>😈描述一下 V8 执行一段 JS 代码的过程？</title>
+    <link href="/2024/02/04/v8%E6%89%A7%E8%A1%8C/"/>
+    <url>/2024/02/04/v8%E6%89%A7%E8%A1%8C/</url>
+    
+    <content type="html"><![CDATA[<p>首先需要明白的是，机器是读不懂 <code>JS</code> 代码，机器只能理解特定的机器码，那如果要让 JS 的逻辑在机器上运行起来，就必须将 JS 的代码翻译成机器码，然后让机器识别。JS 属于解释型语言，对于解释型的语言说，解释器会对源代码做如下分析：</p><ul><li>通过词法分析和语法分析生成 AST（抽象语法树）</li><li>生成字节码</li></ul><p>然后解释器根据字节码来执行程序。但 JS 整个执行的过程其实会比这个更加复杂，接下来就来一一地拆解。</p><h3 id="生成-AST"><a href="#生成-AST" class="headerlink" title="生成 AST"></a>生成 AST</h3><p>生成 <code>AST</code> 分为两步——<code>词法分析</code>和<code>语法分析</code>。</p><p>词法分析即分词，它的工作就是将一行行的代码分解成一个个 token。 比如下面一行代码：</p><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs JavaScript"><span class="hljs-keyword">let</span> name = <span class="hljs-string">&#x27;sanyuan&#x27;</span><br></code></pre></td></tr></table></figure><p><img src="https://weirdo-blog.oss-cn-chengdu.aliyuncs.com/blog/202402041020660.png" alt="img"></p><p>接下来语法分析阶段，将生成的这些 <code>token</code> 数据，根据一定的语法规则转化为<code>AST</code>。举个例子：</p><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs JavaScript"><span class="hljs-keyword">let</span> name = <span class="hljs-string">&#x27;sanyuan&#x27;</span><br><span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(name)<br></code></pre></td></tr></table></figure><p>最后生成的 AST 是这样的：</p><img src="https://weirdo-blog.oss-cn-chengdu.aliyuncs.com/blog/202402041020084.png" alt="img" style="zoom:50%;" /><p>当生成了 <code>AST</code> 之后，编译器&#x2F;解释器后续的工作都要依靠 <code>AST</code> 而不是源代码。顺便补充一句，<strong>babel 的工作原理</strong>就是将 <code>ES6</code> 的代码解析生成<code>ES6</code>的<code>AST</code>，然后将 <code>ES6</code> 的 <code>AST</code> 转换为 <code>ES5</code> 的<code>AST</code>，最后才将 <code>ES5</code> 的 <code>AST</code> 转化为具体的 <code>ES5</code> 代码。</p><blockquote><p>PostCSS 的工作原理是通过将 CSS 解析成抽象语法树（AST），然后通过一系列插件对这个 AST 进行处理，最终再将处理后的 AST 转回为 CSS。</p></blockquote><p>回到 V8 本身，生成 AST 后，接下来会生成执行上下文</p><h3 id="生成字节码"><a href="#生成字节码" class="headerlink" title="生成字节码"></a>生成字节码</h3><p>生成 AST 之后，直接通过 V8 的解释器（也叫 Ignition）来生成字节码。但是字节码并不能让机器直接运行，</p><p>那你可能就会说了，不能执行还转成字节码干嘛，直接把 AST 转换成机器码不就得了，让机器直接执行。</p><p>确实，在 V8 的早期是这么做的，但后来<strong>因为机器码的体积太大，引发了严重的内存占用问题</strong>。</p><p>给一张对比图让大家直观地感受以下三者代码量的差异：</p><p><img src="https://weirdo-blog.oss-cn-chengdu.aliyuncs.com/blog/202402041019085.png" alt="img"></p><p>字节码是介于 AST 和 机器码之间的一种代码，但是与特定类型的机器码无关，字节码需要通过解释器将其转换为机器码然后执行。</p><p>字节码仍然需要转换为机器码，但和原来不同的是，现在不用一次性将全部的字节码都转换成机器码，而是<strong>通过解释器来逐行执行字节码</strong>，省去了生成二进制文件的操作，这样就大大降低了内存的压力。</p><h3 id="执行代码"><a href="#执行代码" class="headerlink" title="执行代码"></a>执行代码</h3><p>在执行字节码的过程中，<strong>如果发现某一部分代码重复出现，那么</strong> <strong><code>V8</code></strong> <strong>将它记做热点代码</strong>（HotSpot），然后将这些代码编译成机器码保存起来，这个用来编译的工具就是<code>V8</code>的编译器（也叫做<code>TurboFan</code>） </p><p>因此在这样的机制下，代码执行的时间越久，那么执行效率会越来越高，因为有越来越多的字节码被标记为热点代码，遇到它们时直接执行相应的机器码，不用再次将转换为机器码。</p><p>其实当你听到有人说 JS 就是一门解释器语言的时候，其实这个说法是有问题的。因为<strong>字节码不仅配合了解释器，而且还和编译器打交道</strong>，所以 JS 并不是完全的解释型语言。</p><p>而编译器和解释器的 根本区别在于<strong>编译器会编译生成二进制文件但解释器不会</strong>。</p><p>并且，这种字节码跟编译器和解释器结合的技术，我们称之为<strong>即时编译</strong>， 也就是我们经常听到的<code>JIT</code>。</p><h3 id="梳理一下："><a href="#梳理一下：" class="headerlink" title="梳理一下："></a>梳理一下：</h3><ol><li>首先通过词法分析和语法分析生成 AST</li><li>通过解释器将 AST 转换为字节码</li><li>由解释器逐行执行字节码(省去了生成二进制文件的操作，这样就大大降低了内存的压力)，遇到热点代码启动编译器进行编译，生成对应的机器码保存起来，后面遇到热点代码时可以直接执行相应机器码， 以优化执行效率</li></ol>]]></content>
+    
+    
+    <categories>
+      
+      <category>JavaScript</category>
+      
+    </categories>
+    
+    
+    <tags>
+      
+      <tag>V8</tag>
+      
+    </tags>
+    
+  </entry>
+  
+  
+  
+  <entry>
     <title>PC端/移动端适配如何进行配置?</title>
     <link href="/2023/12/19/%E8%AE%B2%E8%AE%B2%E7%A7%BB%E5%8A%A8%E7%AB%AFPC%E7%AB%AF%E9%80%82%E9%85%8D/"/>
     <url>/2023/12/19/%E8%AE%B2%E8%AE%B2%E7%A7%BB%E5%8A%A8%E7%AB%AFPC%E7%AB%AF%E9%80%82%E9%85%8D/</url>
